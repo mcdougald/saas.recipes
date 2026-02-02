@@ -1,2 +1,3 @@
-# saas.recipes
-This project is currently hosted at https://trev.fyi/saas
+# SaaS Recipes
+
+This project is currently hosted at [trev.fyi/saas](https://trev.fyi/saas)
