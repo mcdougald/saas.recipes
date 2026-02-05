@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
@@ -15,9 +15,13 @@ import {
   UsersRound,
   Package,
   BarChart3,
-  Search
+  Search,
+  LogOut,
+  CreditCard
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useSession, signOut } from "@/lib/auth-client"
+import { useState } from "react"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -30,6 +34,23 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { data: session } = useSession()
+  const [showUserMenu, setShowUserMenu] = useState(false)
+
+  const handleSignOut = async () => {
+    await signOut()
+    router.push("/sign-in")
+  }
+
+  const userName = session?.user?.name || "User"
+  const userEmail = session?.user?.email || "user@example.com"
+  const userInitials = userName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2)
 
   return (
     <div className="flex h-full flex-col gap-2">
@@ -74,6 +95,13 @@ export function Sidebar() {
           </p>
           <nav className="grid gap-1 text-sm">
             <Link
+              href="/pricing"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted/50"
+            >
+              <CreditCard className="h-4 w-4" />
+              Pricing
+            </Link>
+            <Link
               href="#"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted/50"
             >
@@ -97,20 +125,33 @@ export function Sidebar() {
 
       {/* User Profile Section */}
       <div className="mt-auto border-t p-4">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-9 w-9">
-            <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
-              JD
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 overflow-hidden">
-            <p className="text-sm font-medium leading-none mb-1">John Doe</p>
-            <p className="text-xs text-muted-foreground truncate">john@example.com</p>
-          </div>
-          <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
-            <ChevronDown className="h-4 w-4" />
-            <span className="sr-only">Toggle user menu</span>
-          </Button>
+        <div className="relative">
+          <button
+            onClick={() => setShowUserMenu(!showUserMenu)}
+            className="flex w-full items-center gap-3 rounded-lg hover:bg-muted/50 transition-colors p-2 -m-2"
+          >
+            <Avatar className="h-9 w-9">
+              <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
+                {userInitials}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 overflow-hidden text-left">
+              <p className="text-sm font-medium leading-none mb-1">{userName}</p>
+              <p className="text-xs text-muted-foreground truncate">{userEmail}</p>
+            </div>
+            <ChevronDown className="h-4 w-4 shrink-0" />
+          </button>
+          {showUserMenu && (
+            <div className="absolute bottom-full left-0 right-0 mb-2 bg-popover border rounded-lg shadow-lg overflow-hidden">
+              <button
+                onClick={handleSignOut}
+                className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-muted transition-colors"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign out
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -118,6 +159,22 @@ export function Sidebar() {
 }
 
 export function MobileNav() {
+  const router = useRouter()
+  const { data: session } = useSession()
+
+  const handleSignOut = async () => {
+    await signOut()
+    router.push("/sign-in")
+  }
+
+  const userName = session?.user?.name || "User"
+  const userInitials = userName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2)
+
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:hidden lg:h-[60px] lg:px-6">
       <Button variant="outline" size="icon" className="shrink-0 lg:hidden">
@@ -129,7 +186,7 @@ export function MobileNav() {
       </div>
       <Avatar className="h-8 w-8">
         <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-          JD
+          {userInitials}
         </AvatarFallback>
       </Avatar>
     </header>
