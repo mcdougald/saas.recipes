@@ -16,8 +16,21 @@ export const STRIPE_PLANS = {
     price: 0,
     interval: "month" as const,
     features: [
-      "Basic dashboard access",
-      "Up to 3 projects",
+      "Limited, temporary access",
+      "Browse recipes & view demos",
+      "Community support",
+    ],
+  },
+  BASIC: {
+    name: "Basic",
+    price: 900, // $9.00 in cents
+    interval: "month" as const,
+    stripePriceId: process.env.STRIPE_BASIC_MONTHLY_PRICE_ID,
+    features: [
+      "Full access — no time limits",
+      "Notes & repository recipes",
+      "All live projects",
+      "Unlimited recipe browsing",
       "Community support",
     ],
   },
@@ -27,11 +40,9 @@ export const STRIPE_PLANS = {
     interval: "month" as const,
     stripePriceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID,
     features: [
-      "Everything in Free",
-      "Unlimited projects",
-      "Priority support",
-      "Advanced analytics",
-      "Custom integrations",
+      "Everything in Basic",
+      "AI Chef — recipe help & guidance",
+      "My Help — direct access to my time",
     ],
   },
   ENTERPRISE: {
@@ -41,10 +52,10 @@ export const STRIPE_PLANS = {
     stripePriceId: process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID,
     features: [
       "Everything in Pro",
-      "Dedicated account manager",
-      "SLA guarantee",
-      "Custom features",
-      "On-premise deployment option",
+      "For teams — workspace & sharing",
+      "AI Chef for the whole team",
+      "Priority My Help (my time)",
+      "Early access to new recipes",
     ],
   },
 } as const;

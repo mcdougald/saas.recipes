@@ -24,7 +24,9 @@ export async function POST(req: NextRequest) {
 
     // Get the price ID from environment variables based on the plan
     let stripePriceId: string | undefined;
-    if (priceId === "pro") {
+    if (priceId === "basic") {
+      stripePriceId = STRIPE_PLANS.BASIC.stripePriceId;
+    } else if (priceId === "pro") {
       stripePriceId = STRIPE_PLANS.PRO.stripePriceId;
     } else if (priceId === "enterprise") {
       stripePriceId = STRIPE_PLANS.ENTERPRISE.stripePriceId;
