@@ -87,10 +87,16 @@ export async function POST(req: NextRequest) {
           tier = "enterprise";
         }
 
-        // Get period end timestamp - use proper field access
-        const periodEndTimestamp = 'current_period_end' in sub ? (sub as Record<string, unknown>).current_period_end as number : Date.now() / 1000;
+        // Get period end timestamp
+        // Note: Stripe SDK types for this API version don't expose these properties in a type-safe way
+        // Using unknown then Record<string, unknown> to safely access subscription properties
+        const periodEndTimestamp = 'current_period_end' in sub 
+          ? ((sub as unknown) as Record<string, unknown>).current_period_end as number 
+          : Date.now() / 1000;
         const periodEnd = new Date(periodEndTimestamp * 1000);
-        const cancelAtEnd = 'cancel_at_period_end' in sub ? (sub as Record<string, unknown>).cancel_at_period_end as boolean : false;
+        const cancelAtEnd = 'cancel_at_period_end' in sub 
+          ? ((sub as unknown) as Record<string, unknown>).cancel_at_period_end as boolean 
+          : false;
 
         // Update or create subscription
         await db
@@ -146,7 +152,11 @@ export async function POST(req: NextRequest) {
         const userId = users[0].id;
 
         // Get period end timestamp
-        const periodEndTimestamp = 'current_period_end' in sub ? (sub as Record<string, unknown>).current_period_end as number : Date.now() / 1000;
+        // Note: Stripe SDK types for this API version don't expose these properties in a type-safe way
+        // Using unknown then Record<string, unknown> to safely access subscription properties
+        const periodEndTimestamp = 'current_period_end' in sub 
+          ? ((sub as unknown) as Record<string, unknown>).current_period_end as number 
+          : Date.now() / 1000;
         const periodEnd = new Date(periodEndTimestamp * 1000);
 
         // Update subscription status

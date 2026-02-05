@@ -5,6 +5,8 @@ import * as schema from "./schema";
 const connectionString = process.env.DATABASE_URL || "";
 
 // Create a dummy client if DATABASE_URL is not set (for build time)
+// Note: This allows the build to succeed without a database connection
+// At runtime, API routes will fail gracefully if database is not configured
 const client = connectionString 
   ? postgres(connectionString)
   : null;
