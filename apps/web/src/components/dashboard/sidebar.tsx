@@ -19,8 +19,6 @@ import { Button } from "@/components/ui/button"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Users", href: "/dashboard/users", icon: Users },
-  { name: "Documents", href: "/dashboard/documents", icon: FileText },
   { name: "Contributors", href: "/dashboard/contributors", icon: UsersRound },
   { name: "Dependencies", href: "/dashboard/dependencies", icon: Package },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
