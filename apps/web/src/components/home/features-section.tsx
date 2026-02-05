@@ -55,7 +55,7 @@ export function FeaturesSection() {
       aria-labelledby="features-heading"
     >
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_50%_at_50%_100%,var(--primary)/8%,transparent_70%)]" />
-      <div className="container px-4">
+      <div className="container px-4 mx-auto">
         <div className="mx-auto max-w-2xl text-center mb-14 md:mb-16">
           <p className="mb-3 text-sm font-medium uppercase tracking-wider text-primary/80">
             Why SaaS Recipes

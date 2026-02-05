@@ -7,7 +7,7 @@ export function CtaSection() {
       className="border-t py-20 md:py-28"
       aria-labelledby="cta-heading"
     >
-      <div className="container px-4">
+      <div className="container px-4 mx-auto">
         <div className="mx-auto max-w-2xl text-center">
           <h2
             id="cta-heading"

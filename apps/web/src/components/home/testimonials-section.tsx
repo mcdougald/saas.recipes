@@ -23,7 +23,7 @@ export function TestimonialsSection() {
       className="border-t bg-muted/30 py-20 md:py-28"
       aria-labelledby="testimonials-heading"
     >
-      <div className="container px-4">
+      <div className="container px-4 mx-auto">
         <div className="mx-auto max-w-2xl text-center mb-14">
           <h2
             id="testimonials-heading"

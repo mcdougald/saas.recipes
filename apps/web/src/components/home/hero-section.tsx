@@ -13,14 +13,14 @@ export function HeroSection() {
           id="hero-heading"
           className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Ship your SaaS faster.
+          Serve up your SaaS faster.
           <span className="mt-2 block bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             Learn from recipes that scale.
           </span>
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground md:text-xl">
           Don&apos;t cook alone. Leverage this cookbook — proven recipes from real
-          kitchens—auth, billing, dashboards, and more — plus an AI chef to help
+          kitchens (auth, billing, dashboards, and more) — plus an AI chef to help
           run the kitchen.
         </p>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground md:text-xl">
