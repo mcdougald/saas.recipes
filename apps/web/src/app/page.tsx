@@ -42,14 +42,14 @@ export default function Home() {
               <span className="font-medium">Built with Next.js 16 & TailwindCSS 4</span>
             </div>
             <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              Your Complete SaaS Recipe Collection
+              Don&apos;t Cook Alone
               <span className="block bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-transparent">
-                From Kitchen Sink to Masterpiece
+                SaaS Recipes for Success
               </span>
             </h1>
             <p className="mb-8 text-lg text-muted-foreground md:text-xl">
-              Like mastering any craft, building a SaaS requires the right recipes, proven techniques, and quality ingredients. 
-              Start with everything you need—a fully-featured foundation—then refine it into your own unique creation.
+              Coding is a human art, like cooking. Learn from proven patterns and real-world implementations. 
+              SaaS Recipes provides the essential tools, techniques, and examples you need to craft your masterpiece.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Link href="/dashboard">
@@ -71,10 +71,11 @@ export default function Home() {
         <div className="container px-4">
           <div className="mx-auto max-w-3xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4">
-              Everything in the Recipe Box
+              Learn from Scaled SaaS in the Wild
             </h2>
             <p className="text-lg text-muted-foreground">
-              A comprehensive collection of tools, patterns, and components to build your SaaS application.
+              Study real-world patterns from successful SaaS repositories. Speed up development by understanding industry standards, 
+              battle-tested architectures, and proven solutions that power production applications at scale.
             </p>
           </div>
           
@@ -159,7 +160,7 @@ export default function Home() {
         <div className="container px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4">
-              Ready to start building?
+              Ready to cook?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
               Explore the dashboard to see repository insights, manage contributors, and keep your dependencies secure. 
