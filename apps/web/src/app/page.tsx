@@ -42,14 +42,14 @@ export default function Home() {
               <span className="font-medium">Built with Next.js 16 & TailwindCSS 4</span>
             </div>
             <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              Modern SaaS Dashboard
+              Don&apos;t Cook Alone
               <span className="block bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-transparent">
-                Recipe for Success
+                SaaS Recipes for Success
               </span>
             </h1>
             <p className="mb-8 text-lg text-muted-foreground md:text-xl">
-              A beautiful, production-ready dashboard template built with the latest web technologies.
-              Start building your SaaS application today with our comprehensive toolkit.
+              Coding is a human art, like cooking. Learn from proven patterns and real-world implementations. 
+              SaaS Recipes provides the essential tools, techniques, and examples you need to craft your masterpiece.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Link href="/dashboard">
@@ -71,10 +71,11 @@ export default function Home() {
         <div className="container px-4">
           <div className="mx-auto max-w-3xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4">
-              Everything you need
+              Learn from Scaled SaaS in the Wild
             </h2>
             <p className="text-lg text-muted-foreground">
-              A complete dashboard solution with all the features you need to build your SaaS application.
+              Study real-world patterns from successful SaaS repositories. Speed up development by understanding industry standards, 
+              battle-tested architectures, and proven solutions that power production applications at scale.
             </p>
           </div>
           
@@ -84,9 +85,9 @@ export default function Home() {
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <BarChart3 className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>Analytics Dashboard</CardTitle>
+                <CardTitle>Analytics & Insights</CardTitle>
                 <CardDescription>
-                  Real-time analytics and insights with beautiful visualizations
+                  Real-time analytics and beautiful visualizations to track your project
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -96,9 +97,9 @@ export default function Home() {
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <Users className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>User Management</CardTitle>
+                <CardTitle>Contributor Management</CardTitle>
                 <CardDescription>
-                  Complete user management system with roles and permissions
+                  Track and manage contributors working across different parts of your project
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -108,9 +109,9 @@ export default function Home() {
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <Shield className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>Security First</CardTitle>
+                <CardTitle>Dependency Security</CardTitle>
                 <CardDescription>
-                  Built with security best practices and modern authentication
+                  Monitor and manage your dependencies with built-in security scanning
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -122,7 +123,7 @@ export default function Home() {
                 </div>
                 <CardTitle>Lightning Fast</CardTitle>
                 <CardDescription>
-                  Optimized performance with Next.js 16 and Turbopack
+                  Optimized performance with Next.js 16 and Turbopack for instant feedback
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -134,7 +135,7 @@ export default function Home() {
                 </div>
                 <CardTitle>Responsive Design</CardTitle>
                 <CardDescription>
-                  Beautiful on all devices with mobile-first approach
+                  Beautiful on all devices with a mobile-first, accessible approach
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -144,9 +145,9 @@ export default function Home() {
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <Lock className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>Type Safe</CardTitle>
+                <CardTitle>Type-Safe Code</CardTitle>
                 <CardDescription>
-                  Full TypeScript support for better developer experience
+                  Full TypeScript support for better developer experience and fewer bugs
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -159,10 +160,11 @@ export default function Home() {
         <div className="container px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4">
-              Ready to get started?
+              Ready to cook?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Experience the power of our dashboard. Start building your SaaS application today.
+              Explore the dashboard to see repository insights, manage contributors, and keep your dependencies secure. 
+              Everything you need to craft your SaaS application is ready to go.
             </p>
             <Link href="/dashboard">
               <Button size="lg">

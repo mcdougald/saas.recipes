@@ -9,23 +9,23 @@ import { Bell, Calendar, Clock, MessageSquare, TrendingUp, User } from "lucide-r
 
 export function RightSidebar() {
   const notifications = [
-    { id: 1, title: "New comment", description: "John commented on your post", time: "5m ago", icon: MessageSquare, unread: true },
-    { id: 2, title: "Meeting reminder", description: "Team standup in 30 minutes", time: "25m ago", icon: Calendar, unread: true },
-    { id: 3, title: "System update", description: "New features available", time: "1h ago", icon: Bell, unread: false },
-    { id: 4, title: "User joined", description: "Sarah joined your workspace", time: "2h ago", icon: User, unread: false },
+    { id: 1, title: "New chef comment", description: "John commented on your recipe", time: "5m ago", icon: MessageSquare, unread: true },
+    { id: 2, title: "Kitchen meeting", description: "Team standup in 30 minutes", time: "25m ago", icon: Calendar, unread: true },
+    { id: 3, title: "Recipe update", description: "New features available", time: "1h ago", icon: Bell, unread: false },
+    { id: 4, title: "Chef joined", description: "Sarah joined your kitchen", time: "2h ago", icon: User, unread: false },
   ]
 
   const recentActivity = [
-    { id: 1, user: "JD", name: "John Doe", action: "updated a document", time: "10m ago" },
-    { id: 2, user: "JS", name: "Jane Smith", action: "created a new project", time: "45m ago" },
-    { id: 3, user: "BJ", name: "Bob Johnson", action: "completed a task", time: "1h ago" },
-    { id: 4, user: "AW", name: "Alice Williams", action: "commented on an issue", time: "2h ago" },
+    { id: 1, user: "JD", name: "John Doe", action: "perfected a recipe", time: "10m ago" },
+    { id: 2, user: "JS", name: "Jane Smith", action: "started a new dish", time: "45m ago" },
+    { id: 3, user: "BJ", name: "Bob Johnson", action: "finished cooking", time: "1h ago" },
+    { id: 4, user: "AW", name: "Alice Williams", action: "reviewed ingredients", time: "2h ago" },
   ]
 
   const upcomingEvents = [
-    { id: 1, title: "Team Meeting", time: "Today, 2:00 PM", type: "meeting" },
-    { id: 2, title: "Project Deadline", time: "Tomorrow", type: "deadline" },
-    { id: 3, title: "Weekly Review", time: "Friday, 10:00 AM", type: "review" },
+    { id: 1, title: "Kitchen Meeting", time: "Today, 2:00 PM", type: "meeting" },
+    { id: 2, title: "Recipe Deadline", time: "Tomorrow", type: "deadline" },
+    { id: 3, title: "Taste Test Review", time: "Friday, 10:00 AM", type: "review" },
   ]
 
   return (
@@ -81,7 +81,7 @@ export function RightSidebar() {
         <CardHeader className="pb-3">
           <CardTitle className="text-base">Recent Activity</CardTitle>
           <CardDescription className="text-xs">
-            Team member activities
+            What the chefs are cooking
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -146,10 +146,13 @@ export function RightSidebar() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base">Quick Stats</CardTitle>
+          <CardDescription className="text-xs">
+            Kitchen metrics
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Active Users</span>
+            <span className="text-sm text-muted-foreground">Active Chefs</span>
             <div className="flex items-center gap-1">
               <TrendingUp className="h-3 w-3 text-green-500" />
               <span className="text-sm font-semibold">156</span>
@@ -157,7 +160,7 @@ export function RightSidebar() {
           </div>
           <Separator />
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Tasks Done</span>
+            <span className="text-sm text-muted-foreground">Recipes Done</span>
             <span className="text-sm font-semibold">24/30</span>
           </div>
           <Separator />
