@@ -8,8 +8,6 @@ import { Separator } from "@/components/ui/separator"
 import { 
   LayoutDashboard, 
   Settings, 
-  Users, 
-  FileText,
   Menu,
   ChevronDown,
   UsersRound,

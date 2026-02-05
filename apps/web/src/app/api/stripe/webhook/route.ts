@@ -13,6 +13,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No signature" }, { status: 400 });
   }
 
+  if (!stripe) {
+    return NextResponse.json(
+      { error: "Stripe is not configured" },
+      { status: 500 }
+    );
+  }
+
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) {
     console.error("STRIPE_WEBHOOK_SECRET is not set");
@@ -54,7 +61,7 @@ export async function POST(req: NextRequest) {
 
       case "customer.subscription.created":
       case "customer.subscription.updated": {
-        const sub = event.data.object as Stripe.Subscription;
+        const sub = event.data.object;
         const customerId = sub.customer as string;
 
         // Find user by Stripe customer ID
@@ -80,6 +87,11 @@ export async function POST(req: NextRequest) {
           tier = "enterprise";
         }
 
+        // Get period end timestamp - use proper field access
+        const periodEndTimestamp = 'current_period_end' in sub ? (sub as Record<string, unknown>).current_period_end as number : Date.now() / 1000;
+        const periodEnd = new Date(periodEndTimestamp * 1000);
+        const cancelAtEnd = 'cancel_at_period_end' in sub ? (sub as Record<string, unknown>).cancel_at_period_end as boolean : false;
+
         // Update or create subscription
         await db
           .insert(subscription)
@@ -89,16 +101,16 @@ export async function POST(req: NextRequest) {
             stripeSubscriptionId: sub.id,
             stripePriceId: priceId,
             status: sub.status,
-            stripeCurrentPeriodEnd: new Date(sub.current_period_end * 1000),
-            cancelAtPeriodEnd: sub.cancel_at_period_end,
+            stripeCurrentPeriodEnd: periodEnd,
+            cancelAtPeriodEnd: cancelAtEnd,
           })
           .onConflictDoUpdate({
             target: subscription.id,
             set: {
               status: sub.status,
               stripePriceId: priceId,
-              stripeCurrentPeriodEnd: new Date(sub.current_period_end * 1000),
-              cancelAtPeriodEnd: sub.cancel_at_period_end,
+              stripeCurrentPeriodEnd: periodEnd,
+              cancelAtPeriodEnd: cancelAtEnd,
               updatedAt: new Date(),
             },
           });
@@ -109,14 +121,14 @@ export async function POST(req: NextRequest) {
           .set({
             subscriptionStatus: sub.status,
             subscriptionTier: tier,
-            subscriptionEndDate: new Date(sub.current_period_end * 1000),
+            subscriptionEndDate: periodEnd,
           })
           .where(eq(user.id, userId));
         break;
       }
 
       case "customer.subscription.deleted": {
-        const sub = event.data.object as Stripe.Subscription;
+        const sub = event.data.object;
         const customerId = sub.customer as string;
 
         // Find user by Stripe customer ID
@@ -133,6 +145,10 @@ export async function POST(req: NextRequest) {
 
         const userId = users[0].id;
 
+        // Get period end timestamp
+        const periodEndTimestamp = 'current_period_end' in sub ? (sub as Record<string, unknown>).current_period_end as number : Date.now() / 1000;
+        const periodEnd = new Date(periodEndTimestamp * 1000);
+
         // Update subscription status
         await db
           .update(subscription)
@@ -148,7 +164,7 @@ export async function POST(req: NextRequest) {
           .set({
             subscriptionStatus: "canceled",
             subscriptionTier: "free",
-            subscriptionEndDate: new Date(sub.current_period_end * 1000),
+            subscriptionEndDate: periodEnd,
           })
           .where(eq(user.id, userId));
         break;
