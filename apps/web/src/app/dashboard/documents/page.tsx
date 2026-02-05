@@ -3,6 +3,18 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Upload, Download, Eye, Search, Filter, File } from "lucide-react"
 
+const getColorClasses = (color: string) => {
+  const colors: Record<string, string> = {
+    red: "bg-red-100 text-red-600",
+    blue: "bg-blue-100 text-blue-600",
+    green: "bg-emerald-100 text-emerald-600",
+    gray: "bg-gray-100 text-gray-600",
+    orange: "bg-orange-100 text-orange-600",
+    purple: "bg-purple-100 text-purple-600",
+  }
+  return colors[color] || colors.gray
+}
+
 export default function DocumentsPage() {
   const documents = [
     { id: 1, name: "Q4-Report.pdf", size: "2.4 MB", date: "2024-02-01", type: "PDF", color: "red" },
@@ -12,18 +24,6 @@ export default function DocumentsPage() {
     { id: 5, name: "Presentation.pptx", size: "5.2 MB", date: "2024-01-15", type: "Presentation", color: "orange" },
     { id: 6, name: "Design-Assets.zip", size: "15.8 MB", date: "2024-01-10", type: "Archive", color: "purple" },
   ]
-
-  const getColorClasses = (color: string) => {
-    const colors: Record<string, string> = {
-      red: "bg-red-100 text-red-600",
-      blue: "bg-blue-100 text-blue-600",
-      green: "bg-emerald-100 text-emerald-600",
-      gray: "bg-gray-100 text-gray-600",
-      orange: "bg-orange-100 text-orange-600",
-      purple: "bg-purple-100 text-purple-600",
-    }
-    return colors[color] || colors.gray
-  }
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -44,6 +44,8 @@ export default function DocumentsPage() {
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
+            name="search"
+            aria-label="Search documents"
             placeholder="Search documents..."
             className="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           />
