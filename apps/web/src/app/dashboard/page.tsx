@@ -10,7 +10,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here&apos;s what&apos;s happening today.</p>
+          <p className="text-muted-foreground">Welcome back to the kitchen! Here&apos;s what&apos;s cooking today.</p>
         </div>
         <Button>
           <Activity className="mr-2 h-4 w-4" />
@@ -164,14 +164,14 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
               <CardDescription>
-                Common tasks and shortcuts
+                Essential kitchen tasks
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3">
               <Button className="w-full justify-start h-12 shadow-sm hover:shadow-md transition-shadow" variant="outline">
                 <Users className="mr-3 h-5 w-5 text-blue-600" />
                 <div className="flex flex-col items-start">
-                  <span className="font-medium">Add New User</span>
+                  <span className="font-medium">Add New Chef</span>
                   <span className="text-xs text-muted-foreground">Invite team members</span>
                 </div>
               </Button>
@@ -185,8 +185,8 @@ export default function DashboardPage() {
               <Button className="w-full justify-start h-12 shadow-sm hover:shadow-md transition-shadow" variant="outline">
                 <TrendingUp className="mr-3 h-5 w-5 text-orange-600" />
                 <div className="flex flex-col items-start">
-                  <span className="font-medium">View Analytics</span>
-                  <span className="text-xs text-muted-foreground">Detailed insights</span>
+                  <span className="font-medium">Check Ingredients</span>
+                  <span className="text-xs text-muted-foreground">Review dependencies</span>
                 </div>
               </Button>
             </CardContent>
@@ -194,9 +194,9 @@ export default function DashboardPage() {
 
           <Card className="shadow-md">
             <CardHeader>
-              <CardTitle>Performance</CardTitle>
+              <CardTitle>Kitchen Performance</CardTitle>
               <CardDescription>
-                System health and metrics
+                How well your recipe is cooking
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
