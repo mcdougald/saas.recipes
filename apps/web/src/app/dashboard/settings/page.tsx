@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { User, Bell, Shield, CreditCard, Upload } from "lucide-react"
+import { User, Bell, Shield, Upload } from "lucide-react"
 
 export default function SettingsPage() {
   return (

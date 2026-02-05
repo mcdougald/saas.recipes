@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Upload, FileText, Download, Eye, Search, Filter, File } from "lucide-react"
+import { Upload, Download, Eye, Search, Filter, File } from "lucide-react"
 
 export default function DocumentsPage() {
   const documents = [

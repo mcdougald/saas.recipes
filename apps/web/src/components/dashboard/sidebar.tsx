@@ -4,7 +4,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { 
   LayoutDashboard, 
@@ -12,9 +11,7 @@ import {
   Users, 
   FileText,
   Menu,
-  ChevronDown,
-  LogOut,
-  User
+  ChevronDown
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
