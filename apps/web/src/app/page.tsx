@@ -42,14 +42,14 @@ export default function Home() {
               <span className="font-medium">Built with Next.js 16 & TailwindCSS 4</span>
             </div>
             <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              Modern SaaS Dashboard
+              You&apos;re No Longer Alone in the Kitchen
               <span className="block bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-transparent">
-                Recipe for Success
+                Your SaaS Recipe for Success
               </span>
             </h1>
             <p className="mb-8 text-lg text-muted-foreground md:text-xl">
-              A beautiful, production-ready dashboard template built with the latest web technologies.
-              Start building your SaaS application today with our comprehensive toolkit.
+              Building a SaaS is like cooking a gourmet meal—you need the right ingredients, expert chefs, and a well-equipped kitchen. 
+              With SaaS Recipes, you have access to all the tools, contributors, and dependencies to craft something extraordinary.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Link href="/dashboard">
@@ -71,10 +71,10 @@ export default function Home() {
         <div className="container px-4">
           <div className="mx-auto max-w-3xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4">
-              Everything you need
+              All the Ingredients for Success
             </h2>
             <p className="text-lg text-muted-foreground">
-              A complete dashboard solution with all the features you need to build your SaaS application.
+              Just like a professional kitchen, we provide everything you need to cook up your perfect SaaS application.
             </p>
           </div>
           
@@ -86,7 +86,7 @@ export default function Home() {
                 </div>
                 <CardTitle>Analytics Dashboard</CardTitle>
                 <CardDescription>
-                  Real-time analytics and insights with beautiful visualizations
+                  Track your recipe&apos;s performance with real-time metrics and insights
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -96,9 +96,9 @@ export default function Home() {
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <Users className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>User Management</CardTitle>
+                <CardTitle>Team of Chefs</CardTitle>
                 <CardDescription>
-                  Complete user management system with roles and permissions
+                  Collaborate with fellow chefs—manage contributors who help perfect your recipe
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -108,9 +108,9 @@ export default function Home() {
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <Shield className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>Security First</CardTitle>
+                <CardTitle>Quality Ingredients</CardTitle>
                 <CardDescription>
-                  Built with security best practices and modern authentication
+                  Built with the finest dependencies—security-first, battle-tested packages
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -120,9 +120,9 @@ export default function Home() {
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <Zap className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>Lightning Fast</CardTitle>
+                <CardTitle>Fast Cooking</CardTitle>
                 <CardDescription>
-                  Optimized performance with Next.js 16 and Turbopack
+                  Lightning-fast preparation with Next.js 16 and Turbopack—serve hot and fresh
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -132,9 +132,9 @@ export default function Home() {
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <Globe className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>Responsive Design</CardTitle>
+                <CardTitle>Serves All Guests</CardTitle>
                 <CardDescription>
-                  Beautiful on all devices with mobile-first approach
+                  Beautiful presentation on every plate—responsive design for all devices
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -144,9 +144,9 @@ export default function Home() {
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                   <Lock className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>Type Safe</CardTitle>
+                <CardTitle>Recipe Book</CardTitle>
                 <CardDescription>
-                  Full TypeScript support for better developer experience
+                  Type-safe instructions with TypeScript—follow the recipe exactly every time
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -159,10 +159,10 @@ export default function Home() {
         <div className="container px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4">
-              Ready to get started?
+              Ready to cook together?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Experience the power of our dashboard. Start building your SaaS application today.
+              Join a kitchen full of talented chefs. See who&apos;s contributing to your success, explore the ingredients powering your app, and start cooking up something amazing together.
             </p>
             <Link href="/dashboard">
               <Button size="lg">
