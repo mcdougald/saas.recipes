@@ -12,6 +12,9 @@ This project is currently hosted at [trev.fyi/saas](https://trev.fyi/saas)
 - **Monorepo**: Turborepo
 - **Package Manager**: pnpm
 - **Language**: TypeScript
+- **Authentication**: better-auth
+- **Database**: PostgreSQL with Drizzle ORM
+- **Payments**: Stripe
 
 ## Project Structure
 
@@ -42,6 +45,7 @@ This project is currently hosted at [trev.fyi/saas](https://trev.fyi/saas)
 
 - Node.js 18+
 - pnpm 8.15+
+- PostgreSQL database (see [Authentication Setup Guide](apps/web/AUTH_SETUP.md))
 
 ### Installation
 
@@ -50,12 +54,22 @@ This project is currently hosted at [trev.fyi/saas](https://trev.fyi/saas)
 pnpm install
 ```
 
-2. Run the development server:
+2. Set up authentication and database:
+   - Follow the [Authentication Setup Guide](apps/web/AUTH_SETUP.md) for detailed instructions
+   - Copy `apps/web/.env.example` to `apps/web/.env` and configure your environment variables
+
+3. Run database migrations:
+```bash
+cd apps/web
+pnpm db:push
+```
+
+4. Run the development server:
 ```bash
 pnpm dev
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Build for Production
 
@@ -71,9 +85,19 @@ pnpm build
 - 🚀 Fast development with Turbopack
 - 📦 Monorepo structure for scalability
 - 🎯 TypeScript for type safety
+- 🔐 Authentication with email/password (better-auth)
+- 💳 Subscription billing with Stripe
+- 🗄️ PostgreSQL database with Drizzle ORM
+
+## Design Inspiration
+
+The dashboard layout is inspired by [next-shadcn-dashboard-starter](https://github.com/Kiranism/next-shadcn-dashboard-starter), a comprehensive admin dashboard example built with Next.js and shadcn/ui.
 
 ## Dashboard Pages
 
+- **Home**: Landing page with features and pricing
+- **Sign In/Sign Up**: Authentication pages
+- **Pricing**: Subscription plans with Stripe integration
 - **Dashboard**: Overview with statistics and recent activity
 - **Users**: User management table
 - **Documents**: Document library
