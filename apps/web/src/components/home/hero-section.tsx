@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Zap } from "lucide-react";
 import Link from "next/link";
 
 export function HeroSection() {
@@ -19,15 +18,18 @@ export function HeroSection() {
             Learn from recipes that scale.
           </span>
         </h1>
-        <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground md:text-xl">
-          Stop reinventing the wheel. SaaS Recipes gives you proven patterns,
-          real-world examples, and a full dashboard—so you focus on your product
-          instead of plumbing.
+        <p className="mx-auto max-w-2xl text-lg text-muted-foreground md:text-xl">
+          Don&apos;t cook alone. Leverage this cookbook — proven recipes from real
+          kitchens—auth, billing, dashboards, and more — plus an AI chef to help
+          run the kitchen.
         </p>
-        <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground md:text-xl">
+          You focus on your signature dish; this product handles the prep.
+        </p>
+        <div className="mx-auto mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
           <Link href="/dashboard">
             <Button size="lg" className="w-full sm:w-auto text-base px-8">
-              Explore the dashboard
+              Explore Recipes
               <span className="ml-2" aria-hidden>→</span>
             </Button>
           </Link>

@@ -4,7 +4,7 @@ import { Quote } from "lucide-react";
 const testimonials = [
   {
     quote:
-      "Finally, a reference that shows how real SaaS apps are built—not just theory. Cut our setup time in half.",
+      "Finally, a reference that shows how real SaaS apps are built, not just theories. Cut our setup time in half.",
     author: "Engineering lead",
     role: "Series A startup",
   },

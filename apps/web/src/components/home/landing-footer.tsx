@@ -36,9 +36,13 @@ export function LandingFooter() {
             ))}
           </nav>
         </div>
-        <p className="mt-8 text-center text-sm text-muted-foreground md:text-left">
-          Built with Next.js, TailwindCSS, and shadcn/ui. Use the recipes, ship
-          your product.
+        <p className="mt-8 flex gap-1 text-center text-sm text-muted-foreground md:text-left">
+          Built by <Link
+            href="https://trev.fyi"
+            className="flex items-center gap-2 font-semibold text-foreground underline"
+          >
+            <span>@trev.fyi</span>
+          </Link>
         </p>
       </div>
     </footer>

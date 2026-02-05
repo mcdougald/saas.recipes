@@ -37,8 +37,8 @@ export function HowItWorksSection() {
             How it works
           </h2>
           <p className="text-lg text-muted-foreground">
-            Three steps from “I need this” to “it’s live.” No lock-in, no
-            magic—just patterns you can own.
+            Three steps turn “I need deliver this” into “it’s live.” No lock-in, no
+            magic—just proven patterns and experience you can own.
           </p>
         </div>
         <div className="mx-auto grid max-w-4xl gap-10 md:grid-cols-3 md:gap-8">

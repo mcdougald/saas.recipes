@@ -13,11 +13,11 @@ export function CtaSection() {
             id="cta-heading"
             className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4"
           >
-            Ready to build?
+            Ready to cook?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Explore the dashboard, try the patterns, and start shipping. No
-            credit card required—just open the app and go.
+            Explore the product, try the patterns, and start shipping. No
+            credit card required — just open the app and go.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
             <Link href="/dashboard">
