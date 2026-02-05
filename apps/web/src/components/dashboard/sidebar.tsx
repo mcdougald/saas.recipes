@@ -13,12 +13,16 @@ import {
   Menu,
   ChevronDown,
   UsersRound,
-  Package
+  Package,
+  BarChart3,
+  Search
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Metrics", href: "/dashboard/metrics", icon: BarChart3 },
+  { name: "Explore", href: "/dashboard/explore", icon: Search },
   { name: "Contributors", href: "/dashboard/contributors", icon: UsersRound },
   { name: "Dependencies", href: "/dashboard/dependencies", icon: Package },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
