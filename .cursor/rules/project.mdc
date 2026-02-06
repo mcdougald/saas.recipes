@@ -1,0 +1,10 @@
+---
+description: Project structure and conventions for saas.recipes
+alwaysApply: true
+---
+
+# saas.recipes project
+
+- **Monorepo**: pnpm workspaces + Turborepo. Root: `pnpm dev`, `pnpm build`, `pnpm lint`.
+- **App**: `apps/web` — Next.js 16, React 19, TypeScript, Tailwind 4, Drizzle, better-auth, Stripe. Alias `@/*` → `./src/*`.
+- **React/Next**: Follow **apps/web/.claude/skills/vercel-react-best-practices/AGENTS.md** for patterns and performance in `apps/web`.

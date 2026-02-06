@@ -49,7 +49,7 @@ export function LandingHeader() {
                 Sign in
               </Button>
             </Link>
-            <Link href="/dashboard">
+            <Link href="/sign-up">
               <Button size="sm">
                 Get started
                 <span className="ml-1.5" aria-hidden>→</span>
@@ -85,7 +85,7 @@ export function LandingHeader() {
                     Sign in
                   </Button>
                 </Link>
-                <Link href="/dashboard" onClick={() => setOpen(false)}>
+                <Link href="/sign-up" onClick={() => setOpen(false)}>
                   <Button className="w-full">Get started</Button>
                 </Link>
               </div>

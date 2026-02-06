@@ -12,7 +12,7 @@ const footerLinks = [
 export function LandingFooter() {
   return (
     <footer className="border-t bg-muted/30" role="contentinfo">
-      <div className="container px-4 py-10">
+      <div className="container px-4 py-10 mx-auto">
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
           <Link
             href="/"

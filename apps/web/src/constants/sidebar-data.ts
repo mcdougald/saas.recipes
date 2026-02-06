@@ -147,30 +147,10 @@ export const sidebarData: SidebarData = {
           title: "Auth",
           icon: IconLockAccess,
           items: [
-            {
-              title: "Sign In 1",
-              url: "/sign-in-1",
-            },
-            {
-              title: "Sign In (2 Col)",
-              url: "/sign-in-2",
-            },
-            {
-              title: "Sign Up 1",
-              url: "/sign-up-1",
-            },
-            {
-              title: "Sign Up 2 (2 Col)",
-              url: "/sign-up-2",
-            },
-            {
-              title: "Reset Password 1",
-              url: "/reset-password-1",
-            },
-            {
-              title: "Reset Password 2",
-              url: "/reset-password-2",
-            },
+            { title: "Sign in", url: "/sign-in" },
+            { title: "Sign up", url: "/sign-up" },
+            { title: "Forgot password", url: "/forgot-password" },
+            { title: "Reset password", url: "/reset-password" },
           ],
         },
         {

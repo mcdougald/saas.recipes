@@ -1,0 +1,36 @@
+---
+description: Use Aceternity UI, Magic UI, and similar libraries for stylish, refined UI components
+alwaysApply: false
+globs: apps/web/src/**/*.{tsx,jsx}
+---
+
+# Stylish UI components (Aceternity, Magic UI)
+
+When building or improving UI in `apps/web` (landing, auth, marketing, dashboards), prefer **stylish, refined components** from these sources. Use them for hero sections, highlights, cards, backgrounds, and CTAs.
+
+## Aceternity UI
+
+- **Site:** https://ui.aceternity.com  
+- **Components:** Hero Highlight, Spotlight, Aurora Background, Bento Grids, Cards, Text effects, Buttons, etc.  
+- **Install (per component):** `npx shadcn@latest add @aceternity/<component-name>`  
+  - Example Hero Highlight: `npx shadcn@latest add @aceternity/hero-highlight`  
+- **Docs:** Each component page has Props, Preview, and copy-paste code.  
+- **Stack:** React, Tailwind, Framer Motion; compatible with shadcn/ui.
+
+**Use for:** Hero sections, text highlights, backgrounds, premium card effects.
+
+## Magic UI
+
+- **Site:** https://magicui.design  
+- **Components:** Animated components, borders, gradients, blocks.  
+- **Install:** Often via CLI or copy-paste from docs; check each block’s installation section.  
+- **Stack:** React, Tailwind, Tailwind Animate.
+
+**Use for:** Animated borders, gradients, subtle motion, marketing blocks.
+
+## Conventions
+
+- Install or copy components into `apps/web/src/components/` (e.g. `components/ui/` for shadcn-style, or `components/aceternity/` if you prefer).
+- Keep existing path alias `@/*` → `./src/*`.
+- Match project stack: Next.js 16, React 19, Tailwind 4; avoid breaking existing theming (e.g. CSS variables for primary, background, border).
+- Prefer components that work with the app’s theme (dark/light, `--primary`, etc.) and don’t hardcode colors that clash.
