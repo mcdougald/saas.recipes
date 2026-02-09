@@ -75,20 +75,6 @@ export const sidebarData: SidebarData = {
       title: "General",
       items: [
         {
-          title: "Mail",
-          url: "/mail",
-          icon: MailIcon,
-          badge: "New",
-          badgeColor: "green",
-        },
-        {
-          title: "Discord",
-          url: "/discord",
-          icon: Icons.discord,
-          badge: "New",
-          badgeColor: "green",
-        },
-        {
           title: "Tasks",
           url: "/tasks",
           icon: IconChecklist,
