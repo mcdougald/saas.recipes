@@ -7,56 +7,58 @@ import Link from "next/link";
 
 const popularArticles = [
   {
-    title: "Getting Started with Recipes",
+    title: "Getting started with saas.recipes",
     description:
-      "Learn how to explore recipes, use the dashboard, and get the most from your plan",
+      "Sign up, explore recipes and live project demos, and choose the right plan for you.",
     category: "Getting Started",
-    readTime: "5 min read",
+    readTime: "5 min",
     views: "12.5k",
-    href: "#",
+    href: "/dashboard",
   },
   {
-    title: "Understanding User Roles and Permissions",
+    title: "Understanding plans: Free, Basic, Pro & Enterprise",
     description:
-      "A comprehensive guide to managing team members and their access levels",
-    category: "Team & Collaboration",
-    readTime: "8 min read",
-    views: "8.2k",
-    href: "#",
-  },
-  {
-    title: "Setting Up Two-Factor Authentication",
-    description: "Step-by-step instructions to secure your account with 2FA",
-    category: "Security & Privacy",
-    readTime: "3 min read",
-    views: "15.3k",
-    href: "#",
-  },
-  {
-    title: "API Authentication and Best Practices",
-    description:
-      "Learn how to authenticate API requests and follow security best practices",
-    category: "API & Integrations",
-    readTime: "12 min read",
-    views: "6.7k",
-    href: "#",
-  },
-  {
-    title: "Managing Billing and Subscriptions",
-    description: "Everything you need to know about managing your subscription",
-    category: "Billing & Payments",
-    readTime: "4 min read",
+      "What’s included in each plan and how to upgrade or change your subscription.",
+    category: "Billing & Subscriptions",
+    readTime: "4 min",
     views: "9.1k",
-    href: "#",
+    href: "/pricing",
   },
   {
-    title: "Customizing Your Workspace",
+    title: "Using the dashboard and live projects",
     description:
-      "Personalize your dashboard and workspace to fit your workflow",
-    category: "Account & Settings",
-    readTime: "6 min read",
+      "Navigate the dashboard, view live project demos, and use repository recipes.",
+    category: "Recipes & Repositories",
+    readTime: "6 min",
+    views: "8.2k",
+    href: "/dashboard",
+  },
+  {
+    title: "Setting up two-factor authentication",
+    description:
+      "Step-by-step instructions to secure your saas.recipes account with 2FA.",
+    category: "Security & Privacy",
+    readTime: "3 min",
+    views: "15.3k",
+    href: "/settings/account",
+  },
+  {
+    title: "Managing billing and payment methods",
+    description:
+      "Update payment details, view invoices, and manage your subscription.",
+    category: "Billing & Subscriptions",
+    readTime: "4 min",
     views: "7.4k",
-    href: "#",
+    href: "/payment-dashboard",
+  },
+  {
+    title: "Account settings and preferences",
+    description:
+      "Update your profile, email, password, and notification preferences.",
+    category: "Account & Settings",
+    readTime: "4 min",
+    views: "6.7k",
+    href: "/settings",
   },
 ];
 
@@ -66,15 +68,15 @@ export function PopularArticles() {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold tracking-tight">Popular Articles</h2>
         <Link
-          href="#"
+          href="/help-center#faq"
           className="text-muted-foreground hover:text-foreground text-sm transition-colors"
         >
-          View all articles →
+          View FAQ →
         </Link>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {popularArticles.map((article, index) => (
-          <Link key={index} href={article.href}>
+          <Link key={article.title} href={article.href}>
             <Card className="h-full border transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
               <CardContent className="flex flex-col gap-4 p-6">
                 <div className="flex items-start justify-between gap-2">

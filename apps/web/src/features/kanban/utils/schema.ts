@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const priorityEnum = z.enum(["low", "medium", "high"]);
-export const columnStatusEnum = z.enum(["todo", "in_progress", "done"]);
+export const columnStatusEnum = z.enum(["ideas", "todo", "in_progress", "done"]);
 
 export const kanbanTaskSchema = z.object({
   id: z.string(),
@@ -35,6 +35,7 @@ export const statusConfig: Record<
   ColumnStatus,
   { label: string; color: string }
 > = {
+  ideas: { label: "Ideas", color: "bg-gray-500" },
   todo: { label: "Todo", color: "bg-slate-500" },
   in_progress: { label: "Progress", color: "bg-blue-500" },
   done: { label: "Done", color: "bg-green-500" },

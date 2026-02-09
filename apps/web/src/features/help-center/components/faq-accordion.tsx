@@ -15,17 +15,32 @@ const faqSections = [
       {
         question: "How do I create an account?",
         answer:
-          "Click the 'Sign Up' button in the top right corner and provide your email and a password. After verifying your email, you can explore recipes and content according to your plan.",
+          "Click Sign up in the header and enter your email and a password. After verifying your email, you can explore saas.recipes and browse recipes and demos according to your plan.",
       },
       {
         question: "What's included in each plan?",
         answer:
-          "Free gives you limited, temporary access to browse recipes and view demos. Basic includes full access to notes, repository recipes, and all live projects. Pro adds the AI Chef plus My Help (direct access to my time). Enterprise is for teams: everything in Pro plus team workspace, sharing, and priority support.",
+          "Free gives limited access to browse recipes and view demos. Basic includes full access to notes, repository recipes, and all live projects. Pro adds the AI Chef and My Help. Enterprise is for teams: everything in Pro plus team workspace, sharing, and priority support.",
       },
       {
         question: "How do I get started?",
         answer:
-          "Sign up for a free account to explore. Use the dashboard to browse recipes and live project demos. Upgrade to Basic for full access, or to Pro for AI Chef and My Help when you're ready.",
+          "Sign up for a free account, then use the dashboard to browse recipes and live project demos. Upgrade to Basic for full access to recipes and projects, or to Pro for the AI Chef and My Help when you're ready.",
+      },
+    ],
+  },
+  {
+    category: "Recipes & Content",
+    questions: [
+      {
+        question: "What are recipes?",
+        answer:
+          "Recipes are proven patterns and implementations from indie devs and teams—auth, billing, security, and more. You get codebase insights, real examples, and patterns that match how you work. Browse by category or use the dashboard to explore.",
+      },
+      {
+        question: "Can I use recipe code in my own project?",
+        answer:
+          "Yes. Recipes are meant to be copied and adapted. Use what fits your stack, skip the wiring, and ship faster. Check each recipe for license and usage details.",
       },
     ],
   },
@@ -35,17 +50,17 @@ const faqSections = [
       {
         question: "How do I change my password?",
         answer:
-          "Go to Settings > Security > Change Password. Enter your current password and your new password twice. Make sure your new password is at least 8 characters long and includes a mix of letters, numbers, and special characters.",
+          "Go to Settings > Account (or Security). Enter your current password and your new password twice. Use at least 8 characters with a mix of letters, numbers, and symbols.",
       },
       {
         question: "Can I change my email address?",
         answer:
-          "Yes, you can change your email address in Settings > Account > Email. You'll need to verify your new email address before it becomes active. Make sure to check your spam folder for the verification email.",
+          "Yes. Update your email in Settings > Account. You'll need to verify the new address before it becomes active; check your spam folder for the verification email.",
       },
       {
         question: "How do I enable two-factor authentication?",
         answer:
-          "Navigate to Settings > Security > Two-Factor Authentication and click 'Enable'. You'll need to scan a QR code with an authenticator app like Google Authenticator or Authy. Keep your backup codes in a safe place.",
+          "Go to Settings > Account (or Security) and turn on Two-Factor Authentication. Scan the QR code with an authenticator app (e.g. Google Authenticator or Authy) and store your backup codes somewhere safe.",
       },
     ],
   },
@@ -55,17 +70,17 @@ const faqSections = [
       {
         question: "What payment methods do you accept?",
         answer:
-          "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for annual plans. All payments are processed securely through our payment partners.",
+          "We accept major credit cards (Visa, Mastercard, American Express), PayPal, and for annual plans, bank transfer. Payments are processed securely through our payment provider.",
       },
       {
         question: "Can I cancel my subscription anytime?",
         answer:
-          "Yes, you can cancel your subscription at any time from Settings > Billing. Your subscription will remain active until the end of your current billing period, and you'll continue to have access to all features until then.",
+          "Yes. Cancel from Settings > Billing or the payment dashboard. Your subscription stays active until the end of the current billing period, and you keep access until then.",
       },
       {
         question: "Do you offer refunds?",
         answer:
-          "We offer a 30-day money-back guarantee for new subscriptions. If you're not satisfied with our service within the first 30 days, contact our support team for a full refund. Refunds for annual plans are prorated based on unused time.",
+          "We offer a 30-day money-back guarantee for new subscriptions. Contact support within 30 days for a full refund. Annual plan refunds may be prorated for unused time.",
       },
     ],
   },
@@ -73,7 +88,7 @@ const faqSections = [
 
 export function FAQAccordion() {
   return (
-    <div className="space-y-6">
+    <div id="faq" className="scroll-mt-6 space-y-6">
       <h2 className="text-2xl font-bold tracking-tight">
         Frequently Asked Questions
       </h2>

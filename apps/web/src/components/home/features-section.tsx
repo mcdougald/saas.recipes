@@ -12,38 +12,32 @@ const features = [
   {
     icon: Sparkles,
     title: "Instant codebase insights",
-    description:
-      "Real-time analysis of your codebase so you can make decisions on the spot. See structure, patterns, and impact without digging through files—instant clarity when it matters.",
+    description: "Real-time structure, patterns, and impact—no digging through files.",
   },
   {
     icon: BookOpen,
-    title: "Learn from the best kitchens & cooks",
-    description:
-      "Recipes from silo developers, enterprise teams, and open-source solutions. Whatever your setup—solo, org, or community—find patterns that match how you actually work.",
+    title: "Learn from the best cooks",
+    description: "Recipes from indie devs, teams, and open source. Patterns that match how you work.",
   },
   {
     icon: Shield,
-    title: "Auth, billing & security by default",
-    description:
-      "Production-ready examples for authentication, billing, and secure patterns. Copy proven implementations instead of wiring it yourself—auth, payments, and guardrails that scale.",
+    title: "Auth, billing & security",
+    description: "Production-ready examples. Copy proven implementations, skip the wiring.",
   },
   {
     icon: TrendingUp,
     title: "Modern flavors, tracked",
-    description:
-      "Built to track which modern stacks and flavors are working in the wild. See what’s adopted, what’s trending, and what’s proven—so you choose tools that are here to stay.",
+    description: "See what's adopted and proven so you choose tools that stick.",
   },
   {
     icon: Globe,
     title: "Every deployment shape",
-    description:
-      "Web apps, mobile apps, Chrome extensions, bots, self-hosted, portfolios, and more. Find recipes for the exact kind of product you’re building—versatility without the noise.",
+    description: "Web, mobile, extensions, bots, self-hosted. Recipes for what you're building.",
   },
   {
     icon: Lock,
     title: "Type-safe from the start",
-    description:
-      "Full TypeScript and clear types across the stack. Fewer runtime bugs, safer refactors, and better DX so you move fast without breaking things.",
+    description: "Full TypeScript and clear types. Fewer bugs, safer refactors.",
   },
 ] as const;
 
@@ -70,25 +64,26 @@ export function FeaturesSection() {
             </span>
           </h2>
           <p className="text-lg text-muted-foreground md:text-xl leading-relaxed">
-            Proven recipes from profitable kitchens — auth, billing, dashboards,
-            and more. Use what fits your menu, skip the prep work, and
+            Proven recipes from profitable kitchens. Use what fits your menu, skip the prep work, and
             let the market taste-test your product sooner.
           </p>
         </div>
-        <div className="mx-auto grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {features.map(({ icon: Icon, title, description }) => (
             <Card
               key={title}
-              className="group relative border-2 bg-card/90 backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20"
+              className="group relative border bg-card/90 backdrop-blur-sm transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/15"
             >
-              <CardHeader className="space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
-                  <Icon className="h-6 w-6" aria-hidden />
+              <CardHeader className="space-y-3 p-5 sm:p-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+                    <Icon className="h-4 w-4" aria-hidden />
+                  </div>
+                  <CardTitle className="text-lg font-semibold tracking-tight">
+                    {title}
+                  </CardTitle>
                 </div>
-                <CardTitle className="text-xl font-semibold tracking-tight">
-                  {title}
-                </CardTitle>
-                <CardDescription className="text-base leading-relaxed text-muted-foreground">
+                <CardDescription className="text-sm leading-snug text-muted-foreground">
                   {description}
                 </CardDescription>
               </CardHeader>

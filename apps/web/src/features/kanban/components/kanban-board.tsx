@@ -21,6 +21,7 @@ import { KanbanCard } from "./kanban-card";
 import { KanbanColumn } from "./kanban-column";
 
 const columns: { id: ColumnStatus; title: string }[] = [
+  { id: "ideas", title: "Ideas" },
   { id: "todo", title: "To Do" },
   { id: "in_progress", title: "In Progress" },
   { id: "done", title: "Done" },

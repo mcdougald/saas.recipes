@@ -10,7 +10,7 @@ export default function HelpCenterPage() {
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold tracking-tight">Help Center</h1>
           <p className="text-muted-foreground">
-            Find answers, guides, and support resources
+            Guides for recipes, dashboard, plans, billing, and support
           </p>
         </div>
       </div>
