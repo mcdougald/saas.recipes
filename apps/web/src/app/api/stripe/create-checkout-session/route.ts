@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     if (!stripe) {
       return NextResponse.json(
         { error: "Stripe is not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid price ID" }, { status: 400 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:4000";
 
     const checkoutSession = await stripe.checkout.sessions.create({
       customer_email: session.user.email,
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
     console.error("Error creating checkout session:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

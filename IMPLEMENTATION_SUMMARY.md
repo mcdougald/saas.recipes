@@ -7,6 +7,7 @@ This document summarizes the better-auth and Stripe integration that was impleme
 ### 1. Authentication System (better-auth)
 
 **Dependencies Installed:**
+
 - `better-auth` - Modern authentication library
 - `drizzle-orm` - Type-safe ORM
 - `postgres` - PostgreSQL client
@@ -14,6 +15,7 @@ This document summarizes the better-auth and Stripe integration that was impleme
 - `drizzle-kit` - Database migration tool
 
 **Files Created:**
+
 - `src/lib/auth.ts` - Server-side auth configuration
 - `src/lib/auth-client.ts` - Client-side auth hooks
 - `src/lib/db/schema.ts` - Database schema definitions
@@ -24,12 +26,14 @@ This document summarizes the better-auth and Stripe integration that was impleme
 - `drizzle.config.ts` - Drizzle ORM configuration
 
 **Database Schema:**
+
 - `user` table - User accounts with Stripe integration fields
 - `session` table - User sessions
 - `account` table - Authentication providers
 - `verification` table - Email verification tokens
 
 **Features:**
+
 - Email/password authentication
 - Session management
 - User profile display in dashboard
@@ -39,10 +43,12 @@ This document summarizes the better-auth and Stripe integration that was impleme
 ### 2. Subscription Billing (Stripe)
 
 **Dependencies Installed:**
+
 - `stripe` - Stripe Node.js SDK
 - `@stripe/stripe-js` - Stripe.js for client-side
 
 **Files Created:**
+
 - `src/lib/stripe.ts` - Stripe configuration
 - `src/app/pricing/page.tsx` - Pricing page
 - `src/app/api/stripe/create-checkout-session/route.ts` - Checkout API
@@ -50,11 +56,13 @@ This document summarizes the better-auth and Stripe integration that was impleme
 - `src/app/api/stripe/webhook/route.ts` - Webhook handler
 
 **Database Schema:**
+
 - `subscription` table - Subscription details
 - `pricingPlan` table - Available pricing tiers
 - User table extended with subscription fields
 
 **Features:**
+
 - 3 pricing tiers: Free, Pro ($19/mo), Enterprise ($49/mo)
 - Stripe Checkout integration
 - Webhook handling for subscription events
@@ -64,6 +72,7 @@ This document summarizes the better-auth and Stripe integration that was impleme
 ### 3. User Interface Updates
 
 **Modified Files:**
+
 - `src/components/dashboard/sidebar.tsx` - Added user session display and sign-out
 - `src/app/page.tsx` - Added sign-in link to navigation
 - `README.md` - Updated with new features and tech stack
@@ -72,6 +81,7 @@ This document summarizes the better-auth and Stripe integration that was impleme
 ### 4. Documentation
 
 **New Files:**
+
 - `AUTH_SETUP.md` - Comprehensive setup guide with:
   - Database setup instructions
   - Stripe configuration steps
@@ -88,8 +98,8 @@ DATABASE_URL="postgresql://..."
 
 # Better Auth
 BETTER_AUTH_SECRET="..."
-BETTER_AUTH_URL="http://localhost:3000"
-NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
+BETTER_AUTH_URL="http://localhost:4000"
+NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:4000"
 
 # Stripe
 STRIPE_SECRET_KEY="sk_test_..."
@@ -99,7 +109,7 @@ STRIPE_PRO_MONTHLY_PRICE_ID="price_..."
 STRIPE_ENTERPRISE_MONTHLY_PRICE_ID="price_..."
 
 # App
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_URL="http://localhost:4000"
 ```
 
 ## New Scripts Added
@@ -116,14 +126,17 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ## Routes Added
 
 ### Authentication Routes
+
 - `/sign-in` - User sign-in page
 - `/sign-up` - User registration page
 - `/api/auth/[...all]` - Better-auth API endpoints
 
 ### Pricing Routes
+
 - `/pricing` - Pricing page with subscription tiers
 
 ### Stripe API Routes
+
 - `/api/stripe/create-checkout-session` - Create checkout session
 - `/api/stripe/create-portal-session` - Access customer portal
 - `/api/stripe/webhook` - Handle Stripe webhook events
@@ -215,12 +228,14 @@ Before deploying to production:
 ## Files Modified vs Created
 
 **Created (19 new files):**
+
 - 6 library/configuration files
 - 7 page/component files
 - 3 API route files
 - 3 documentation files
 
 **Modified (6 existing files):**
+
 - README.md
 - package.json
 - pnpm-lock.yaml

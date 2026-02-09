@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     if (!stripe) {
       return NextResponse.json(
         { error: "Stripe is not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -33,11 +33,11 @@ export async function POST(req: NextRequest) {
     if (users.length === 0 || !users[0].stripeCustomerId) {
       return NextResponse.json(
         { error: "No subscription found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:4000";
 
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: users[0].stripeCustomerId,
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     console.error("Error creating portal session:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

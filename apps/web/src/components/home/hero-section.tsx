@@ -1,5 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { WordRotate } from "@/components/ui/word-rotate";
 import Link from "next/link";
+
+import { HeroDescription } from "./hero-description";
 
 export function HeroSection() {
   return (
@@ -11,21 +14,20 @@ export function HeroSection() {
       <div className="container relative mx-auto max-w-4xl text-center">
         <h1
           id="hero-heading"
-          className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+          className="mb-6 pb-2 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Serve SaaS ideas faster.
-          <span className="mt-2 block bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Learn from recipes that scale.
+          Serve a SaaS{" "}
+          <WordRotate
+            words={["faster", "safer", "better"]}
+            duration={3000}
+            className="inline-block"
+          />
+          
+          <span className="mt-2 block pb-2 bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            Access profitable recipes
           </span>
         </h1>
-        <p className="mx-auto max-w-2xl text-lg text-muted-foreground md:text-xl">
-          Don&apos;t cook alone. Leverage the cookbook — proven recipes from real
-          kitchens (auth, billing, dashboards, and more) — plus an AI chef to help
-          run the kitchen.
-        </p>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground md:text-xl">
-          You focus on your signature dish; this product handles the prep.
-        </p>
+        <HeroDescription />
         <div className="mx-auto mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
           <Link href="/dashboard">
             <Button size="lg" className="w-full sm:w-auto text-base px-8">

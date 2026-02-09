@@ -12,6 +12,7 @@ This guide will help you set up authentication with better-auth and subscription
 ### 1.1 Set up PostgreSQL Database
 
 You can use any PostgreSQL provider:
+
 - **Local**: Install PostgreSQL locally
 - **Neon**: https://neon.tech (recommended for development)
 - **Supabase**: https://supabase.com
@@ -33,8 +34,8 @@ DATABASE_URL="postgresql://user:password@host:5432/database"
 
 # Better Auth
 BETTER_AUTH_SECRET="your-secret-key-at-least-32-characters-long"
-BETTER_AUTH_URL="http://localhost:3000"
-NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
+BETTER_AUTH_URL="http://localhost:4000"
+NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:4000"
 
 # Stripe
 STRIPE_SECRET_KEY="sk_test_..."
@@ -44,7 +45,7 @@ STRIPE_PRO_MONTHLY_PRICE_ID="price_..." # Set after creating products
 STRIPE_ENTERPRISE_MONTHLY_PRICE_ID="price_..." # Set after creating products
 
 # App
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_URL="http://localhost:4000"
 ```
 
 ### 1.3 Generate a Better Auth Secret
@@ -74,11 +75,13 @@ This will create all necessary tables for authentication and subscriptions.
 2. Create two products:
 
 **Pro Plan**
+
 - Name: "Pro"
 - Price: $19.00/month
 - Copy the Price ID and set it as `STRIPE_PRO_MONTHLY_PRICE_ID`
 
 **Enterprise Plan**
+
 - Name: "Enterprise"
 - Price: $49.00/month
 - Copy the Price ID and set it as `STRIPE_ENTERPRISE_MONTHLY_PRICE_ID`
@@ -89,12 +92,13 @@ This will create all necessary tables for authentication and subscriptions.
 2. Run the following command to forward webhooks to your local server:
 
 ```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
+stripe listen --forward-to localhost:4000/api/stripe/webhook
 ```
 
 3. Copy the webhook signing secret (`whsec_...`) and set it as `STRIPE_WEBHOOK_SECRET`
 
 **For production:**
+
 1. Go to https://dashboard.stripe.com/webhooks
 2. Add endpoint: `https://yourdomain.com/api/stripe/webhook`
 3. Select these events:
@@ -110,21 +114,21 @@ stripe listen --forward-to localhost:3000/api/stripe/webhook
 pnpm dev
 ```
 
-The application will be available at http://localhost:3000
+The application will be available at http://localhost:4000
 
 ## Testing the Integration
 
 ### Test Authentication
 
-1. Go to http://localhost:3000/sign-up
+1. Go to http://localhost:4000/sign-up
 2. Create a new account
-3. Sign in at http://localhost:3000/sign-in
+3. Sign in at http://localhost:4000/sign-in
 4. You should be redirected to the dashboard
 
 ### Test Subscription
 
 1. Sign in to your account
-2. Go to http://localhost:3000/pricing
+2. Go to http://localhost:4000/pricing
 3. Click "Start Free Trial" on the Pro or Enterprise plan
 4. Use Stripe test card: `4242 4242 4242 4242`
    - Use any future expiry date
@@ -142,6 +146,7 @@ With Stripe CLI running, complete a subscription and check your terminal for web
 ### Environment Variables
 
 Set all the same environment variables in your production environment, but:
+
 - Use production database URL
 - Use production Stripe keys (starting with `pk_live_` and `sk_live_`)
 - Set `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL` to your production domain

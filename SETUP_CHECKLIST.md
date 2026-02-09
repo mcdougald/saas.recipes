@@ -14,8 +14,8 @@ Use this checklist when setting up the authentication and subscription system fo
 - [ ] Copy `.env.example` to `.env` in `apps/web/`
 - [ ] Set `DATABASE_URL` with your PostgreSQL connection string
 - [ ] Generate `BETTER_AUTH_SECRET` using `openssl rand -base64 32`
-- [ ] Set `BETTER_AUTH_URL` and `NEXT_PUBLIC_BETTER_AUTH_URL` (usually `http://localhost:3000`)
-- [ ] Set `NEXT_PUBLIC_APP_URL` (usually `http://localhost:3000`)
+- [ ] Set `BETTER_AUTH_URL` and `NEXT_PUBLIC_BETTER_AUTH_URL` (usually `http://localhost:4000`)
+- [ ] Set `NEXT_PUBLIC_APP_URL` (usually `http://localhost:4000`)
 
 ## Stripe Configuration
 
@@ -30,11 +30,13 @@ Use this checklist when setting up the authentication and subscription system fo
 ## Stripe Webhook Setup
 
 ### Development (Local)
+
 - [ ] Install Stripe CLI: https://stripe.com/docs/stripe-cli
-- [ ] Run `stripe listen --forward-to localhost:3000/api/stripe/webhook`
+- [ ] Run `stripe listen --forward-to localhost:4000/api/stripe/webhook`
 - [ ] Copy webhook signing secret to `STRIPE_WEBHOOK_SECRET`
 
 ### Production
+
 - [ ] Add webhook endpoint in Stripe dashboard: `https://yourdomain.com/api/stripe/webhook`
 - [ ] Select events: `checkout.session.completed`, `customer.subscription.*`
 - [ ] Copy webhook signing secret to production `STRIPE_WEBHOOK_SECRET`
@@ -49,8 +51,9 @@ Use this checklist when setting up the authentication and subscription system fo
 ## Application Testing
 
 ### Authentication Flow
+
 - [ ] Start dev server: `pnpm dev`
-- [ ] Visit http://localhost:3000
+- [ ] Visit http://localhost:4000
 - [ ] Click "Sign in" - verify sign-in page loads
 - [ ] Try to sign in with non-existent account - should show error
 - [ ] Click "Sign up" link
@@ -63,6 +66,7 @@ Use this checklist when setting up the authentication and subscription system fo
 - [ ] Verify successful login
 
 ### Subscription Flow
+
 - [ ] While signed in, navigate to /pricing
 - [ ] Click "Start Free Trial" on Pro plan
 - [ ] Verify redirect to Stripe Checkout
@@ -76,6 +80,7 @@ Use this checklist when setting up the authentication and subscription system fo
 - [ ] Verify subscription created in `pnpm db:studio`
 
 ### Customer Portal
+
 - [ ] Navigate to /dashboard/settings (or wherever you add the portal link)
 - [ ] Click "Manage Subscription" (needs to be added to UI)
 - [ ] Verify redirect to Stripe Customer Portal
@@ -110,21 +115,25 @@ Use this checklist when setting up the authentication and subscription system fo
 ## Common Issues
 
 ### "DATABASE_URL environment variable is not set"
+
 - Verify `.env` file exists in `apps/web/`
 - Check `DATABASE_URL` is set correctly
 - Restart development server after changing `.env`
 
 ### Stripe Checkout not working
+
 - Verify Stripe publishable key is set
 - Check browser console for errors
 - Ensure you're using test mode keys for development
 
 ### Webhook not receiving events
+
 - Ensure Stripe CLI is running with `stripe listen`
 - Check webhook secret matches CLI output
 - Verify webhook endpoint is correct
 
 ### Build fails with environment variable errors
+
 - This is expected if environment variables aren't set
 - For CI/CD, the build is designed to succeed without env vars
 - Runtime API routes will fail gracefully if not configured
@@ -152,5 +161,6 @@ After successful setup:
 - Next.js Docs: https://nextjs.org/docs
 
 For issues with this implementation, check:
+
 - IMPLEMENTATION_SUMMARY.md for technical details
 - AUTH_SETUP.md for detailed setup instructions

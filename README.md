@@ -50,6 +50,7 @@ This project is currently hosted at [trev.fyi/saas](https://trev.fyi/saas)
 ### Installation
 
 1. Install dependencies:
+
 ```bash
 pnpm install
 ```
@@ -59,17 +60,19 @@ pnpm install
    - Copy `apps/web/.env.example` to `apps/web/.env` and configure your environment variables
 
 3. Run database migrations:
+
 ```bash
 cd apps/web
 pnpm db:push
 ```
 
 4. Run the development server:
+
 ```bash
 pnpm dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:4000](http://localhost:4000) in your browser
 
 ### Build for Production
 

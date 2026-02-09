@@ -20,8 +20,9 @@ export const auth = betterAuth({
   socialProviders: {
     // Can add GitHub, Google, etc. later
   },
-  secret: process.env.BETTER_AUTH_SECRET || "your-secret-key-change-in-production",
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  secret:
+    process.env.BETTER_AUTH_SECRET || "your-secret-key-change-in-production",
+  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:4000",
 });
 
 export type Session = typeof auth.$Infer.Session;

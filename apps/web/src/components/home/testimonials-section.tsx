@@ -42,7 +42,7 @@ export function TestimonialsSection() {
               key={author}
               className="border-2 bg-card/80 shadow-sm"
             >
-              <CardContent className="pt-6">
+              <CardContent className="pt-2">
                 <Quote
                   className="mb-3 h-8 w-8 text-primary/40"
                   aria-hidden
