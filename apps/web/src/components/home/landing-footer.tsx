@@ -1,4 +1,4 @@
-import { BarChart3 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const footerLinks = [
@@ -18,8 +18,15 @@ export function LandingFooter() {
             href="/"
             className="flex items-center gap-2 font-semibold text-foreground"
           >
-            <BarChart3 className="h-5 w-5 text-primary" aria-hidden />
-            <span>SaaS Recipes</span>
+            <Image
+              src="/SaasRecipesIcon.svg"
+              alt=""
+              width={28}
+              height={35}
+              className="h-5 w-auto"
+              aria-hidden
+            />
+            <span>Recipes</span>
           </Link>
           <nav
             className="flex flex-wrap items-center justify-center gap-6"
@@ -37,7 +44,8 @@ export function LandingFooter() {
           </nav>
         </div>
         <p className="mt-8 flex gap-1 text-center text-sm text-muted-foreground md:text-left">
-          Built by <Link
+          Built by{" "}
+          <Link
             href="https://trev.fyi"
             className="flex items-center gap-2 font-semibold text-foreground underline"
           >

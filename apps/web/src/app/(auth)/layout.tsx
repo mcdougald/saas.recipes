@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { BarChart3, BookOpen, Zap, Shield, ChefHat } from "lucide-react";
+import { BookOpen, Shield, ChefHat, ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
   title: { template: "%s | SaaS Recipes", default: "Auth | SaaS Recipes" },
@@ -69,20 +70,26 @@ export default function AuthLayout({
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
           <Link
             href="/"
-            className="group flex items-center gap-2.5 rounded-lg py-1 pr-2 transition-colors hover:bg-muted/50 -m-1 pl-1"
+            className="flex items-center gap-2 font-semibold text-xl tracking-tight rounded-lg py-1 pr-2 -m-1 pl-1 transition-colors hover:opacity-90"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
-              <BarChart3 className="h-5 w-5" aria-hidden />
-            </span>
-            <span className="font-semibold tracking-tight text-foreground group-hover:text-primary">
-              SaaS Recipes
-            </span>
+            <Image
+              src="/SaasRecipesIcon.svg"
+              alt="SaaS Recipes"
+              width={28}
+              height={35}
+              className="h-6 w-auto"
+            />
+            <span>Recipes</span>
           </Link>
           <Link
             href="/"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="group inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:text-foreground hover:bg-muted/60 -m-2"
           >
-            ← Back to home
+            <ArrowLeft
+              className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5"
+              aria-hidden
+            />
+            <span>Back to home</span>
           </Link>
         </div>
       </header>
@@ -112,7 +119,7 @@ export default function AuthLayout({
               rel="noopener noreferrer"
               className="font-medium text-foreground/90 underline decoration-primary/50 underline-offset-2 transition-colors hover:text-primary hover:decoration-primary"
             >
-              trev.fyi
+              @trev.fyi
             </a>
           </p>
         </div>

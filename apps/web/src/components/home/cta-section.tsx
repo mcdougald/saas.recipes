@@ -4,6 +4,7 @@ import Link from "next/link";
 export function CtaSection() {
   return (
     <section
+      id="cta"
       className="border-t py-20 md:py-28"
       aria-labelledby="cta-heading"
     >
@@ -16,14 +17,16 @@ export function CtaSection() {
             Ready to cook?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Explore the product, try the patterns, and start shipping. No
-            credit card required — just open the app and go.
+            Explore the product, try the patterns, and start shipping. No credit
+            card required — just open the app and go.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
             <Link href="/dashboard">
               <Button size="lg" className="w-full sm:w-auto text-base px-8">
                 Open dashboard
-                <span className="ml-2" aria-hidden>→</span>
+                <span className="ml-2" aria-hidden>
+                  →
+                </span>
               </Button>
             </Link>
             <Link href="/pricing">

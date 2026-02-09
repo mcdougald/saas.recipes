@@ -2,6 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Next.js: launch app",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm --filter web dev",
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "pattern": "(- Local:\\s*|Ready in.*\\s+)(https?://[^\\s]+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    },
+    {
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
@@ -22,7 +34,7 @@
       "command": "pnpm --filter web dev",
       "cwd": "${workspaceFolder}",
       "serverReadyAction": {
-        "pattern": "- Local:.+(https?://[^\\s]+)",
+        "pattern": "(- Local:\\s*|Ready in.*\\s+)(https?://[^\\s]+)",
         "uriFormat": "%s",
         "action": "debugWithChrome"
       }

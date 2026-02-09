@@ -22,6 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { getScrollbarStyles } from "@/helpers/scrollbar-styles";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
@@ -369,17 +370,30 @@ function SidebarSeparator({
   );
 }
 
+const { className: sidebarScrollbarClass, css: sidebarScrollbarCss } =
+  getScrollbarStyles({
+    className: "sidebar-content-scrollbar",
+    trackColor: "rgb(243 244 246)",
+    thumbColor: "rgb(156 163 175)",
+    thumbHoverColor: "rgb(107 114 128)",
+    width: 6,
+  });
+
 function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      data-slot="sidebar-content"
-      data-sidebar="content"
-      className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
-        className,
-      )}
-      {...props}
-    />
+    <>
+      <style dangerouslySetInnerHTML={{ __html: sidebarScrollbarCss }} />
+      <div
+        data-slot="sidebar-content"
+        data-sidebar="content"
+        className={cn(
+          "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+          sidebarScrollbarClass,
+          className,
+        )}
+        {...props}
+      />
+    </>
   );
 }
 

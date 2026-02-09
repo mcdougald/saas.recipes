@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { getScrollbarStyles } from "@/helpers/scrollbar-styles"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { 
@@ -20,6 +21,14 @@ import {
 import { Button } from "@/components/ui/button"
 import { useSession, signOut } from "@/lib/auth-client"
 import { useState } from "react"
+
+const { className: scrollbarClass, css: scrollbarCss } = getScrollbarStyles({
+  className: "sidebar-scrollbar",
+  trackColor: "rgb(243 244 246)",
+  thumbColor: "rgb(156 163 175)",
+  thumbHoverColor: "rgb(107 114 128)",
+  width: 6,
+})
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -52,6 +61,7 @@ export function Sidebar() {
 
   return (
     <div className="flex h-full flex-col gap-2">
+      <style dangerouslySetInnerHTML={{ __html: scrollbarCss }} />
       {/* Header */}
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
@@ -63,7 +73,7 @@ export function Sidebar() {
       </div>
       
       {/* Navigation */}
-      <div className="flex-1 overflow-auto">
+      <div className={cn("flex-1 overflow-auto", scrollbarClass)}>
         <nav className="grid items-start gap-1 px-2 py-2 text-sm font-medium lg:px-4">
           {navigation.map((item) => {
             const Icon = item.icon

@@ -1,7 +1,6 @@
 import { Icons } from "@/features/discord/components/icons";
 import type { SidebarData } from "@/lib/types";
 import {
-  IconArrowsExchange,
   IconBarrierBlock,
   IconBrain,
   IconBrowserCheck,
@@ -9,7 +8,6 @@ import {
   IconCalendar,
   IconChartBar,
   IconChecklist,
-  IconCoin,
   IconCreditCard,
   IconError404,
   IconHelp,
@@ -18,8 +16,8 @@ import {
   IconLockAccess,
   IconMessages,
   IconNotification,
+  IconPackage,
   IconPalette,
-  IconReportMoney,
   IconServerOff,
   IconSettings,
   IconTool,
@@ -27,30 +25,14 @@ import {
   IconUserOff,
   IconUsers,
 } from "@tabler/icons-react";
-import {
-  AudioWaveform,
-  Command,
-  GalleryVerticalEnd,
-  KanbanIcon,
-  MailIcon,
-} from "lucide-react";
+import { BookOpen, GitCommit, KanbanIcon, MailIcon } from "lucide-react";
 
 export const sidebarData: SidebarData = {
   teams: [
     {
-      name: "Shadcn Admin",
-      logo: Command,
-      plan: "NextJs + ShadcnUI",
-    },
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
+      name: "SaaS.recipes",
+      logo: BookOpen,
+      plan: "Next.js + Tailwind",
     },
   ],
   navGroups: [
@@ -63,25 +45,29 @@ export const sidebarData: SidebarData = {
           icon: IconLayoutDashboard,
         },
         {
-          title: "Business Dashboard",
-          url: "/dashboard2",
+          title: "Analytics",
+          url: "/analytics",
           icon: IconChartBar,
         },
         {
-          title: "Payment Dashboard",
-          icon: IconReportMoney,
-          items: [
-            {
-              title: "Payment Dashboard",
-              url: "/payment-dashboard",
-              icon: IconCreditCard,
-            },
-            {
-              title: "Payment Transactions",
-              url: "/payment-transactions",
-              icon: IconArrowsExchange,
-            },
-          ],
+          title: "Commits",
+          url: "/commits",
+          icon: GitCommit,
+        },
+        {
+          title: "Issues",
+          url: "/issues",
+          icon: IconBug,
+        },
+        {
+          title: "Contributors",
+          url: "/contributors",
+          icon: IconUsers,
+        },
+        {
+          title: "Dependencies",
+          url: "/dependencies",
+          icon: IconPackage,
         },
       ],
     },
@@ -92,7 +78,6 @@ export const sidebarData: SidebarData = {
           title: "Mail",
           url: "/mail",
           icon: MailIcon,
-          // badge: "Coming Soon",
           badge: "New",
           badgeColor: "green",
         },
@@ -197,7 +182,6 @@ export const sidebarData: SidebarData = {
         {
           title: "Settings",
           icon: IconSettings,
-          // badge: "Coming Soon",
           items: [
             {
               title: "Profile",
