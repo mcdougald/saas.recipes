@@ -102,6 +102,7 @@ export function AddTaskDialog({
   };
 
   const statusLabels: Record<ColumnStatus, string> = {
+    ideas: 'Ideas',
     todo: "To Do",
     in_progress: "In Progress",
     done: "Done",
