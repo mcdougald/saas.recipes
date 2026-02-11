@@ -3,21 +3,21 @@ import { BookOpen, Code2, Rocket } from "lucide-react";
 const steps = [
   {
     icon: BookOpen,
-    title: "Study the recipes",
+    title: "Access proven recipes",
     description:
-      "Browse real implementations: auth, billing, dashboards, and more. See how others solved the same problems.",
+      "Quickly scan real implementations for auth, billing, dashboards, and more. Clear examples make it easy to find exactly what you need.",
   },
   {
     icon: Code2,
-    title: "Copy what fits",
+    title: "Get code that fits your stack",
     description:
-      "Use the code and patterns directly in your app. TypeScript, Next.js, and Tailwind—ready to adapt.",
+      "Start from patterns already shaped for your setup, then drop them into your app. TypeScript, Next.js, and Tailwind-ready out of the box.",
   },
   {
     icon: Rocket,
-    title: "Ship faster",
+    title: "Satisfy returning users",
     description:
-      "Spend less time on infrastructure and more on your product. Get to market with confidence.",
+      "Spend less time on plumbing and more on product quality. Deliver cleaner experiences that keep users happy and coming back.",
   },
 ] as const;
 
@@ -37,7 +37,7 @@ export function HowItWorksSection() {
             How it works
           </h2>
           <p className="text-lg text-muted-foreground">
-            Three steps turn “I need deliver this” into “it’s live.” No lock-in, no
+            Three steps turn “I need to deliver&quot; into “it’s live.” No lock-in, no
             magic—just proven patterns and experience you can own.
           </p>
         </div>

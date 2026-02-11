@@ -1,4 +1,3 @@
-import { Icons } from "@/features/discord/components/icons";
 import type { SidebarData } from "@/lib/types";
 import {
   IconBarrierBlock,
@@ -25,7 +24,17 @@ import {
   IconUserOff,
   IconUsers,
 } from "@tabler/icons-react";
-import { BookOpen, GitCommit, KanbanIcon, MailIcon } from "lucide-react";
+import {
+  Blocks,
+  BookOpen,
+  Database,
+  GitCommit,
+  KanbanIcon,
+  Network,
+  Rocket,
+  ShieldCheck,
+  Workflow,
+} from "lucide-react";
 
 export const sidebarData: SidebarData = {
   teams: [
@@ -108,6 +117,59 @@ export const sidebarData: SidebarData = {
           icon: KanbanIcon,
           badge: "New",
           badgeColor: "green",
+        },
+      ],
+    },
+    {
+      title: "Learn",
+      items: [
+        {
+          title: "Recipe Academy",
+          url: "/learn",
+          icon: BookOpen,
+          badge: "New",
+          badgeColor: "green",
+        },
+        {
+          title: "Core Concepts",
+          icon: Blocks,
+          items: [
+            {
+              title: "System Design",
+              url: "/learn/system-design",
+              icon: Network,
+            },
+            {
+              title: "Architecture Patterns",
+              url: "/learn/architecture-patterns",
+              icon: Workflow,
+            },
+            {
+              title: "Data Modeling",
+              url: "/learn/data-modeling",
+              icon: Database,
+            },
+            {
+              title: "DevOps & Delivery",
+              url: "/learn/devops-delivery",
+              icon: Rocket,
+            },
+            {
+              title: "Security Essentials",
+              url: "/learn/security-essentials",
+              icon: ShieldCheck,
+            },
+          ],
+        },
+        {
+          title: "Recipe Playbooks",
+          url: "/learn/playbooks",
+          icon: IconChecklist,
+        },
+        {
+          title: "Case Studies",
+          url: "/learn/case-studies",
+          icon: IconChartBar,
         },
       ],
     },
