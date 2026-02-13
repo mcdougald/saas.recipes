@@ -5,9 +5,9 @@ export function FeaturesSectionHeader() {
         id="features-heading"
         className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4"
       >
-        Everything needed to{" "}
+        Your toolkit to serving{" "}
         <span className="bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-          serve a better dish
+          profitable code
         </span>
       </h2>
       <p className="text-lg text-muted-foreground md:text-xl leading-relaxed">

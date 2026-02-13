@@ -9,32 +9,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { pricingPageCopy, pricingPlans } from "@/features/pricing/pricing-data";
 import { Switch } from "@/components/ui/switch";
 import { Check } from "lucide-react";
 import { useState } from "react";
 
-const features = [
-  "Unlimited access to all courses",
-  "Personalized learning paths",
-  "Progress tracking and analytics",
-  "Offline viewing on mobile app",
-  "Certificate of completion",
-  "24/7 customer support",
-];
-
 export function SinglePricing() {
   const [isAnnual, setIsAnnual] = useState(false);
+  const supporterPlan = pricingPlans.find((plan) => plan.id === "supporter");
 
-  const monthlyPrice = 14.99;
-  const annualPrice = 149.99;
+  if (!supporterPlan) {
+    return null;
+  }
+
+  const monthlyPrice = Number.parseFloat(supporterPlan.price.replace("$", ""));
+  const annualPrice = Number((monthlyPrice * 10).toFixed(2));
   const annualMonthlyEquivalent = (annualPrice / 12).toFixed(2);
 
   return (
     <div className="px-4 py-4 lg:px-6">
       <div className="mb-12 text-center">
-        <h1 className="mb-4 text-4xl font-bold">Simple, Transparent Pricing</h1>
+        <h1 className="mb-4 text-4xl font-bold">Simple, Supportive Pricing</h1>
         <p className="text-muted-foreground text-lg">
-          Invest in yourself with our Pro Plan
+          {pricingPageCopy.supportNote}
         </p>
       </div>
 
@@ -46,21 +43,21 @@ export function SinglePricing() {
           <CardHeader className="relative border-b text-center">
             <div className="mb-2 flex justify-center">
               <Badge variant="secondary" className="text-sm font-medium">
-                Pro Plan
+                {supporterPlan.name}
               </Badge>
             </div>
             <CardTitle className="text-2xl">
-              Everything you need to master new skills
+              Full access that helps sustain long-term product progress
             </CardTitle>
             <CardDescription className="mt-2">
-              Join thousands of learners accelerating their careers
+              Build faster while supporting healthier development cycles
             </CardDescription>
           </CardHeader>
 
           <CardContent className="relative pt-6">
             <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
               <ul className="flex-1 space-y-3">
-                {features.map((feature) => (
+                {supporterPlan.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-3">
                     <Check className="text-primary h-5 w-5" />
                     <span className="text-sm">{feature}</span>
@@ -106,10 +103,13 @@ export function SinglePricing() {
                 </div>
 
                 <Button size="lg" className="w-full max-w-xs text-base">
-                  Start {isAnnual ? "Annual" : "Monthly"} Plan
+                  {isAnnual
+                    ? `Start ${supporterPlan.name} Annual`
+                    : supporterPlan.buttonText}
                 </Button>
                 <p className="text-muted-foreground text-center text-xs">
-                  30-day money-back guarantee. Cancel anytime.
+                  Cancel anytime. Your subscription helps fund healthier and
+                  more consistent resource development.
                 </p>
               </div>
             </div>

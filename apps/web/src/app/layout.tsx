@@ -1,6 +1,7 @@
 import { SnowEffect } from "@/components/snow-effect";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { I18nProvider } from "@/components/i18n-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { FontProvider } from "@/contexts/font-context";
 import { SnowProvider } from "@/contexts/snow-context";
@@ -70,16 +71,18 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
-            <FontProvider>
-              <NextToploader color="var(--primary)" showSpinner={false} />
-              <SnowProvider>
-                {children}
-                <SnowEffect />
-                <Toaster />
-              </SnowProvider>
-            </FontProvider>
-          </AuthProvider>
+          <I18nProvider>
+            <AuthProvider>
+              <FontProvider>
+                <NextToploader color="var(--primary)" showSpinner={false} />
+                <SnowProvider>
+                  {children}
+                  <SnowEffect />
+                  <Toaster />
+                </SnowProvider>
+              </FontProvider>
+            </AuthProvider>
+          </I18nProvider>
         </ThemeProvider>
       </body>
     </html>

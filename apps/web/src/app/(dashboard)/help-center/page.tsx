@@ -1,8 +1,8 @@
-import { CategoryCards } from "@/features/help-center/components/category-cards";
-import { FAQAccordion } from "@/features/help-center/components/faq-accordion";
-import { HelpSearchHero } from "@/features/help-center/components/help-search-hero";
-import { PopularArticles } from "@/features/help-center/components/popular-articles";
+import { HelpCenterClient } from "@/features/help-center/components/help-center-client";
 
+/**
+ * Help center dashboard page.
+ */
 export default function HelpCenterPage() {
   return (
     <>
@@ -16,10 +16,7 @@ export default function HelpCenterPage() {
       </div>
 
       <div className="@container/main px-4 lg:px-6 space-y-8 pb-8">
-        <HelpSearchHero />
-        <CategoryCards />
-        <PopularArticles />
-        <FAQAccordion />
+        <HelpCenterClient />
       </div>
     </>
   );

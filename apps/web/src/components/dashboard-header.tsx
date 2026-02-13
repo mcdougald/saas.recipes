@@ -1,11 +1,13 @@
 "use client";
 
 import { CommandSearch, SearchTrigger } from "@/components/command-search";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import { ThemeCustomizer } from "@/components/theme-customizer";
 import { ToggleTheme } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useI18n } from "@/hooks/use-i18n";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Home, Settings } from "lucide-react";
 import Link from "next/link";
@@ -14,6 +16,7 @@ import * as React from "react";
 import { toast } from "sonner";
 
 export function DashboardHeader() {
+  const { t } = useI18n();
   const [themeCustomizerOpen, setThemeCustomizerOpen] = React.useState(false);
   const [commandSearchOpen, setCommandSearchOpen] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
@@ -41,14 +44,14 @@ export function DashboardHeader() {
 
     const authParam = searchParams.get("auth");
     if (authParam === "success") {
-      toast.success("Signed in successfully!", {
-        description: "Welcome back to your dashboard.",
+      toast.success(t("auth.signInSuccess"), {
+        description: t("auth.welcomeBack"),
       });
       const url = new URL(window.location.href);
       url.searchParams.delete("auth");
       router.replace(url.pathname + url.search, { scroll: false });
     }
-  }, [mounted, searchParams, router]);
+  }, [mounted, searchParams, router, t]);
 
   if (!mounted) {
     return (
@@ -80,10 +83,11 @@ export function DashboardHeader() {
           asChild
           className="text-muted-foreground hover:text-foreground"
         >
-          <Link href="/" aria-label="Go to homepage">
+          <Link href="/" aria-label={t("header.goToHomepage")}>
             <Home className="h-[1.2rem] w-[1.2rem]" />
           </Link>
         </Button>
+        <LanguageSwitcher />
         <ToggleTheme />
 
         <Button
@@ -93,7 +97,7 @@ export function DashboardHeader() {
           className="text-muted-foreground hover:text-foreground"
         >
           <Settings className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">Open theme customizer</span>
+          <span className="sr-only">{t("header.openThemeCustomizer")}</span>
         </Button>
 
         <ThemeCustomizer

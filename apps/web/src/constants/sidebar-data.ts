@@ -46,7 +46,7 @@ export const sidebarData: SidebarData = {
   ],
   navGroups: [
     {
-      title: "Dashboard",
+      title: "Explore",
       items: [
         {
           title: "Dashboard",
@@ -81,8 +81,15 @@ export const sidebarData: SidebarData = {
       ],
     },
     {
-      title: "General",
+      title: "Build",
       items: [
+        {
+          title: "AI Chef",
+          url: "/ai-chef",
+          icon: IconBrain,
+          badge: "New",
+          badgeColor: "green",
+        },
         {
           title: "Tasks",
           url: "/tasks",
@@ -105,13 +112,6 @@ export const sidebarData: SidebarData = {
           icon: IconCalendar,
         },
         {
-          title: "AI Chef",
-          url: "/ai-chef",
-          icon: IconBrain,
-          badge: "New",
-          badgeColor: "green",
-        },
-        {
           title: "Kanban",
           url: "/kanban",
           icon: KanbanIcon,
@@ -124,14 +124,14 @@ export const sidebarData: SidebarData = {
       title: "Learn",
       items: [
         {
-          title: "Recipe Academy",
+          title: "SaaS Academy",
           url: "/learn",
           icon: BookOpen,
           badge: "New",
           badgeColor: "green",
         },
         {
-          title: "Core Concepts",
+          title: "Concepts",
           icon: Blocks,
           items: [
             {
@@ -162,14 +162,14 @@ export const sidebarData: SidebarData = {
           ],
         },
         {
-          title: "Recipe Playbooks",
-          url: "/learn/playbooks",
-          icon: IconChecklist,
-        },
-        {
           title: "Case Studies",
           url: "/learn/case-studies",
           icon: IconChartBar,
+        },
+        {
+          title: "Snippets",
+          url: "/learn/playbooks",
+          icon: IconChecklist,
         },
       ],
     },

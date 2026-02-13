@@ -24,7 +24,7 @@ export function HeroSection() {
           />
           
           <span className="mt-2 block pb-2 bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Access profitable recipes
+            Use profitable recipes
           </span>
         </h1>
         <HeroDescription />
