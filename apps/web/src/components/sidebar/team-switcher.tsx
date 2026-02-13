@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronsUpDown, Plus } from "lucide-react";
+import Link from "next/link";
 import React, { useState } from "react";
 import {
   DropdownMenu,
@@ -10,13 +11,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "./ui/sidebar";
+} from "@/components/ui/sidebar";
+import { useAuth } from "@/contexts/auth-context";
 
 export function TeamSwitcher({
   teams,
@@ -28,8 +30,10 @@ export function TeamSwitcher({
   }[];
 }) {
   const { isMobile, state } = useSidebar();
+  const { user } = useAuth();
   const [activeTeam, setActiveTeam] = useState(teams[0]);
   const isCollapsed = state === "collapsed";
+  const canAddNewTeam = user?.subscriptionTier === "enterprise";
 
   return (
     <SidebarMenu>
@@ -41,10 +45,10 @@ export function TeamSwitcher({
               className="group/team relative overflow-hidden data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               {/* Gradient Logo Container */}
-              <div className="relative flex aspect-square size-8 items-center justify-center rounded-lg bg-linear-to-br from-violet-500 to-fuchsia-500 shadow-md shadow-violet-500/20 transition-transform group-hover/team:scale-105">
+              <div className="relative flex aspect-square size-8 items-center justify-center rounded-lg bg-linear-to-br from-black via-zinc-700 to-white shadow-md shadow-black/25 transition-transform group-hover/team:scale-105">
                 <activeTeam.logo className="size-4 text-white" />
                 {/* Shine effect */}
-                <div className="absolute inset-0 rounded-lg bg-linear-to-br from-white/20 to-transparent" />
+                <div className="absolute inset-0 rounded-lg bg-linear-to-br from-white/15 to-transparent" />
               </div>
 
               {!isCollapsed && (
@@ -77,8 +81,8 @@ export function TeamSwitcher({
                 onClick={() => setActiveTeam(team)}
                 className="gap-3 p-2.5 cursor-pointer rounded-lg transition-colors"
               >
-                <div className="flex size-8 items-center justify-center rounded-lg bg-linear-to-br from-violet-500/10 to-fuchsia-500/10 border border-violet-500/20">
-                  <team.logo className="size-4 text-violet-600 dark:text-violet-400" />
+                <div className="flex size-8 items-center justify-center rounded-lg bg-linear-to-br from-zinc-500/10 to-zinc-200/30 border border-zinc-300/40 dark:border-zinc-700/50">
+                  <team.logo className="size-4 text-black dark:text-white" />
                 </div>
                 <div className="flex-1">
                   <div className="font-medium">{team.name}</div>
@@ -92,14 +96,26 @@ export function TeamSwitcher({
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator className="bg-border/50" />
-            <DropdownMenuItem className="gap-3 p-2.5 cursor-pointer rounded-lg">
-              <div className="flex size-8 items-center justify-center rounded-lg border border-dashed border-muted-foreground/30 bg-muted/50">
-                <Plus className="size-4 text-muted-foreground" />
+            {canAddNewTeam ? (
+              <DropdownMenuItem className="gap-3 p-2.5 cursor-pointer rounded-lg">
+                <div className="flex size-8 items-center justify-center rounded-lg border border-dashed border-muted-foreground/30 bg-muted/50">
+                  <Plus className="size-4 text-muted-foreground" />
+                </div>
+                <div className="text-muted-foreground font-medium">
+                  Add new team
+                </div>
+              </DropdownMenuItem>
+            ) : (
+              <div className="rounded-lg border border-border/50 bg-muted/30 p-3 text-xs text-muted-foreground">
+                <p>Adding teams requires an enterprise subscription.</p>
+                <Link
+                  href="/pricing"
+                  className="mt-1 inline-flex font-medium text-foreground underline underline-offset-4 hover:text-primary"
+                >
+                  View pricing
+                </Link>
               </div>
-              <div className="text-muted-foreground font-medium">
-                Add new team
-              </div>
-            </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

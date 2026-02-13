@@ -39,9 +39,9 @@ import {
 export const sidebarData: SidebarData = {
   teams: [
     {
-      name: "SaaS.recipes",
+      name: "SaaS.Recipes",
       logo: BookOpen,
-      plan: "Next.js + Tailwind",
+      plan: "Default",
     },
   ],
   navGroups: [

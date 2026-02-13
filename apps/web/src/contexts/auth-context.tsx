@@ -34,12 +34,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { data: session } = await authClient.getSession();
 
         if (session?.user) {
+          const sessionUser = session.user as typeof session.user & {
+            subscriptionTier?: string | null;
+          };
+
           setUser({
-            id: session.user.id,
-            name: session.user.name,
-            email: session.user.email,
-            avatar: session.user.image || "",
+            id: sessionUser.id,
+            name: sessionUser.name,
+            email: sessionUser.email,
+            avatar: sessionUser.image || "",
             role: "user",
+            subscriptionTier: sessionUser.subscriptionTier ?? null,
           });
         }
       } catch (error) {
@@ -63,12 +68,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     if (data?.user) {
+      const loginUser = data.user as typeof data.user & {
+        subscriptionTier?: string | null;
+      };
+
       setUser({
-        id: data.user.id,
-        name: data.user.name,
-        email: data.user.email,
-        avatar: data.user.image || "",
+        id: loginUser.id,
+        name: loginUser.name,
+        email: loginUser.email,
+        avatar: loginUser.image || "",
         role: "user",
+        subscriptionTier: loginUser.subscriptionTier ?? null,
       });
     }
   };

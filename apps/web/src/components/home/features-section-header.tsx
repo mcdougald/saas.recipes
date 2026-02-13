@@ -3,11 +3,11 @@ export function FeaturesSectionHeader() {
     <div className="mx-auto max-w-xl text-center mb-14 md:mb-16">
       <h2
         id="features-heading"
-        className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4"
+        className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-6"
       >
-        Your toolkit to serving{" "}
+        Your toolkit to serve up{" "}
         <span className="bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-          profitable code
+          gourmet software
         </span>
       </h2>
       <p className="text-lg text-muted-foreground md:text-xl leading-relaxed">
