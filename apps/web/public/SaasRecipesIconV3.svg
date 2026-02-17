@@ -7,7 +7,7 @@ path { stroke: currentColor; }
 }
 </style>
 <path d="M18.4816 18.6864C18.5582 18.8556 18.5906 19.0408 18.5757 19.2252C18.5608 19.4097 18.4991 19.5876 18.3963 19.7428C18.2935 19.898 18.1527 20.0256 17.9869 20.1139C17.821 20.2022 17.6352 20.2486 17.4465 20.2487H2.71273C2.5239 20.2487 2.33806 20.2025 2.17209 20.1142C2.00612 20.0259 1.86527 19.8983 1.76236 19.7431C1.65944 19.5879 1.59771 19.41 1.58277 19.2254C1.56784 19.0409 1.60017 18.8556 1.67684 18.6864L3.27941 15.2487H16.8798L18.4816 18.6864Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8 18.3H12" stroke="black" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8.57922 18.2487H11.5792" stroke="black" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M9 11.39V12.99" stroke="black" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M11 10V13" stroke="black" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M13 8V13" stroke="black" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>

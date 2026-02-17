@@ -17,6 +17,12 @@
       "**/.next": true,
       "**/dist": true,
       "**/.turbo": true
+    },
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#1B6B5A",
+      "titleBar.inactiveBackground": "#1B6B5A99",
+      "titleBar.activeForeground": "#F4FFF7",
+      "titleBar.inactiveForeground": "#E6F5EC"
     }
   }
 }

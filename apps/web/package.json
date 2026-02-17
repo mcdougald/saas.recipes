@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4000",
+    "dev": "node ./scripts/with-env.mjs next dev -p 4000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -12,11 +12,11 @@
     "setup": "./scripts/setup.sh",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx --env-file=../../.env scripts/seed-test-user.ts"
+    "db:generate": "node ./scripts/with-env.mjs drizzle-kit generate",
+    "db:migrate": "node ./scripts/with-env.mjs drizzle-kit migrate",
+    "db:push": "node ./scripts/with-env.mjs drizzle-kit push",
+    "db:studio": "node ./scripts/with-env.mjs drizzle-kit studio",
+    "db:seed": "node ./scripts/with-env.mjs tsx scripts/seed-test-user.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.42",

@@ -19,6 +19,10 @@ export const auth = betterAuth({
   },
   socialProviders: {
     // Can add GitHub, Google, etc. later
+    github: { 
+      clientId: process.env.GITHUB_CLIENT_ID as string, 
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string, 
+    }, 
   },
   secret:
     process.env.BETTER_AUTH_SECRET || "your-secret-key-change-in-production",
