@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export function CtaSection() {
+  const smokePlumes = ["left", "center", "right"] as const;
+  const smokeLayers = [1, 2, 3, 4, 5, 6] as const;
+
   return (
     <section
       id="cta"
@@ -15,16 +18,18 @@ export function CtaSection() {
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/15 to-transparent" />
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 z-0 flex -translate-y-1/4 justify-center"
+            className="pointer-events-none absolute inset-x-6 top-0 z-0 flex -translate-y-1/4 items-start justify-between sm:inset-x-12"
           >
-            <div className="fire-smoke-scene">
-              <span className="smoke smoke-1" />
-              <span className="smoke smoke-2" />
-              <span className="smoke smoke-3" />
-              <span className="smoke smoke-4" />
-              <span className="smoke smoke-5" />
-              <span className="smoke smoke-6" />
-            </div>
+            {smokePlumes.map((plume) => (
+              <div
+                key={plume}
+                className={`smoke-scene smoke-scene-${plume}`}
+              >
+                {smokeLayers.map((layer) => (
+                  <span key={layer} className={`smoke smoke-${layer}`} />
+                ))}
+              </div>
+            ))}
           </div>
 
           <div className="relative z-10">
@@ -84,75 +89,31 @@ export function CtaSection() {
         </div>
       </div>
       <style jsx>{`
-        .fire-smoke-scene {
+        .smoke-scene {
           position: relative;
-          width: 16rem;
-          height: 8rem;
+          width: 7.25rem;
+          height: 7.5rem;
+          --scene-x: 0rem;
+          --scene-delay: 0s;
+          --rise: 5.8rem;
         }
 
-        .ember-ring {
-          position: absolute;
-          left: 50%;
-          top: 1.8rem;
-          width: 6rem;
-          height: 1.6rem;
-          transform: translateX(-50%);
-          border-radius: 9999px;
-          background: radial-gradient(
-            ellipse at center,
-            rgba(20, 20, 20, 0.32) 0%,
-            rgba(20, 20, 20, 0.16) 40%,
-            transparent 75%
-          );
-          filter: blur(1px);
-          animation: emberPulse 2.6s ease-in-out infinite;
+        .smoke-scene-left {
+          --scene-x: -0.45rem;
+          --scene-delay: 0.6s;
+          --rise: 5.4rem;
         }
 
-        .fire-core {
-          position: absolute;
-          left: 50%;
-          top: 1.1rem;
-          border-radius: 9999px 9999px 70% 70%;
-          transform-origin: center top;
+        .smoke-scene-center {
+          --scene-x: 0rem;
+          --scene-delay: 0s;
+          --rise: 6.2rem;
         }
 
-        .fire-core-main {
-          width: 1.55rem;
-          height: 2.55rem;
-          transform: translateX(-50%);
-          background: radial-gradient(
-            ellipse at 50% 78%,
-            rgba(220, 220, 220, 0.92) 0%,
-            rgba(145, 145, 145, 0.85) 42%,
-            rgba(65, 65, 65, 0.82) 72%,
-            rgba(0, 0, 0, 0.85) 100%
-          );
-          filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.35));
-          animation: flameMain 1.4s ease-in-out infinite alternate;
-        }
-
-        .fire-core-side {
-          width: 0.95rem;
-          height: 1.75rem;
-          opacity: 0.9;
-          background: radial-gradient(
-            ellipse at 50% 78%,
-            rgba(205, 205, 205, 0.86) 0%,
-            rgba(120, 120, 120, 0.82) 44%,
-            rgba(35, 35, 35, 0.8) 100%
-          );
-          filter: blur(0.15px) drop-shadow(0 0 6px rgba(0, 0, 0, 0.28));
-          animation: flameSide 1.2s ease-in-out infinite alternate;
-        }
-
-        .fire-core-side-left {
-          transform: translateX(-1.35rem) rotate(-8deg);
-          animation-delay: 0.15s;
-        }
-
-        .fire-core-side-right {
-          transform: translateX(0.25rem) rotate(8deg);
-          animation-delay: 0.35s;
+        .smoke-scene-right {
+          --scene-x: 0.45rem;
+          --scene-delay: 1.1s;
+          --rise: 5.6rem;
         }
 
         .smoke {
@@ -162,8 +123,8 @@ export function CtaSection() {
           border-radius: 9999px;
           background: radial-gradient(
             circle at 40% 35%,
-            rgba(55, 55, 55, 0.68) 0%,
-            rgba(30, 30, 30, 0.22) 62%,
+            rgba(45, 45, 45, 0.62) 0%,
+            rgba(25, 25, 25, 0.24) 62%,
             rgba(0, 0, 0, 0) 100%
           );
           filter: blur(1.1px);
@@ -171,13 +132,14 @@ export function CtaSection() {
           animation-name: smokeRise;
           animation-timing-function: ease-out;
           animation-iteration-count: infinite;
+          animation-delay: calc(var(--delay) + var(--scene-delay));
         }
 
         .smoke-1 {
           width: 1rem;
           height: 1rem;
           animation-duration: 2.8s;
-          animation-delay: 0s;
+          --delay: 0s;
           --x: -1.3rem;
           --drift: -1.2rem;
         }
@@ -186,7 +148,7 @@ export function CtaSection() {
           width: 1.2rem;
           height: 1.2rem;
           animation-duration: 3.4s;
-          animation-delay: 0.55s;
+          --delay: 0.55s;
           --x: -0.35rem;
           --drift: 0.7rem;
         }
@@ -195,7 +157,7 @@ export function CtaSection() {
           width: 1.1rem;
           height: 1.1rem;
           animation-duration: 3.1s;
-          animation-delay: 1s;
+          --delay: 1s;
           --x: 0.75rem;
           --drift: 1.1rem;
         }
@@ -204,7 +166,7 @@ export function CtaSection() {
           width: 1.35rem;
           height: 1.35rem;
           animation-duration: 3.8s;
-          animation-delay: 1.45s;
+          --delay: 1.45s;
           --x: -0.95rem;
           --drift: -0.55rem;
         }
@@ -213,7 +175,7 @@ export function CtaSection() {
           width: 0.95rem;
           height: 0.95rem;
           animation-duration: 2.9s;
-          animation-delay: 1.9s;
+          --delay: 1.9s;
           --x: 1.15rem;
           --drift: 0.55rem;
         }
@@ -222,7 +184,7 @@ export function CtaSection() {
           width: 1.45rem;
           height: 1.45rem;
           animation-duration: 4s;
-          animation-delay: 2.2s;
+          --delay: 2.2s;
           --x: 0.2rem;
           --drift: -0.85rem;
         }
@@ -230,7 +192,8 @@ export function CtaSection() {
         @keyframes smokeRise {
           0% {
             opacity: 0;
-            transform: translateX(var(--x)) translateY(0) scale(0.55);
+            transform: translateX(calc(var(--x) + var(--scene-x))) translateY(0)
+              scale(0.55);
           }
           15% {
             opacity: 0.45;
@@ -240,55 +203,22 @@ export function CtaSection() {
           }
           100% {
             opacity: 0;
-            transform: translateX(calc(var(--x) + var(--drift)))
-              translateY(-6rem) scale(1.6);
-          }
-        }
-
-        @keyframes flameMain {
-          0% {
-            transform: translateX(-50%) scaleY(1) scaleX(1);
-          }
-          50% {
-            transform: translateX(-50%) scaleY(1.08) scaleX(0.96);
-          }
-          100% {
-            transform: translateX(-50%) scaleY(0.93) scaleX(1.04);
-          }
-        }
-
-        @keyframes flameSide {
-          0% {
-            opacity: 0.82;
-          }
-          100% {
-            opacity: 0.98;
-          }
-        }
-
-        @keyframes emberPulse {
-          0%,
-          100% {
-            opacity: 0.72;
-            transform: translateX(-50%) scale(0.95);
-          }
-          50% {
-            opacity: 0.95;
-            transform: translateX(-50%) scale(1.05);
+            transform: translateX(
+                calc(var(--x) + var(--drift) + var(--scene-x))
+              )
+              translateY(calc(var(--rise) * -1)) scale(1.6);
           }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .fire-core-main,
-          .fire-core-side,
-          .smoke,
-          .ember-ring {
+          .smoke {
             animation: none !important;
           }
 
           .smoke {
             opacity: 0.3;
-            transform: translateX(var(--x)) translateY(-2.4rem) scale(1.1);
+            transform: translateX(calc(var(--x) + var(--scene-x)))
+              translateY(-2.4rem) scale(1.1);
           }
         }
       `}</style>

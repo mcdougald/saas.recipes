@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { WordRotate } from "@/components/ui/word-rotate";
 import Link from "next/link";
+import { HiSparkles } from "react-icons/hi2";
 
 import { HeroDescription } from "./hero-description";
 
@@ -52,12 +53,10 @@ export function HeroSection() {
           >
             <Link href="#features">
               <span>See Features</span>
-              <span
-                className="ml-2 inline-block opacity-70 motion-safe:transition-all motion-safe:duration-300 motion-safe:group-hover:-translate-y-px motion-safe:group-hover:opacity-100"
+              <HiSparkles
+                className="ml-2 inline-block size-4 opacity-70 motion-safe:transition-all motion-safe:duration-300 motion-safe:group-hover:-translate-y-px motion-safe:group-hover:opacity-100"
                 aria-hidden
-              >
-                ✨
-              </span>
+              />
             </Link>
           </Button>
         </div>

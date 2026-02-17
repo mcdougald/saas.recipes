@@ -24,16 +24,16 @@ export function TestimonialsSection() {
       aria-labelledby="testimonials-heading"
     >
       <div className="container px-4 mx-auto">
-        <div className="mx-auto max-w-2xl text-center mb-14">
+        <div className="mx-auto mb-14 max-w-3xl text-center">
           <h2
             id="testimonials-heading"
             className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4"
           >
-            Built for builders
+            Built for All Kitchens
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Developers and teams use SaaS Recipes to ship faster and avoid
-            reinventing the wheel.
+          <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg">
+            Solo developers and product teams use SaaS Recipes to launch faster
+            and avoid reinventing the wheel.
           </p>
         </div>
         <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">

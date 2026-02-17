@@ -182,6 +182,9 @@ importers:
       react-i18next:
         specifier: ^16.5.4
         version: 16.5.4(i18next@25.8.6)(react-dom@19.2.3)(react@19.2.3)(typescript@5.9.3)
+      react-icons:
+        specifier: ^5.5.0
+        version: 5.5.0(react@19.2.3)
       react-resizable-panels:
         specifier: ^3.0.6
         version: 3.0.6(react-dom@19.2.3)(react@19.2.3)
@@ -7826,6 +7829,14 @@ packages:
       react-dom: 19.2.3(react@19.2.3)
       typescript: 5.9.3
       use-sync-external-store: 1.6.0(react@19.2.3)
+    dev: false
+
+  /react-icons@5.5.0(react@19.2.3):
+    resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 19.2.3
     dev: false
 
   /react-is@16.13.1:

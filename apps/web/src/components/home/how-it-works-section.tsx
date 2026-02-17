@@ -1,5 +1,8 @@
+"use client";
+
 import { BookOpen, Sparkles, TrendingUp } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { motion } from "motion/react";
 
 type ValuePillar = {
   icon: LucideIcon;
@@ -53,10 +56,18 @@ export function HowItWorksSection() {
           </p>
         </div>
         <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {valuePillars.map(({ icon: Icon, title, description, highlights }) => (
-            <article
+          {valuePillars.map(({ icon: Icon, title, description, highlights }, index) => (
+            <motion.article
               key={title}
               className="group rounded-2xl border bg-background p-6 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{
+                duration: 0.45,
+                delay: index * 0.08,
+                ease: "easeOut",
+              }}
             >
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/15">
@@ -80,7 +91,7 @@ export function HowItWorksSection() {
                   </span>
                 ))}
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>
