@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import posthog from "posthog-js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -25,6 +26,11 @@ export default function ForgotPasswordPage() {
       // Placeholder: in a real app you'd call your auth provider's forgot-password API
       await new Promise((r) => setTimeout(r, 800));
       setSent(true);
+
+      // Capture password reset request event
+      posthog.capture("password_reset_requested", {
+        email_provided: Boolean(email),
+      });
     } catch {
       // no-op
     } finally {

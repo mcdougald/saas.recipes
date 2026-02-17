@@ -2,6 +2,7 @@
 
 import { authClient } from "@/lib/auth-client";
 import { User } from "@/lib/types";
+import posthog from "posthog-js";
 import {
   ReactNode,
   createContext,
@@ -46,6 +47,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             role: "user",
             subscriptionTier: sessionUser.subscriptionTier ?? null,
           });
+
+          // Identify user in PostHog on session restore
+          posthog.identify(sessionUser.id, {
+            email: sessionUser.email,
+            name: sessionUser.name,
+            subscriptionTier: sessionUser.subscriptionTier ?? "free",
+          });
         }
       } catch (error) {
         console.error("Failed to get session:", error);
@@ -80,6 +88,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         role: "user",
         subscriptionTier: loginUser.subscriptionTier ?? null,
       });
+
+      // Identify user in PostHog on login
+      posthog.identify(loginUser.id, {
+        email: loginUser.email,
+        name: loginUser.name,
+        subscriptionTier: loginUser.subscriptionTier ?? "free",
+      });
+
+      // Capture login event
+      posthog.capture("user_signed_in", {
+        method: "email",
+        email: loginUser.email,
+      });
     }
   };
 
@@ -100,6 +121,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
+      // Capture logout event before resetting PostHog
+      posthog.capture("user_logged_out");
+      posthog.reset();
+
       await authClient.signOut({
         fetchOptions: {
           onSuccess: () => {

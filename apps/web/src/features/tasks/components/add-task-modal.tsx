@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import posthog from "posthog-js";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -70,6 +71,14 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
       };
 
       onAddTask?.(newTask);
+
+      // Track task creation event
+      posthog.capture("task_created", {
+        task_id: newTask.id,
+        status: newTask.status,
+        label: newTask.label,
+        priority: newTask.priority,
+      });
 
       setFormData({
         id: "",

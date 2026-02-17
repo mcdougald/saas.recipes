@@ -49,6 +49,7 @@ import {
   MessageSquareIcon,
   RefreshCcwIcon,
 } from "lucide-react";
+import posthog from "posthog-js";
 import { useState } from "react";
 
 const models = [
@@ -84,6 +85,15 @@ const AiChefDemo = () => {
     if (!(hasText || hasAttachments)) {
       return;
     }
+
+    // Track AI chat message sent event
+    posthog.capture("ai_chat_message_sent", {
+      model,
+      web_search_enabled: webSearch,
+      has_attachments: hasAttachments,
+      message_length: message.text?.length || 0,
+    });
+
     sendMessage(
       {
         text: message.text || "Sent with attachments",
@@ -166,7 +176,12 @@ const AiChefDemo = () => {
                                         messages[messages.length - 1]?.id ===
                                           message.id && (
                                           <MessageAction
-                                            onClick={() => regenerate()}
+                                            onClick={() => {
+                                              posthog.capture("ai_chat_regenerate_clicked", {
+                                                model,
+                                              });
+                                              regenerate();
+                                            }}
                                             label="Retry"
                                             tooltip="Regenerate response"
                                           >

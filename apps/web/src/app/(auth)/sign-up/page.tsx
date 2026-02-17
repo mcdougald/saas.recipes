@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import posthog from "posthog-js";
 import { CheckCircle2, Clock3, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,12 +38,26 @@ export default function SignUpPage() {
       });
 
       if (result.error) {
-        setError(result.error.message || "Couldn’t create account");
+        setError(result.error.message || "Couldn't create account");
       } else {
+        // Identify user and capture sign-up event on successful registration
+        if (result.data?.user) {
+          posthog.identify(result.data.user.id, {
+            email: result.data.user.email,
+            name: result.data.user.name,
+          });
+
+          posthog.capture("user_signed_up", {
+            method: "email",
+            email: result.data.user.email,
+          });
+        }
+
         router.push("/dashboard");
       }
     } catch (err) {
       console.error("Sign-up error:", err);
+      posthog.captureException(err);
       setError("Something went wrong. Try again?");
     } finally {
       setIsLoading(false);

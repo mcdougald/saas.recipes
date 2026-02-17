@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { pricingPageCopy, pricingPlans } from "@/features/pricing/pricing-data";
 import { Check } from "lucide-react";
+import posthog from "posthog-js";
 import { useState } from "react";
 
 export function ColumnPricing() {
@@ -59,7 +60,16 @@ export function ColumnPricing() {
             <Card
               key={plan.id}
               className={`cursor-pointer ${cardClasses}`}
-              onClick={() => setCurrentPlan(plan.id)}
+              onClick={() => {
+                setCurrentPlan(plan.id);
+                // Capture pricing plan selection event
+                posthog.capture("pricing_plan_selected", {
+                  plan_id: plan.id,
+                  plan_name: plan.name,
+                  plan_price: plan.price,
+                  is_popular: Boolean(plan.popular),
+                });
+              }}
             >
               {plan.popular && !isSelected && (
                 <div className="bg-primary text-primary-foreground absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-medium">

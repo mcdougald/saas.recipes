@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { getPostHogClient, shutdownPostHog } from "@/lib/posthog-server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -43,6 +44,17 @@ export async function POST(req: NextRequest) {
       customer: users[0].stripeCustomerId,
       return_url: `${baseUrl}/dashboard/settings`,
     });
+
+    // Track billing portal opened event
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: session.user.id,
+      event: "billing_portal_opened",
+      properties: {
+        customer_id: users[0].stripeCustomerId,
+      },
+    });
+    await shutdownPostHog();
 
     return NextResponse.json({ url: portalSession.url });
   } catch (error) {

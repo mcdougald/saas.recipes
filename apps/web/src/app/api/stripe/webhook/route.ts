@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { user, subscription } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import Stripe from "stripe";
+import { getPostHogClient, shutdownPostHog } from "@/lib/posthog-server";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -55,6 +56,20 @@ export async function POST(req: NextRequest) {
               subscriptionStatus: "active",
             })
             .where(eq(user.id, userId));
+
+          // Track subscription started event
+          const posthog = getPostHogClient();
+          posthog.capture({
+            distinctId: userId,
+            event: "subscription_started",
+            properties: {
+              checkout_session_id: session.id,
+              customer_id: session.customer,
+              amount_total: session.amount_total,
+              currency: session.currency,
+            },
+          });
+          await shutdownPostHog();
         }
         break;
       }
@@ -130,6 +145,21 @@ export async function POST(req: NextRequest) {
             subscriptionEndDate: periodEnd,
           })
           .where(eq(user.id, userId));
+
+        // Track subscription updated event
+        const posthog = getPostHogClient();
+        posthog.capture({
+          distinctId: userId,
+          event: "subscription_updated",
+          properties: {
+            subscription_id: sub.id,
+            status: sub.status,
+            tier,
+            price_id: priceId,
+            cancel_at_period_end: cancelAtEnd,
+          },
+        });
+        await shutdownPostHog();
         break;
       }
 
@@ -177,6 +207,18 @@ export async function POST(req: NextRequest) {
             subscriptionEndDate: periodEnd,
           })
           .where(eq(user.id, userId));
+
+        // Track subscription canceled event
+        const posthog = getPostHogClient();
+        posthog.capture({
+          distinctId: userId,
+          event: "subscription_canceled",
+          properties: {
+            subscription_id: sub.id,
+            customer_id: customerId,
+          },
+        });
+        await shutdownPostHog();
         break;
       }
 

@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import posthog from "posthog-js";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -42,9 +43,17 @@ export default function SignIn() {
     try {
       setIsSocialLoading(provider);
       const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+
+      // Capture social sign-in initiation event
+      posthog.capture("user_signed_in_social", {
+        provider,
+        method: "social",
+      });
+
       await signInSocial(provider, callbackUrl);
     } catch (error) {
       console.error("Social sign in error:", error);
+      posthog.captureException(error);
       toast.error(`Failed to sign in with ${provider}. Please try again.`);
       setIsSocialLoading(null);
     }

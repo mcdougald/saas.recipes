@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe, STRIPE_PLANS } from "@/lib/stripe";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { getPostHogClient, shutdownPostHog } from "@/lib/posthog-server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -55,6 +56,19 @@ export async function POST(req: NextRequest) {
         userId: session.user.id,
       },
     });
+
+    // Track checkout session creation in PostHog
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: session.user.id,
+      event: "checkout_session_created",
+      properties: {
+        plan_id: priceId,
+        checkout_session_id: checkoutSession.id,
+        email: session.user.email,
+      },
+    });
+    await shutdownPostHog();
 
     return NextResponse.json({ url: checkoutSession.url });
   } catch (error) {
