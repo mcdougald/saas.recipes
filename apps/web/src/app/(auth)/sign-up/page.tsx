@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
+import { CheckCircle2, Clock3, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -48,13 +50,18 @@ export default function SignUpPage() {
   };
 
   return (
-    <Card className="w-full max-w-md border-border/60 shadow-lg shadow-black/5">
-      <CardHeader className="space-y-1.5 text-center pb-2">
-        <CardTitle className="text-xl font-semibold tracking-tight">
-          Create your account
+    <Card className="w-full max-w-md border-border/60 bg-background/95 shadow-xl shadow-black/5 backdrop-blur-xs">
+      <CardHeader className="space-y-3 pb-2 text-center">
+        <p className="mx-auto inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/3 px-3 py-1 text-xs font-medium text-primary">
+          <Sparkles className="h-3.5 w-3.5" aria-hidden />
+          Start free in under a minute
+        </p>
+        <CardTitle className="text-4xl font-semibold tracking-tight">
+          Create your chef account
         </CardTitle>
-        <CardDescription className="text-muted-foreground">
-          One account — recipes, dashboard, and the rest. Free to start.
+        <CardDescription className="mx-auto max-w-sm text-muted-foreground">
+          Turn real SaaS codebases into your launch playbook. Save recipes, compare
+          stacks, and ship with more confidence.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -69,6 +76,7 @@ export default function SignUpPage() {
               placeholder="Alex Chen"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              autoComplete="name"
               required
               disabled={isLoading}
               className="h-10"
@@ -84,6 +92,7 @@ export default function SignUpPage() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
               required
               disabled={isLoading}
               className="h-10"
@@ -101,17 +110,20 @@ export default function SignUpPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
+              autoComplete="new-password"
               disabled={isLoading}
               className="h-10"
             />
             <p className="text-xs text-muted-foreground">
-              At least 8 characters. We don’t store plaintext.
+              Use at least 8 characters. Your password is encrypted and never stored
+              in plaintext.
             </p>
           </div>
           {error ? (
             <div
               className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
               role="alert"
+              aria-live="polite"
             >
               {error}
             </div>
@@ -121,9 +133,24 @@ export default function SignUpPage() {
             className="w-full h-10 font-medium"
             disabled={isLoading}
           >
-            {isLoading ? "Creating account…" : "Create account"}
+            {isLoading ? "Creating your account…" : "Create free account"}
           </Button>
         </form>
+        <ul className="space-y-2 mt-3 rounded-lg border border-border/60 bg-muted/20 p-3 text-xs text-muted-foreground">
+          <li className="flex items-start gap-2">
+            <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+            Access curated SaaS recipes and architecture breakdowns instantly.
+          </li>
+          <li className="flex items-start gap-2">
+            <Clock3 className="mb-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+            Set up once, then jump straight into your next build.
+          </li>
+          <li className="flex items-start gap-2">
+            <ShieldCheck className="mb-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+            Free to start. No credit card required.
+          </li>
+        </ul>
+  
         <p className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link

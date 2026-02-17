@@ -109,14 +109,24 @@ export function LandingHeader() {
           })}
           <div className="flex items-center gap-3">
             <Link href="/sign-in">
-              <Button variant="ghost" size="sm">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:translate-y-0"
+              >
                 Sign in
               </Button>
             </Link>
             <Link href="/sign-up">
-              <Button size="sm">
+              <Button
+                size="sm"
+                className="group cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
+              >
                 Get started
-                <span className="ml-1.5" aria-hidden>
+                <span
+                  className="ml-1.5 transition-transform duration-200 group-hover:translate-x-0.5"
+                  aria-hidden
+                >
                   →
                 </span>
               </Button>
@@ -156,12 +166,23 @@ export function LandingHeader() {
               })}
               <div className="flex flex-col gap-2 pt-4 border-t">
                 <Link href="/sign-in" onClick={() => setOpen(false)}>
-                  <Button variant="outline" className="w-full">
+                  <Button
+                    variant="outline"
+                    className="w-full cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:translate-y-0"
+                  >
                     Sign in
                   </Button>
                 </Link>
                 <Link href="/sign-up" onClick={() => setOpen(false)}>
-                  <Button className="w-full">Get started</Button>
+                  <Button className="group w-full cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0">
+                    Get started
+                    <span
+                      className="ml-1.5 transition-transform duration-200 group-hover:translate-x-0.5"
+                      aria-hidden
+                    >
+                      →
+                    </span>
+                  </Button>
                 </Link>
               </div>
             </nav>

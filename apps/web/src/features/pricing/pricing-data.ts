@@ -17,18 +17,19 @@ export type PricingFeatureRow = {
 };
 
 export const pricingPageCopy = {
-  headline: "Fund Better Builder Outcomes",
+  headline: "Choose the Plan That Helps You Ship Better SaaS, Faster",
   description:
-    "Choose a plan that helps sustain my health and focused development time while improving the saas.recipes learning and devtool resource.",
+    "Get practical, battle-tested SaaS breakdowns you can apply immediately, so you spend less time guessing architecture and more time shipping product.",
   supportNote:
-    "Paid plans are direct support for consistent maintenance, deeper breakdowns, and better practical learning resources for the community.",
+    "Paid plans unlock deeper resources and directly fund consistent platform improvements, fresh breakdowns, and long-term reliability for the community.",
 };
 
 export const pricingPlans: PricingPlan[] = [
   {
     id: "free",
     name: "Explorer",
-    description: "The SaaS.Recipes platform is free & secure for anyone to try.",
+    description:
+      "The SaaS.Recipes platform is free & secure for anyone to try.",
     price: "$0",
     period: "/month",
     features: [

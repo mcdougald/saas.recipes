@@ -29,21 +29,37 @@ export function HeroSection() {
         </h1>
         <HeroDescription />
         <div className="mx-auto mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-          <Link href="/dashboard">
-            <Button size="lg" className="w-full sm:w-auto text-base px-8">
-              Explore Recipes
-              <span className="ml-2" aria-hidden>→</span>
-            </Button>
-          </Link>
-          <Link href="#features">
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto text-base"
-            >
-              See Features
-            </Button>
-          </Link>
+          <Button
+            asChild
+            size="lg"
+            className="group w-full px-8 text-base shadow-lg shadow-primary/20 motion-safe:transition-all motion-safe:duration-300 motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-xl motion-safe:hover:shadow-primary/30 sm:w-auto"
+          >
+            <Link href="/dashboard">
+              <span>Explore Recipes</span>
+              <span
+                className="ml-2 inline-block motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:translate-x-1"
+                aria-hidden
+              >
+                →
+              </span>
+            </Link>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="group w-full border-primary/30 bg-background/80 text-base backdrop-blur-sm motion-safe:transition-all motion-safe:duration-300 motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-primary/60 motion-safe:hover:bg-primary/5 motion-safe:hover:shadow-lg motion-safe:hover:shadow-primary/15 sm:w-auto"
+          >
+            <Link href="#features">
+              <span>See Features</span>
+              <span
+                className="ml-2 inline-block opacity-70 motion-safe:transition-all motion-safe:duration-300 motion-safe:group-hover:-translate-y-px motion-safe:group-hover:opacity-100"
+                aria-hidden
+              >
+                ✨
+              </span>
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
