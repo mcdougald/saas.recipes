@@ -37,6 +37,12 @@ export default function AppSidebar({
 }: React.ComponentProps<typeof UISidebar>) {
   const { user } = useAuth();
   const { config } = useSidebarConfig();
+  const isLocalhost =
+    typeof window !== "undefined" &&
+    ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+  const navGroups = sidebarData.navGroups.filter(
+    (nav) => nav.title !== "Admin" || isLocalhost
+  );
 
   return (
     <UISidebar
@@ -49,7 +55,7 @@ export default function AppSidebar({
         <TeamSwitcher teams={sidebarData.teams} />
       </SidebarHeader>
       <SidebarContent>
-        {sidebarData.navGroups.map((nav) => (
+        {navGroups.map((nav) => (
           <NavGroup key={nav.title} {...nav} />
         ))}
       </SidebarContent>

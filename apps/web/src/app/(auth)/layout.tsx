@@ -25,7 +25,7 @@ function AuthCtaContent() {
           code.
         </h2>
         <p className="mt-4 text-base text-muted-foreground sm:text-lg md:max-w-md max-md:mx-auto">
-          Latest tooling and proven best-practices from inspirations track. Your
+          Latest tooling and proven best-practices from inspirations tracked. Your
           code and stack, aligned with what works.
         </p>
         <ul
@@ -104,24 +104,34 @@ export default function AuthLayout({
         </div>
       </main>
       <footer
-        className="shrink-0 border-t border-border/40 bg-background/60 py-5"
+        className="shrink-0 border-t border-border/50 bg-background/80 backdrop-blur supports-backdrop-filter:bg-background/65"
         role="contentinfo"
       >
-        <div className="flex flex-col items-center justify-center gap-3 text-center">
+        <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-3 px-4 py-5 text-center sm:px-6">
           <p className="text-sm text-muted-foreground">
-            Thanks for being here — I&apos;m glad you&apos;re cooking in the community.
+            Welcome back to the kitchen 🍽️. Sign in to start exploring free recipe
+            insights and build your next SaaS idea.
           </p>
-          <p className="text-xs text-muted-foreground">
-            Created by{" "}
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-muted-foreground">
+            <span>
+              Created by{" "}
+              <a
+                href="https://trev.fyi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-foreground/90 underline decoration-primary/50 underline-offset-2 transition-colors hover:text-primary hover:decoration-primary"
+              >
+                @trev.fyi
+              </a>
+            </span>
+            <span className="hidden h-3 w-px bg-border/70 sm:inline-block" aria-hidden />
             <a
-              href="https://trev.fyi"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-foreground/90 underline decoration-primary/50 underline-offset-2 transition-colors hover:text-primary hover:decoration-primary"
+              href="mailto:hello@trev.fyi"
+              className="font-medium text-foreground/80 underline decoration-border underline-offset-2 transition-colors hover:text-primary hover:decoration-primary"
             >
-              @trev.fyi
+              Need help?
             </a>
-          </p>
+          </div>
         </div>
       </footer>
     </div>

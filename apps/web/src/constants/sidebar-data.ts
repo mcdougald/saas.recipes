@@ -4,7 +4,6 @@ import {
   IconBrain,
   IconBrowserCheck,
   IconBug,
-  IconCalendar,
   IconChartBar,
   IconChecklist,
   IconCreditCard,
@@ -13,7 +12,6 @@ import {
   IconLayoutDashboard,
   IconLock,
   IconLockAccess,
-  IconMessages,
   IconNotification,
   IconPackage,
   IconPalette,
@@ -49,7 +47,7 @@ export const sidebarData: SidebarData = {
       title: "Explore",
       items: [
         {
-          title: "Dashboard",
+          title: "Recipes",
           url: "/dashboard",
           icon: IconLayoutDashboard,
         },
@@ -84,13 +82,18 @@ export const sidebarData: SidebarData = {
       title: "Build",
       items: [
         {
+          title: "Your Recipes",
+          url: "/your-recipes",
+          icon: BookOpen,
+        },
+        {
           title: "AI Chef",
           url: "/ai-chef",
           icon: IconBrain,
           badge: "New",
           badgeColor: "green",
         },
-        {
+          {
           title: "Tasks",
           url: "/tasks",
           icon: IconChecklist,
@@ -187,11 +190,6 @@ export const sidebarData: SidebarData = {
           ],
         },
         {
-          title: "Pricing",
-          url: "/pricing",
-          icon: IconCreditCard,
-        },
-        {
           title: "Errors",
           icon: IconBug,
           items: [
@@ -227,6 +225,11 @@ export const sidebarData: SidebarData = {
     {
       title: "Other",
       items: [
+        {
+          title: "Pricing",
+          url: "/pricing",
+          icon: IconCreditCard,
+        },
         {
           title: "Settings",
           icon: IconSettings,

@@ -20,7 +20,7 @@ export function LearningOverviewPage() {
     <>
       <div className="px-4 py-4 lg:px-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Recipe Academy</h1>
+          <h1 className="text-2xl font-bold tracking-tight">SaaS Academy</h1>
           <p className="text-muted-foreground">
             Learn core SaaS engineering concepts through real codebase recipes.
           </p>

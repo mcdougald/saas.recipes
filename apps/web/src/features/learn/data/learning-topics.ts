@@ -184,3 +184,11 @@ export const learningTopics: LearningTopic[] = [
 export const learningTopicMap = new Map(
   learningTopics.map((topic) => [topic.slug, topic]),
 );
+
+function normalizeTopicSlug(slug: string) {
+  return decodeURIComponent(slug).trim().toLowerCase();
+}
+
+export function getLearningTopicBySlug(slug: string) {
+  return learningTopicMap.get(normalizeTopicSlug(slug));
+}
