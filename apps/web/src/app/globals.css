@@ -134,6 +134,44 @@
 }
 
 @layer utilities {
+  .text-gradient-primary {
+    color: var(--foreground);
+  }
+
+  :root:not(.dark) .text-gradient-primary {
+    background-image: linear-gradient(
+      90deg,
+      var(--primary),
+      color-mix(in oklab, var(--primary) 72%, transparent)
+    );
+  }
+
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    :root:not(.dark) .text-gradient-primary {
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .dark .text-gradient-primary {
+    background-image: none;
+    color: var(--foreground);
+    -webkit-text-fill-color: currentColor;
+  }
+
+  /* Firefox + extensions (e.g. Dark Reader) can break clipped transparent text. */
+  @supports (-moz-appearance: none) {
+    .text-gradient-primary {
+      background: none !important;
+      color: var(--foreground) !important;
+      -webkit-text-fill-color: currentColor !important;
+      background-clip: border-box !important;
+      -webkit-background-clip: border-box !important;
+    }
+  }
+
   /* Snow effect - smooth infinite falling animation */
   @keyframes snow-fall {
     0% {

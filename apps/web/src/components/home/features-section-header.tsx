@@ -6,7 +6,7 @@ export function FeaturesSectionHeader() {
         className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-6"
       >
         Your toolkit to serve up{" "}
-        <span className="bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+        <span className="text-gradient-primary">
           gourmet software
         </span>
       </h2>

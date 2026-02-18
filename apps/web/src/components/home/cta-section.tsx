@@ -12,13 +12,13 @@ export function CtaSection() {
       className="relative border-t py-20 md:py-28"
       aria-labelledby="cta-heading"
     >
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_55%_at_50%_100%,var(--primary)/12%,transparent_70%)]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_55%_at_50%_100%,var(--primary)/12%,transparent_70%)] dark:bg-[radial-gradient(ellipse_70%_55%_at_50%_100%,var(--primary)/20%,transparent_72%)]" />
       <div className="container px-4 mx-auto">
-        <div className="relative mx-auto max-w-4xl overflow-visible rounded-3xl border border-border/50 bg-linear-to-b from-background/95 via-background to-muted/15 px-6 py-9 text-center shadow-[0_0_0_1px_hsl(var(--foreground)/0.03),0_22px_58px_hsl(var(--foreground)/0.08)] sm:px-10 md:py-12">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/15 to-transparent" />
+        <div className="relative mx-auto max-w-4xl overflow-visible rounded-3xl border border-border/60 bg-linear-to-b from-background/95 via-background to-muted/15 px-6 py-9 text-center shadow-[0_0_0_1px_hsl(var(--foreground)/0.03),0_22px_58px_hsl(var(--foreground)/0.08)] dark:border-white/15 dark:from-background dark:via-background dark:to-primary/8 dark:shadow-[0_0_0_1px_hsl(var(--primary)/0.2),0_34px_90px_hsl(var(--background)/0.9),0_20px_50px_hsl(var(--primary)/0.14)] sm:px-10 md:py-12">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/15 to-transparent dark:via-primary/35" />
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-6 top-0 z-0 flex -translate-y-1/4 items-start justify-between sm:inset-x-12"
+            className="pointer-events-none absolute inset-x-6 top-0 z-0 flex -translate-y-1/4 items-start justify-between opacity-85 dark:opacity-100 sm:inset-x-12"
           >
             {smokePlumes.map((plume) => (
               <div
@@ -35,11 +35,11 @@ export function CtaSection() {
           <div className="relative z-10">
           <h2
             id="cta-heading"
-            className="mb-6 mt-6 text-4xl font-bold tracking-tight sm:text-4xl md:text-6xl"
+            className="mb-6 mt-6 text-4xl font-bold tracking-tight dark:text-white sm:text-4xl md:text-6xl"
           >
             Ready to cook?
           </h2>
-          <p className="mx-auto mb-8 mt-4 max-w-2xl text-lg text-muted-foreground">
+          <p className="mx-auto mb-8 mt-4 max-w-2xl text-lg text-muted-foreground dark:text-muted-foreground/95">
             Explore real codebases, copy battle-tested architecture decisions,
             and skip weeks of trial and error. Open the app and get cooking.
           </p>
@@ -59,7 +59,7 @@ export function CtaSection() {
             <Button
               asChild
               size="lg"
-              className="group w-full px-8 text-base shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 sm:w-auto"
+              className="group w-full px-8 text-base shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:shadow-primary/20 dark:hover:shadow-primary/35 active:translate-y-0 sm:w-auto"
             >
               <Link href="/dashboard">
                 Open Recipes
@@ -75,14 +75,14 @@ export function CtaSection() {
               asChild
               size="lg"
               variant="outline"
-              className="w-full border-border/70 bg-background/70 text-base backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 active:translate-y-0 sm:w-auto"
+              className="w-full border-border/70 bg-background/70 text-base backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 dark:border-white/20 dark:bg-white/3 dark:hover:border-primary/50 dark:hover:bg-primary/12 active:translate-y-0 sm:w-auto"
             >
               <Link href="/pricing">
                 See Pricing
               </Link>
             </Button>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="mt-4 text-sm text-muted-foreground dark:text-muted-foreground/90">
             Start free today.
           </p>
           </div>
@@ -133,6 +133,16 @@ export function CtaSection() {
           animation-timing-function: ease-out;
           animation-iteration-count: infinite;
           animation-delay: calc(var(--delay) + var(--scene-delay));
+        }
+
+        :global(.dark) .smoke {
+          background: radial-gradient(
+            circle at 40% 35%,
+            rgba(186, 202, 255, 0.48) 0%,
+            rgba(165, 184, 255, 0.2) 62%,
+            rgba(255, 255, 255, 0) 100%
+          );
+          filter: blur(1.35px);
         }
 
         .smoke-1 {

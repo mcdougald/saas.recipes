@@ -87,17 +87,18 @@ export const sidebarData: SidebarData = {
           icon: BookOpen,
         },
         {
+          title: "Tasks",
+          url: "/tasks",
+          icon: IconChecklist,
+        },
+        {
           title: "AI Chef",
           url: "/ai-chef",
           icon: IconBrain,
           badge: "New",
           badgeColor: "green",
         },
-          {
-          title: "Tasks",
-          url: "/tasks",
-          icon: IconChecklist,
-        },
+         
         // {
         //   title: "Users",
         //   url: "/users",
@@ -114,13 +115,13 @@ export const sidebarData: SidebarData = {
         //   url: "/calendar",
         //   icon: IconCalendar,
         // },
-        {
-          title: "Kanban",
-          url: "/kanban",
-          icon: KanbanIcon,
-          badge: "New",
-          badgeColor: "green",
-        },
+        // {
+        //   title: "Kanban",
+        //   url: "/kanban",
+        //   icon: KanbanIcon,
+        //   badge: "New",
+        //   badgeColor: "green",
+        // },
       ],
     },
     {

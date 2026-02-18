@@ -24,7 +24,7 @@ export function HeroSection() {
             className="inline-block"
           />
           
-          <span className="mt-2 block pb-2 bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+          <span className="text-gradient-primary mt-2 block pb-2">
             Use profitable recipes
           </span>
         </h1>

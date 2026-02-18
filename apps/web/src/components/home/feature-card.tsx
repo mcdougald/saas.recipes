@@ -46,7 +46,7 @@ export function FeatureCard({
         <Card className="relative h-full overflow-hidden border-border/70 bg-card/90 p-0 backdrop-blur-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-[1.01] group-hover:border-primary/30 group-hover:shadow-xl group-hover:shadow-primary/10 group-focus-visible:-translate-y-1 group-focus-visible:border-primary/30 group-focus-visible:shadow-xl group-focus-visible:shadow-primary/10 active:scale-[0.995]">
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(120deg,transparent_10%,var(--primary)/14%,transparent_85%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100" />
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(130%_60%_at_0%_0%,var(--primary)/12%,transparent_45%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" />
-          <CardHeader className="space-y-3 p-4 sm:p-5">
+          <CardHeader className="space-y-3 p-4 sm:p-5 h-full">
             <div className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary transition-all duration-300 group-hover:scale-105 group-hover:bg-primary/15 group-hover:text-primary/90 group-focus-visible:scale-105 group-focus-visible:bg-primary/15">
                 <Icon
@@ -70,7 +70,7 @@ export function FeatureCard({
             <CardDescription className="text-sm leading-snug text-muted-foreground">
               {description}
             </CardDescription>
-            <ul className="space-y-1.5 pt-0.5">
+            <ul className="space-y-1.5 pt-0.5 mt-auto">
               {bullets.map((bullet) => (
                 <li
                   key={bullet}

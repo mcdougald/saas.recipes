@@ -40,3 +40,7 @@ next-env.d.ts
 
 # turbo
 .turbo
+
+*project-mock-*.json
+.mocks/
+.mocks

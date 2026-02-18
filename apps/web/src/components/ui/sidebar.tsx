@@ -373,10 +373,10 @@ function SidebarSeparator({
 const { className: sidebarScrollbarClass, css: sidebarScrollbarCss } =
   getScrollbarStyles({
     className: "sidebar-content-scrollbar",
-    trackColor: "rgb(243 244 246)",
-    thumbColor: "rgb(156 163 175)",
-    thumbHoverColor: "rgb(107 114 128)",
-    width: 6,
+    trackColor: "hsl(var(--sidebar-border) / 0.25)",
+    thumbColor: "hsl(var(--sidebar-foreground) / 0.35)",
+    thumbHoverColor: "hsl(var(--sidebar-foreground) / 0.5)",
+    width: 7,
   });
 
 function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {

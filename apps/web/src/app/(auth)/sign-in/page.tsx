@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,7 +21,9 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSocialLoading, setIsSocialLoading] = useState(false);
   const router = useRouter();
+  const isBusy = isLoading || isSocialLoading;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +46,22 @@ export default function SignInPage() {
       setError("Something went wrong. Try again?");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGithubSignIn = async () => {
+    setError("");
+    setIsSocialLoading(true);
+
+    try {
+      await signIn.social({
+        provider: "github",
+        callbackURL: "/dashboard?auth=success",
+      });
+    } catch (err) {
+      console.error("GitHub sign-in error:", err);
+      setError("Couldn't sign in with GitHub. Try again?");
+      setIsSocialLoading(false);
     }
   };
 
@@ -69,6 +88,26 @@ export default function SignInPage() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full h-10 font-medium"
+          onClick={handleGithubSignIn}
+          disabled={isBusy}
+        >
+          <Github className="mr-2 h-4 w-4" aria-hidden />
+          {isSocialLoading ? "Connecting to GitHub..." : "Continue with GitHub"}
+        </Button>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with email
+            </span>
+          </div>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium pb-2">
@@ -82,7 +121,7 @@ export default function SignInPage() {
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
               required
-              disabled={isLoading}
+              disabled={isBusy}
               className="h-10 mt-1.5"
             />
           </div>
@@ -106,7 +145,7 @@ export default function SignInPage() {
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
               required
-              disabled={isLoading}
+              disabled={isBusy}
               className="h-10"
             />
           </div>
@@ -122,7 +161,7 @@ export default function SignInPage() {
           <Button
             type="submit"
             className="w-full h-10 font-medium"
-            disabled={isLoading}
+            disabled={isBusy}
           >
             {isLoading ? "Signing in…" : "Sign in"}
           </Button>

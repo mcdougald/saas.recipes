@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import posthog from "posthog-js";
-import { CheckCircle2, Clock3, ShieldCheck, Sparkles } from "lucide-react";
+import { CheckCircle2, Clock3, Github, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signUp } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 
 export default function SignUpPage() {
   const [name, setName] = useState("");
@@ -23,7 +22,9 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSocialLoading, setIsSocialLoading] = useState(false);
   const router = useRouter();
+  const isBusy = isLoading || isSocialLoading;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,6 +65,23 @@ export default function SignUpPage() {
     }
   };
 
+  const handleGithubSignIn = async () => {
+    setError("");
+    setIsSocialLoading(true);
+
+    try {
+      await signIn.social({
+        provider: "github",
+        callbackURL: "/dashboard?auth=success",
+      });
+    } catch (err) {
+      console.error("GitHub sign-in error:", err);
+      posthog.captureException(err);
+      setError("Couldn't continue with GitHub. Try again?");
+      setIsSocialLoading(false);
+    }
+  };
+
   return (
     <Card className="w-full max-w-md border-border/60 bg-background/95 shadow-xl shadow-black/5 backdrop-blur-xs">
       <CardHeader className="space-y-3 pb-2 text-center">
@@ -80,6 +98,26 @@ export default function SignUpPage() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full h-10 font-medium"
+          onClick={handleGithubSignIn}
+          disabled={isBusy}
+        >
+          <Github className="mr-2 h-4 w-4" aria-hidden />
+          {isSocialLoading ? "Connecting to GitHub..." : "Continue with GitHub"}
+        </Button>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with email
+            </span>
+          </div>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
@@ -93,7 +131,7 @@ export default function SignUpPage() {
               onChange={(e) => setName(e.target.value)}
               autoComplete="name"
               required
-              disabled={isLoading}
+              disabled={isBusy}
               className="h-10"
             />
           </div>
@@ -109,7 +147,7 @@ export default function SignUpPage() {
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
               required
-              disabled={isLoading}
+              disabled={isBusy}
               className="h-10"
             />
           </div>
@@ -126,7 +164,7 @@ export default function SignUpPage() {
               required
               minLength={8}
               autoComplete="new-password"
-              disabled={isLoading}
+              disabled={isBusy}
               className="h-10"
             />
             <p className="text-xs text-muted-foreground">
@@ -146,7 +184,7 @@ export default function SignUpPage() {
           <Button
             type="submit"
             className="w-full h-10 font-medium"
-            disabled={isLoading}
+            disabled={isBusy}
           >
             {isLoading ? "Creating your account…" : "Create free account"}
           </Button>

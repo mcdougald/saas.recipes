@@ -1,35 +1,27 @@
-import { ChartAreaInteractive } from "@/features/dashboard/components/chart-area-interactive";
-import { DataTable } from "@/features/dashboard/components/data-table";
-import { SectionCards } from "@/features/dashboard/components/selection-cards";
-
-import data from "@/constants/data.json";
-import focusDocumentsData from "@/constants/format-documents-data.json";
-import keyPersonnelData from "@/constants/key-personal-data.json";
-import pastPerformanceData from "@/constants/past-performance-data.json";
+import { RepoOverviewStats } from "@/features/repos/components/repo-overview-stats";
+import { RepositoryList } from "@/features/repos/components/repository-list";
+import {
+  getRepositoryDashboardSummary,
+  repositoryDashboardData,
+} from "@/features/repos/data/repository-dashboard-data";
 
 export default function Page() {
+  const summary = getRepositoryDashboardSummary(repositoryDashboardData);
+
   return (
     <>
       <div className="px-4 lg:px-6 py-4">
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Home Dashboard</h1>
           <p className="text-muted-foreground">
-            Welcome to your admin dashboard
+            Snapshot of repository health, delivery activity, and codebase signals.
           </p>
         </div>
       </div>
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
-        <SectionCards />
-        <ChartAreaInteractive />
-      </div>
-      <div className="@container/main">
-        <DataTable
-          data={data}
-          pastPerformanceData={pastPerformanceData}
-          keyPersonnelData={keyPersonnelData}
-          focusDocumentsData={focusDocumentsData}
-        />
+        <RepoOverviewStats summary={summary} />
+        <RepositoryList projects={repositoryDashboardData} />
       </div>
     </>
   );
