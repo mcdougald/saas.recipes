@@ -5,18 +5,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 
 export default function CommitsPage() {
   return (
     <>
-      <div className="px-4 lg:px-6 py-4">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Commits</h1>
-          <p className="text-muted-foreground">
-            Browse and search commit history
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        title="Commits"
+        description="Browse and search commit history"
+      />
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
         <Card className="border">

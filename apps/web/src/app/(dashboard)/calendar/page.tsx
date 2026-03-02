@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import {
   Card,
   CardContent,
@@ -66,14 +67,10 @@ export default function CalendarPage() {
 
   return (
     <>
-      <div className="px-4 lg:px-6 py-4">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Calendar</h1>
-          <p className="text-muted-foreground">
-            Manage your schedule and upcoming events
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        title="Calendar"
+        description="Manage your schedule and upcoming events"
+      />
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
         {/* Stats Cards */}

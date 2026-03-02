@@ -19,7 +19,7 @@ interface PopularArticlesProps {
  */
 export function PopularArticles({ articles, searchQuery }: PopularArticlesProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold tracking-tight">
           Popular Articles
@@ -41,34 +41,30 @@ export function PopularArticles({ articles, searchQuery }: PopularArticlesProps)
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (
             <Link key={article.id} href={article.href}>
-              <Card className="h-full border transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
-                <CardContent className="flex flex-col gap-4 p-6">
+              <Card className="h-full border-border/70 bg-linear-to-b from-card to-muted/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                <CardContent className="flex h-full flex-col gap-3 p-5">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 space-y-2">
-                      <Badge variant="outline" className="text-xs">
-                        {article.category}
-                      </Badge>
-                      <h3 className="font-semibold leading-tight">
-                        {article.title}
-                      </h3>
-                      <p className="text-muted-foreground line-clamp-2 text-sm">
-                        {article.description}
-                      </p>
-                    </div>
-                    <BookOpen className="text-muted-foreground size-5 shrink-0" />
+                    <Badge variant="outline" className="h-5 px-2 text-[11px]">
+                      {article.category}
+                    </Badge>
+                    <BookOpen className="text-muted-foreground size-4 shrink-0" />
                   </div>
-                  <div className="flex items-center justify-between border-t pt-4">
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Clock className="size-3" />
-                        {article.readTime}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <TrendingUp className="size-3" />
-                        {article.views} views
-                      </div>
-                    </div>
-                    <ArrowRight className="text-muted-foreground size-4" />
+                  <h3 className="line-clamp-2 text-sm font-semibold leading-snug">
+                    {article.title}
+                  </h3>
+                  <p className="text-muted-foreground line-clamp-2 text-xs">
+                    {article.description}
+                  </p>
+                  <div className="text-muted-foreground mt-auto flex items-center justify-between border-t pt-3 text-xs">
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="size-3" />
+                      {article.readTime}
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <TrendingUp className="size-3" />
+                      {article.views}
+                    </span>
+                    <ArrowRight className="size-3.5 shrink-0" />
                   </div>
                 </CardContent>
               </Card>

@@ -1,5 +1,6 @@
 "use client";
 
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { DataTable } from "@/features/users/components/user-data-table";
 import { UserStateCards } from "@/features/users/components/user-state-cards";
 import type { User, UserFormValues } from "@/features/users/utils/schema";
@@ -44,12 +45,7 @@ export default function UsersPage() {
 
   return (
     <>
-      <div className="px-4 lg:px-6 py-4">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Users</h1>
-          <p className="text-muted-foreground">Manage users and permissions</p>
-        </div>
-      </div>
+      <DashboardPageHeader title="Users" description="Manage users and permissions" />
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
         <UserStateCards />

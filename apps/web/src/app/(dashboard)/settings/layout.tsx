@@ -11,7 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { Bell, Monitor, Palette, UserCog, Wrench } from "lucide-react";
+import { Bell, CreditCard, Monitor, Palette, UserCog, Wrench } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -25,6 +25,11 @@ const sidebarNavItems = [
     title: "Account",
     href: "/settings/account",
     icon: Wrench,
+  },
+  {
+    title: "Billing",
+    href: "/settings/billing",
+    icon: CreditCard,
   },
   {
     title: "Appearance",
@@ -126,6 +131,12 @@ function SidebarNavTabs({ items }: SidebarNavProps) {
   );
 }
 
+/**
+ * Render settings navigation and section content.
+ *
+ * @param children The active settings page content.
+ * @returns The shared settings layout shell.
+ */
 export default function SettingsLayout({
   children,
 }: {
@@ -134,8 +145,8 @@ export default function SettingsLayout({
   return (
     <div className="-m-4 flex h-[calc(100vh-4rem)] flex-col">
       <div className="shrink-0 px-4 pt-6 lg:px-6">
-        <div className="space-y-0.5">
-          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+        <div className="space-y-0.5 mt-5">
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
             Settings
           </h1>
           <p className="text-muted-foreground">

@@ -1,6 +1,7 @@
 import chatConversations from "@/constants/chat-conversation.json";
 import chatMessages from "@/constants/chat-messages.json";
 import chatUsers from "@/constants/chat-users.json";
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { Chat } from "@/features/chats/components/chats";
 import {
   ChatConversation,
@@ -11,14 +12,10 @@ import {
 export default function ChatsPage() {
   return (
     <>
-      <div className="px-4 py-4 lg:px-6">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Chats</h1>
-          <p className="text-muted-foreground">
-            Chat with your customers and team members.
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        title="Chats"
+        description="Chat with your customers and team members."
+      />
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
         <Chat

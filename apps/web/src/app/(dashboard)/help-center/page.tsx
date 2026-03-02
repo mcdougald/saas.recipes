@@ -1,3 +1,4 @@
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { HelpCenterClient } from "@/features/help-center/components/help-center-client";
 
 /**
@@ -6,14 +7,10 @@ import { HelpCenterClient } from "@/features/help-center/components/help-center-
 export default function HelpCenterPage() {
   return (
     <>
-      <div className="px-4 lg:px-6 py-4">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Help Center</h1>
-          <p className="text-muted-foreground">
-            Guides for recipes, dashboard, plans, billing, and support
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        title="Help Center"
+        description="Guides for recipes, dashboard, plans, billing, and support"
+      />
 
       <div className="@container/main px-4 lg:px-6 space-y-8 pb-8">
         <HelpCenterClient />

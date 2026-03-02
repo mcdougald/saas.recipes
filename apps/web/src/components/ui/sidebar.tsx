@@ -158,6 +158,7 @@ function Sidebar({
   variant = "sidebar",
   collapsible = "offcanvas",
   className,
+  style,
   children,
   ...props
 }: React.ComponentProps<"div"> & {
@@ -210,6 +211,7 @@ function Sidebar({
   return (
     <div
       className="group peer text-sidebar-foreground hidden md:block"
+      style={style}
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -281,17 +283,30 @@ function SidebarTrigger({
   );
 }
 
-function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
+function SidebarRail({
+  className,
+  onClick,
+  enableClickToggle = true,
+  ...props
+}: React.ComponentProps<"button"> & {
+  enableClickToggle?: boolean;
+}) {
   const { toggleSidebar } = useSidebar();
 
   return (
     <button
       data-sidebar="rail"
       data-slot="sidebar-rail"
-      aria-label="Toggle Sidebar"
+      aria-label={enableClickToggle ? "Toggle Sidebar" : "Resize Sidebar"}
       tabIndex={-1}
-      onClick={toggleSidebar}
-      title="Toggle Sidebar"
+      onClick={(event) => {
+        onClick?.(event);
+        if (!enableClickToggle) {
+          return;
+        }
+        toggleSidebar();
+      }}
+      title={enableClickToggle ? "Toggle Sidebar" : "Resize Sidebar"}
       className={cn(
         "hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex",
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",

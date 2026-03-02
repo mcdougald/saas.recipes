@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { Heart, Import, ListChecks, Sparkles } from "lucide-react";
 
 const implementationTracks = [
@@ -64,16 +65,11 @@ const favoritesSignals = [
 export default function YourRecipesPage() {
   return (
     <>
-      <div className="px-4 py-4 lg:px-6">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Your Recipes</h1>
-          <p className="text-muted-foreground max-w-3xl">
-            This page will become your private build queue. The next release focuses on
-            importing repositories as reusable recipes and organizing favorites into an
-            execution-ready workflow.
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        title="Your Recipes"
+        description="This page will become your private build queue. The next release focuses on importing repositories as reusable recipes and organizing favorites into an execution-ready workflow."
+        descriptionClassName="max-w-3xl"
+      />
 
       <div className="@container/main space-y-6 px-4 pb-6 lg:px-6">
         <div className="grid gap-4 md:grid-cols-2">

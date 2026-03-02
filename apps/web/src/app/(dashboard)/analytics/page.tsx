@@ -5,18 +5,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 
 export default function AnalyticsPage() {
   return (
     <>
-      <div className="px-4 lg:px-6 py-4">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground">
-            View project metrics, trends, and performance insights
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        title="Analytics"
+        description="View project metrics, trends, and performance insights"
+      />
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
         <Card className="border">

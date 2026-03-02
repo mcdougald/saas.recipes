@@ -5,18 +5,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 
 export default function IssuesPage() {
   return (
     <>
-      <div className="px-4 lg:px-6 py-4">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Issues</h1>
-          <p className="text-muted-foreground">
-            Track and manage project issues and bug reports
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        title="Issues"
+        description="Track and manage project issues and bug reports"
+      />
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
         <Card className="border">

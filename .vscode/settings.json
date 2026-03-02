@@ -5,6 +5,8 @@
     "source.fixAll.eslint": "always"
   },
   "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.suggest.completeJSDocs": true,
+  "javascript.suggest.completeJSDocs": true,
   "typescript.tsdk": "apps/web/node_modules/typescript/lib",
   "eslint.useFlatConfig": true,
   "eslint.workingDirectories": [

@@ -34,3 +34,7 @@ When building or improving UI in `apps/web` (landing, auth, marketing, dashboard
 - Keep existing path alias `@/*` → `./src/*`.
 - Match project stack: Next.js 16, React 19, Tailwind 4; avoid breaking existing theming (e.g. CSS variables for primary, background, border).
 - Prefer components that work with the app’s theme (dark/light, `--primary`, etc.) and don’t hardcode colors that clash.
+- Use a black-and-white-first visual system for stylish components:
+  - default to neutral monochrome tokens (`black`, `white`, `zinc`, `neutral`, `slate`) for surfaces, text, borders, and effects.
+  - avoid colorful gradients/glows unless explicitly requested for a specific section or brand accent.
+  - ensure strong contrast in both light and dark modes using monochrome-friendly combinations.

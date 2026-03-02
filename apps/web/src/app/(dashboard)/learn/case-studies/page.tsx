@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import {
   Card,
   CardContent,
@@ -37,15 +38,10 @@ const caseStudies = [
 export default function LearnCaseStudiesPage() {
   return (
     <>
-      <div className="px-4 py-4 lg:px-6">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Case Studies</h1>
-          <p className="text-muted-foreground">
-            Real implementation stories that connect architecture decisions to
-            business outcomes.
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        title="Case Studies"
+        description="Real implementation stories that connect architecture decisions to business outcomes."
+      />
 
       <div className="@container/main grid gap-6 px-4 pb-6 lg:px-6 md:grid-cols-2 xl:grid-cols-3">
         {caseStudies.map((study) => (

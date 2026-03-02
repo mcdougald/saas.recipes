@@ -1,0 +1,25 @@
+---
+description: Enforce TSDoc best practices for exported TypeScript APIs
+alwaysApply: true
+---
+
+# TSDoc Best Practices
+
+When creating or modifying TypeScript code, always add or update TSDoc for exported APIs.
+
+## Requirements
+
+- Add `/** ... */` TSDoc blocks for exported functions, classes, interfaces, types, enums, and hooks.
+- Start with a short imperative summary line.
+- Include `@param` for each non-trivial parameter (name + purpose).
+- Include `@returns` when return type/value is meaningful.
+- Include `@throws` when errors are intentionally thrown.
+- Add `@example` for APIs that are easy to misuse or non-obvious.
+- Keep docs accurate when signatures or behavior change.
+
+## Style
+
+- Describe behavior and intent, not implementation details.
+- Keep comments concise and scannable.
+- Use valid TSDoc tags and avoid ad-hoc formatting.
+- Do not add redundant comments for private/internal code unless complexity warrants it.

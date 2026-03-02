@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  ArrowRight,
   BookOpen,
   CreditCard,
   KeyRound,
@@ -53,43 +54,57 @@ export function CategoryCards({
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {categories.map((category) => {
-        const Icon = categoryIconMap[category.icon];
-        return (
-          <Card
-            key={category.id}
-            className="group h-full border transition-all hover:shadow-md"
-          >
-            <CardContent className="flex flex-col gap-4 p-6">
-              <div
-                className={`flex size-12 items-center justify-center rounded-lg ${category.bgColor} ${category.borderColor} border transition-transform group-hover:scale-110`}
-              >
-                <Icon className={`size-6 ${category.color}`} />
-              </div>
-              <div className="space-y-1">
-                <h3 className="font-semibold leading-tight">
-                  {category.title}
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  {category.description}
-                </p>
-              </div>
-              <div className="mt-auto">
+    <div className="space-y-5">
+      <div className="space-y-1">
+        <h2 className="text-2xl font-bold tracking-tight">Browse by Category</h2>
+        <p className="text-muted-foreground text-sm">
+          Pick a lane and jump to practical guides used to ship real SaaS
+          products faster.
+        </p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {categories.map((category) => {
+          const Icon = categoryIconMap[category.icon];
+          return (
+            <Card
+              key={category.id}
+              className="h-full py-1 overflow-hidden border-border/70 bg-linear-to-b from-card to-muted/20 transition-all hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              <CardContent className="p-0 h-full">
                 <button
                   type="button"
                   onClick={() => onSelectCategory?.(category.title)}
-                  className="cursor-pointer"
+                  className="group flex h-full w-full flex-col gap-3 p-4 text-left"
                 >
-                  <Badge variant="outline" className="text-xs">
-                    {category.articleCount} articles
-                  </Badge>
+                  <div
+                    className={`flex size-7 items-center justify-center rounded-lg border ${category.bgColor} ${category.borderColor} transition-transform group-hover:scale-105`}
+                  >
+                    <Icon className={`size-3.5 ${category.color}`} />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-semibold leading-tight">
+                      {category.title}
+                    </h3>
+                    <p className="text-muted-foreground line-clamp-2 text-xs">
+                      {category.description}
+                    </p>
+                  </div>
+                  <div className="mt-auto flex items-center justify-between">
+                    <Badge variant="secondary" className="h-5 px-2 text-[11px]">
+                      {category.articleCount} guides
+                    </Badge>
+                    <span className="text-muted-foreground inline-flex items-center gap-1 text-xs font-medium">
+                      Explore
+                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
                 </button>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 }

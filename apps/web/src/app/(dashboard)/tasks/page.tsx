@@ -1,5 +1,6 @@
 "use client";
 
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -23,6 +24,9 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
+/**
+ * Render the tasks dashboard for AI-generated repository implementation tasks.
+ */
 export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>(tasksData as Task[]);
 
@@ -72,14 +76,15 @@ export default function TasksPage() {
 
   return (
     <>
-      <div className="px-4 lg:px-6 py-4">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Tasks</h1>
-          <p className="text-muted-foreground">
-            Manage and track your project tasks
-          </p>
-        </div>
-      </div>
+      <DashboardPageHeader
+        title="Tasks"
+        description="Create AI-generated implementation tasks to recreate or evolve repositories you own. This feature is in beta and improving rapidly."
+        actions={
+          <Badge variant="outline" className="w-fit">
+            Beta feature
+          </Badge>
+        }
+      />
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
         {/* Stats Cards */}
@@ -130,7 +135,8 @@ export default function TasksPage() {
           <CardHeader>
             <CardTitle>All Tasks</CardTitle>
             <CardDescription>
-              A list of all tasks with filtering, sorting, and pagination.
+              AI-generated implementation tasks for your owned repositories,
+              with filtering, sorting, and pagination.
             </CardDescription>
           </CardHeader>
           <CardContent>

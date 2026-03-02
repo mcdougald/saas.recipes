@@ -1,4 +1,5 @@
 import { PaymentAnalytics } from "@/features/payment-dashboard/components/payment-analytics";
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { PaymentGatewayStatus } from "@/features/payment-dashboard/components/payment-gateway-status";
 import { PaymentMethodsBreakdown } from "@/features/payment-dashboard/components/payment-methods-breakdown";
 import { PaymentMetrics } from "@/features/payment-dashboard/components/payment-metrics";
@@ -9,12 +10,10 @@ import { RecentPayments } from "@/features/payment-dashboard/components/recent-p
 export default function PaymentDashboardPage() {
   return (
     <>
-      <div className="px-4 lg:px-6 py-4 flex flex-col gap-2">
-        <h1 className="text-2xl font-bold tracking-tight">Payment Dashboard</h1>
-        <p className="text-muted-foreground">
-          Monitor transactions, track revenue, and manage payment operations.
-        </p>
-      </div>
+      <DashboardPageHeader
+        title="Payment Dashboard"
+        description="Monitor transactions, track revenue, and manage payment operations."
+      />
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
         <PaymentMetrics />

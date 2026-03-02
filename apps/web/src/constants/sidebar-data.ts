@@ -79,56 +79,10 @@ export const sidebarData: SidebarData = {
       ],
     },
     {
-      title: "Build",
-      items: [
-        {
-          title: "Your Recipes",
-          url: "/your-recipes",
-          icon: BookOpen,
-        },
-        {
-          title: "Tasks",
-          url: "/tasks",
-          icon: IconChecklist,
-        },
-        {
-          title: "AI Chef",
-          url: "/ai-chef",
-          icon: IconBrain,
-          badge: "New",
-          badgeColor: "green",
-        },
-         
-        // {
-        //   title: "Users",
-        //   url: "/users",
-        //   icon: IconUsers,
-        // },
-        // {
-        //   title: "Chats",
-        //   url: "/chats",
-        //   badge: "3",
-        //   icon: IconMessages,
-        // },
-        // {
-        //   title: "Calendar",
-        //   url: "/calendar",
-        //   icon: IconCalendar,
-        // },
-        // {
-        //   title: "Kanban",
-        //   url: "/kanban",
-        //   icon: KanbanIcon,
-        //   badge: "New",
-        //   badgeColor: "green",
-        // },
-      ],
-    },
-    {
       title: "Learn",
       items: [
         {
-          title: "SaaS Academy",
+          title: "Academy",
           url: "/learn",
           icon: BookOpen,
           badge: "New",
@@ -175,6 +129,90 @@ export const sidebarData: SidebarData = {
           url: "/learn/playbooks",
           icon: IconChecklist,
         },
+        
+      ],
+    },
+    {
+      title: "USER",
+      items: [
+        {
+          title: "Recipes",
+          url: "/your-recipes",
+          icon: BookOpen,
+        },
+        {
+          title: "Tasks",
+          url: "/tasks",
+          icon: IconChecklist,
+        },
+        {
+          title: "AI Chef",
+          url: "/ai-chef",
+          icon: IconBrain,
+          badge: "New",
+          badgeColor: "green",
+        },
+        
+        {
+          title: "Settings",
+          icon: IconSettings,
+          items: [
+            {
+              title: "Profile",
+              url: "/settings",
+              icon: IconUserCog,
+            },
+            {
+              title: "Account",
+              url: "/settings/account",
+              icon: IconTool,
+            },
+            {
+              title: "Billing",
+              url: "/settings/billing",
+              icon: IconCreditCard,
+            },
+            {
+              title: "Appearance",
+              url: "/settings/appearance",
+              icon: IconPalette,
+            },
+            {
+              title: "Notifications",
+              url: "/settings/notifications",
+              icon: IconNotification,
+            },
+            {
+              title: "Display",
+              url: "/settings/display",
+              icon: IconBrowserCheck,
+            },
+          ],
+        }
+         
+        // {
+        //   title: "Users",
+        //   url: "/users",
+        //   icon: IconUsers,
+        // },
+        // {
+        //   title: "Chats",
+        //   url: "/chats",
+        //   badge: "3",
+        //   icon: IconMessages,
+        // },
+        // {
+        //   title: "Calendar",
+        //   url: "/calendar",
+        //   icon: IconCalendar,
+        // },
+        // {
+        //   title: "Kanban",
+        //   url: "/kanban",
+        //   icon: KanbanIcon,
+        //   badge: "New",
+        //   badgeColor: "green",
+        // },
       ],
     },
     {
@@ -227,48 +265,17 @@ export const sidebarData: SidebarData = {
       title: "Other",
       items: [
         {
-          title: "Pricing",
-          url: "/pricing",
-          icon: IconCreditCard,
-        },
-        {
-          title: "Settings",
-          icon: IconSettings,
-          items: [
-            {
-              title: "Profile",
-              url: "/settings",
-              icon: IconUserCog,
-            },
-            {
-              title: "Account",
-              url: "/settings/account",
-              icon: IconTool,
-            },
-            {
-              title: "Appearance",
-              url: "/settings/appearance",
-              icon: IconPalette,
-            },
-            {
-              title: "Notifications",
-              url: "/settings/notifications",
-              icon: IconNotification,
-            },
-            {
-              title: "Display",
-              url: "/settings/display",
-              icon: IconBrowserCheck,
-            },
-          ],
-        },
-        {
           title: "Help Center",
           url: "/help-center",
           icon: IconHelp,
           badge: "Coming Soon",
         },
+        {
+          title: "Pricing",
+          url: "/pricing",
+          icon: IconCreditCard,
+        },
       ],
-    },
+    }
   ],
 };

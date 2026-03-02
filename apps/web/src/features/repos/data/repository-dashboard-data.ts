@@ -1,129 +1,162 @@
+import projectMockData from "../../../../../../.mocks/project-mock-02-09-2026.json";
 import type {
+  RepositoryDashboardItem,
   RepositoryDashboardListItem,
   RepositoryDashboardSummary,
+  RepositorySourceType,
+  RepositoryStatus,
+  RepositoryVisibility,
 } from "@/features/repos/types";
 
-export const repositoryDashboardData: RepositoryDashboardListItem[] = [
-  {
-    id: "project-k62j6cuc3pt8ii6qea1su58p",
-    name: "InReach",
-    slug: "weareinreach-inreach",
-    description:
-      "InReach is the world's first open source verified LGBTQ+ resource platform.",
-    status: "active",
-    url: "https://app.inreach.org",
-    license: "GPL-3.0",
-    sourceType: "template",
-    inspirationScore: 1,
-    metadata: {
-      size: 51200,
-      stars: 46,
-      forks: 5,
-      openIssues: 9,
-      watchers: 46,
-      language: "TypeScript",
-      visibility: "public",
-      lastSyncedAt: "2026-02-04T03:44:08.417Z",
-    },
-    repo: {
-      owner: "weareinreach",
-      name: "InReach",
-      default_branch: "dev",
-      pushed_at: "2026-02-04T01:36:26.000Z",
-      commit_count: 5690,
-      contributor_count: 19,
-      openPullRequests: 1,
-      mergedPullRequests: 1394,
-      totalPullRequests: 1552,
-      topics: ["lgbtq", "nextjs", "prisma", "trpc", "typescript"],
-    },
-  },
-  {
-    id: "project-7q3i1mock5f8k2pj9as6c4te",
-    name: "OpsBoard",
-    slug: "acme-opsboard",
-    description:
-      "Internal operations portal for dispatch, incidents, and maintenance workflows.",
-    status: "active",
-    url: "https://opsboard.example.com",
-    license: "MIT",
-    sourceType: "reference",
-    inspirationScore: 2,
-    metadata: {
-      size: 31800,
-      stars: 128,
-      forks: 18,
-      openIssues: 22,
-      watchers: 30,
-      language: "TypeScript",
-      visibility: "private",
-      lastSyncedAt: "2026-02-15T18:02:11.000Z",
-    },
-    repo: {
-      owner: "acme",
-      name: "opsboard",
-      default_branch: "main",
-      pushed_at: "2026-02-16T06:32:10.000Z",
-      commit_count: 2381,
-      contributor_count: 11,
-      openPullRequests: 6,
-      mergedPullRequests: 402,
-      totalPullRequests: 471,
-      topics: ["nextjs", "postgres", "monitoring", "dashboard"],
-    },
-  },
-  {
-    id: "project-z1r9p6mock5b3y8tw2u4h7na",
-    name: "BillingPilot",
-    slug: "acme-billingpilot",
-    description:
-      "Subscription billing and invoicing control plane used by multiple SaaS products.",
-    status: "paused",
-    url: "https://billingpilot.example.com",
-    license: "Apache-2.0",
-    sourceType: "starter",
-    inspirationScore: 3,
-    metadata: {
-      size: 22400,
-      stars: 87,
-      forks: 13,
-      openIssues: 14,
-      watchers: 21,
-      language: "Go",
-      visibility: "internal",
-      lastSyncedAt: "2026-02-10T14:22:55.000Z",
-    },
-    repo: {
-      owner: "acme",
-      name: "billingpilot",
-      default_branch: "main",
-      pushed_at: "2026-02-11T09:04:19.000Z",
-      commit_count: 1442,
-      contributor_count: 8,
-      openPullRequests: 3,
-      mergedPullRequests: 196,
-      totalPullRequests: 229,
-      topics: ["billing", "golang", "stripe", "apis"],
-    },
-  },
-];
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+const SUPPORTED_STATUSES = new Set<RepositoryStatus>(["active", "paused", "archived"]);
+const SUPPORTED_SOURCE_TYPES = new Set<RepositorySourceType>(["template", "reference", "starter"]);
+const SUPPORTED_VISIBILITY = new Set<RepositoryVisibility>(["public", "private", "internal"]);
 
+function safeNumber(value: unknown, fallback = 0): number {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+
+  return fallback;
+}
+
+function safeString(value: unknown, fallback = ""): string {
+  return typeof value === "string" && value.length > 0 ? value : fallback;
+}
+
+function normalizeStatus(value: unknown): RepositoryStatus {
+  return SUPPORTED_STATUSES.has(value as RepositoryStatus) ? (value as RepositoryStatus) : "active";
+}
+
+function normalizeSourceType(value: unknown): RepositorySourceType {
+  return SUPPORTED_SOURCE_TYPES.has(value as RepositorySourceType)
+    ? (value as RepositorySourceType)
+    : "template";
+}
+
+function normalizeVisibility(value: unknown): RepositoryVisibility {
+  return SUPPORTED_VISIBILITY.has(value as RepositoryVisibility)
+    ? (value as RepositoryVisibility)
+    : "public";
+}
+
+function normalizeIsoDate(value: unknown, fallback = "1970-01-01T00:00:00.000Z"): string {
+  return typeof value === "string" && value.length > 0 ? value : fallback;
+}
+
+function isPushedWithinDays(pushedAt: string, days: number): boolean {
+  const parsedDate = Date.parse(pushedAt);
+  if (Number.isNaN(parsedDate)) {
+    return false;
+  }
+
+  return Date.now() - parsedDate <= days * DAY_IN_MS;
+}
+
+const rawProjects = (projectMockData as { data?: RepositoryDashboardItem[] }).data ?? [];
+
+/**
+ * Provide repository dashboard rows from the latest mock payload's `data` array.
+ */
+export const repositoryDashboardData: RepositoryDashboardListItem[] = rawProjects.map((project) => ({
+  id: safeString(project.id, "unknown-project"),
+  name: safeString(project.name, "Unnamed repository"),
+  slug: safeString(project.slug, safeString(project.name, "unknown").toLowerCase()),
+  description: safeString(project.description, "No project description available."),
+  status: normalizeStatus(project.status),
+  url: safeString(project.url, "#"),
+  license: typeof project.license === "string" ? project.license : null,
+  sourceType: normalizeSourceType(project.sourceType),
+  inspirationScore: safeNumber(project.inspirationScore),
+  metadata: {
+    size: safeNumber(project.metadata?.size),
+    stars: safeNumber(project.metadata?.stars),
+    forks: safeNumber(project.metadata?.forks),
+    language: safeString(project.metadata?.language, "Unknown"),
+    watchers: safeNumber(project.metadata?.watchers),
+    openIssues: safeNumber(project.metadata?.openIssues),
+    visibility: normalizeVisibility(project.metadata?.visibility),
+    lastSyncedAt: normalizeIsoDate(project.metadata?.lastSyncedAt),
+  },
+  repo: {
+    owner: safeString(project.repo?.owner, "unknown"),
+    name: safeString(project.repo?.name, "unknown"),
+    created_at: normalizeIsoDate(project.repo?.created_at),
+    default_branch: safeString(project.repo?.default_branch, "main"),
+    pushed_at: normalizeIsoDate(project.repo?.pushed_at),
+    stars: safeNumber(project.repo?.stars),
+    forks: safeNumber(project.repo?.forks),
+    commit_count: safeNumber(project.repo?.commit_count),
+    contributor_count: safeNumber(project.repo?.contributor_count),
+    openIssues: safeNumber(project.repo?.openIssues),
+    closedIssues: safeNumber(project.repo?.closedIssues),
+    totalIssues: safeNumber(project.repo?.totalIssues),
+    openPullRequests: safeNumber(project.repo?.openPullRequests),
+    mergedPullRequests: safeNumber(project.repo?.mergedPullRequests),
+    totalPullRequests: safeNumber(project.repo?.totalPullRequests),
+    topics: Array.isArray(project.repo?.topics)
+      ? project.repo.topics.filter((topic): topic is string => typeof topic === "string")
+      : [],
+    deployments: project.repo?.deployments ?? null,
+    packageManager:
+      typeof project.repo?.packageManager === "string" ? project.repo.packageManager : null,
+    packageJson:
+      project.repo?.packageJson && typeof project.repo.packageJson === "object"
+        ? project.repo.packageJson
+        : null,
+  },
+}));
+
+/**
+ * Aggregate high-signal metrics for repository dashboard cards.
+ *
+ * @param projects - Repository items currently shown in the dashboard.
+ * @returns Rollup values used by overview stat cards.
+ */
 export function getRepositoryDashboardSummary(
   projects: RepositoryDashboardListItem[],
 ): RepositoryDashboardSummary {
+  const totalRepositories = projects.length;
+  const totalStars = projects.reduce((sum, project) => sum + project.metadata.stars, 0);
+  const totalForks = projects.reduce((sum, project) => sum + project.metadata.forks, 0);
+  const totalContributors = projects.reduce((sum, project) => sum + project.repo.contributor_count, 0);
+  const totalOpenIssues = projects.reduce((sum, project) => sum + project.metadata.openIssues, 0);
+  const totalOpenPullRequests = projects.reduce(
+    (sum, project) => sum + project.repo.openPullRequests,
+    0,
+  );
+  const totalPullRequests = projects.reduce(
+    (sum, project) => sum + project.repo.totalPullRequests,
+    0,
+  );
+  const totalMergedPullRequests = projects.reduce(
+    (sum, project) => sum + project.repo.mergedPullRequests,
+    0,
+  );
+  const deploymentSuccessRateValues = projects
+    .map((project) => project.repo.deployments?.successRate)
+    .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
+  const averageDeploymentSuccessRate =
+    deploymentSuccessRateValues.length > 0
+      ? deploymentSuccessRateValues.reduce((sum, value) => sum + value, 0) /
+        deploymentSuccessRateValues.length
+      : null;
+  const recentlyPushedLast30Days = projects.filter((project) =>
+    isPushedWithinDays(project.repo.pushed_at, 30),
+  ).length;
+
   return {
-    totalStars: projects.reduce((sum, project) => sum + project.metadata.stars, 0),
-    totalContributors: projects.reduce(
-      (sum, project) => sum + project.repo.contributor_count,
-      0,
-    ),
-    totalOpenIssues: projects.reduce(
-      (sum, project) => sum + project.metadata.openIssues,
-      0,
-    ),
-    totalOpenPullRequests: projects.reduce(
-      (sum, project) => sum + project.repo.openPullRequests,
-      0,
-    ),
+    totalRepositories,
+    totalStars,
+    totalForks,
+    totalContributors,
+    totalOpenIssues,
+    totalOpenPullRequests,
+    averageMergeRate:
+      totalPullRequests > 0 ? Math.round((totalMergedPullRequests / totalPullRequests) * 100) : 0,
+    averageDeploymentSuccessRate:
+      averageDeploymentSuccessRate === null ? null : Math.round(averageDeploymentSuccessRate),
+    recentlyPushedLast30Days,
   };
 }

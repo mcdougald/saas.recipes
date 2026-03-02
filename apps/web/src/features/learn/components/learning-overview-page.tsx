@@ -13,7 +13,7 @@ import { ArrowRight, CheckCircle2, LockKeyhole, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 /**
- * Landing page for the learn feature and premium academy positioning.
+ * Render the learn overview page with premium AI notes positioning.
  */
 export function LearningOverviewPage() {
   const totalWalkthroughs = learningTopics.reduce(
@@ -40,7 +40,7 @@ export function LearningOverviewPage() {
           <div className="relative flex flex-col gap-5">
             <Badge variant="outline" className="w-fit gap-1.5">
               <Sparkles aria-hidden className="size-3.5" />
-              Learn from production-grade SaaS recipes
+              AI-generated notes from real SaaS repos
             </Badge>
 
             <div className="space-y-2">
@@ -48,10 +48,9 @@ export function LearningOverviewPage() {
                 SaaS Academy
               </h1>
               <p className="max-w-3xl text-muted-foreground">
-                Build real product intuition through hands-on codebase
-                walkthroughs. Academy, notes, guides, and case studies are
-                premium modules for teams that want structured implementation
-                support.
+                Turn top open-source codebases into clear, actionable learning.
+                Get AI-generated implementation notes and latest trend notes so
+                your team can ship with current patterns, not stale docs.
               </p>
             </div>
 
@@ -69,7 +68,7 @@ export function LearningOverviewPage() {
             <div className="flex flex-wrap gap-2">
               <Button asChild>
                 <Link href="/pricing">
-                  Unlock premium learning
+                  Unlock AI notes
                   <ArrowRight aria-hidden className="size-4" />
                 </Link>
               </Button>
@@ -89,8 +88,8 @@ export function LearningOverviewPage() {
             <CardHeader>
               <CardTitle>Unlock the full academy</CardTitle>
               <CardDescription>
-                Premium gives your team structured modules and implementation
-                depth, not just reading material.
+                Premium gives your team structured learning plus continuously
+                updated AI insights, not static reading material.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -100,21 +99,24 @@ export function LearningOverviewPage() {
                     aria-hidden
                     className="mt-0.5 size-4 shrink-0 text-primary"
                   />
-                  Academy paths with weekly milestones and outcomes.
+                  AI-generated notes that summarize architecture, decisions, and
+                  implementation steps by topic.
                 </p>
                 <p className="flex items-start gap-2 text-sm text-muted-foreground">
                   <CheckCircle2
                     aria-hidden
                     className="mt-0.5 size-4 shrink-0 text-primary"
                   />
-                  Tactical notes and guides mapped to common SaaS bottlenecks.
+                  Latest trend notes refreshed from emerging SaaS patterns
+                  across production repositories.
                 </p>
                 <p className="flex items-start gap-2 text-sm text-muted-foreground">
                   <CheckCircle2
                     aria-hidden
                     className="mt-0.5 size-4 shrink-0 text-primary"
                   />
-                  Case studies showing real architecture and delivery trade-offs.
+                  Academy paths with weekly milestones and case studies focused
+                  on real delivery trade-offs.
                 </p>
               </div>
 

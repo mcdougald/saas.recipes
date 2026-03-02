@@ -1,16 +1,18 @@
 import {
   ArrowUpRight,
+  BookOpenCheck,
   Clock3,
+  GitCommitHorizontal,
   GitFork,
+  GitMerge,
   GitPullRequest,
   Globe,
-  HardDrive,
   Package,
+  Scale,
   ShieldCheck,
   Sparkles,
   Star,
   Users,
-  Workflow,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -25,6 +27,11 @@ import type {
 
 const numberFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
+});
+
+const compactNumberFormatter = new Intl.NumberFormat("en-US", {
+  notation: "compact",
+  maximumFractionDigits: 1,
 });
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -44,6 +51,11 @@ function formatNumber(value: number): string {
   return numberFormatter.format(value);
 }
 
+/** Formats large counts using compact notation for dense dashboard cards. */
+function formatCompactNumber(value: number): string {
+  return compactNumberFormatter.format(value);
+}
+
 /** Converts an ISO date string into a short US date label. */
 function formatDate(value: string): string {
   return dateFormatter.format(new Date(value));
@@ -61,6 +73,25 @@ function getMergeRate(project: RepositoryDashboardListItem): number {
   }
 
   return Math.round((project.repo.mergedPullRequests / project.repo.totalPullRequests) * 100);
+}
+
+/** Calculates issue closure percentage from total and closed issues. */
+function getIssueClosureRate(project: RepositoryDashboardListItem): number {
+  if (project.repo.totalIssues === 0) {
+    return 0;
+  }
+
+  return Math.round((project.repo.closedIssues / project.repo.totalIssues) * 100);
+}
+
+/** Computes full days since the provided ISO timestamp. */
+function getDaysSince(value: string): number {
+  const timestamp = Date.parse(value);
+  if (Number.isNaN(timestamp)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.floor((Date.now() - timestamp) / (24 * 60 * 60 * 1000)));
 }
 
 /** Builds the canonical GitHub repository URL from owner and repo name. */
@@ -95,15 +126,23 @@ type RepositoryListItemProps = {
  */
 export function RepositoryListItem({ project }: RepositoryListItemProps) {
   const mergeRate = getMergeRate(project);
+  const issueClosureRate = getIssueClosureRate(project);
   const deploymentSuccessRate = project.repo.deployments?.successRate ?? 0;
   const deploymentCount = project.repo.deployments?.totalCount ?? 0;
   const visibility = project.metadata.visibility ?? "public";
   const packageManager = project.repo.packageManager ?? project.repo.packageJson?.packageManager;
   const isArchived = project.status === "archived";
+  const pushedDaysAgo = getDaysSince(project.repo.pushed_at);
+  const activityToneClassName =
+    pushedDaysAgo <= 7
+      ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+      : pushedDaysAgo <= 30
+        ? "bg-amber-500/10 text-amber-700 dark:text-amber-300"
+        : "bg-rose-500/10 text-rose-700 dark:text-rose-300";
 
   return (
-    <article className="group relative overflow-hidden rounded-xl border bg-card p-3 transition-all hover:-translate-y-0.5 hover:shadow-sm lg:p-4">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-14 bg-linear-to-r from-primary/10 via-primary/5 to-transparent opacity-50" />
+    <article className="group relative overflow-hidden rounded-xl border bg-card p-3 transition-all hover:-translate-y-0.5 hover:shadow-sm [content-visibility:auto] lg:p-4">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-r from-primary/10 via-primary/5 to-transparent opacity-70" />
 
       <div className="relative flex flex-wrap items-start justify-between gap-2.5">
         <div className="flex min-w-0 items-start gap-2.5">
@@ -132,10 +171,14 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
                 <ShieldCheck className="mr-1 size-3" />
                 {visibility}
               </Badge>
+              <Badge variant="secondary" className={cn("h-5 px-1.5 text-[10px]", activityToneClassName)}>
+                <Clock3 className="mr-1 size-3" />
+                {pushedDaysAgo === 0 ? "Updated today" : `${pushedDaysAgo}d ago`}
+              </Badge>
               {packageManager ? (
                 <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
                   <Package className="mr-1 size-3" />
-                  {packageManager}
+                  {packageManager.split("@")[0]}
                 </Badge>
               ) : null}
             </div>
@@ -166,20 +209,20 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
         </div>
       </div>
 
-      <div className="relative mt-3 grid gap-1.5 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="relative mt-3 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-4">
         <div className="bg-muted/40 rounded-md border px-2 py-1.5">
           <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
             <Star className="size-3.5" />
             Stars
           </p>
-          <p className="text-sm font-semibold">{formatNumber(project.metadata.stars)}</p>
+          <p className="text-sm font-semibold">{formatCompactNumber(project.metadata.stars)}</p>
         </div>
         <div className="bg-muted/40 rounded-md border px-2 py-1.5">
           <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
             <GitFork className="size-3.5" />
             Forks
           </p>
-          <p className="text-sm font-semibold">{formatNumber(project.metadata.forks)}</p>
+          <p className="text-sm font-semibold">{formatCompactNumber(project.metadata.forks)}</p>
         </div>
         <div className="bg-muted/40 rounded-md border px-2 py-1.5">
           <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
@@ -193,33 +236,19 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
         <div className="bg-muted/40 rounded-md border px-2 py-1.5">
           <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
             <GitPullRequest className="size-3.5" />
-            Open PRs
+            Open PRs / Issues
           </p>
           <p className="text-sm font-semibold">
-            {formatNumber(project.repo.openPullRequests)}
+            {formatNumber(project.repo.openPullRequests)} / {formatNumber(project.metadata.openIssues)}
           </p>
-        </div>
-        <div className="bg-muted/40 rounded-md border px-2 py-1.5">
-          <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
-            <Globe className="size-3.5" />
-            Watchers
-          </p>
-          <p className="text-sm font-semibold">{formatNumber(project.metadata.watchers)}</p>
-        </div>
-        <div className="bg-muted/40 rounded-md border px-2 py-1.5">
-          <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
-            <HardDrive className="size-3.5" />
-            Size
-          </p>
-          <p className="text-sm font-semibold">{formatNumber(project.metadata.size)} KB</p>
         </div>
       </div>
 
-      <div className="relative mt-3 grid gap-1.5 lg:grid-cols-2">
+      <div className="relative mt-3 grid gap-1.5 lg:grid-cols-3">
         <div className="rounded-md border bg-muted/20 px-2 py-1.5">
           <div className="mb-1 flex items-center justify-between text-[11px]">
             <p className="text-muted-foreground inline-flex items-center gap-1">
-              <Sparkles className="size-3" />
+              <GitMerge className="size-3" />
               Merge rate
             </p>
             <span className="font-medium">{mergeRate}%</span>
@@ -227,10 +256,24 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
           <Progress value={mergeRate} className="h-1.5" />
         </div>
 
+        <div className="rounded-md border bg-blue-500/8 px-2 py-1.5">
+          <div className="mb-1 flex items-center justify-between text-[11px]">
+            <p className="text-muted-foreground inline-flex items-center gap-1">
+              <BookOpenCheck className="size-3" />
+              Issue closure
+            </p>
+            <span className="font-medium">{issueClosureRate}%</span>
+          </div>
+          <Progress
+            value={issueClosureRate}
+            className="h-1.5 bg-blue-500/20 **:data-[slot=progress-indicator]:bg-blue-500"
+          />
+        </div>
+
         <div className="rounded-md border bg-emerald-500/8 px-2 py-1.5">
           <div className="mb-1 flex items-center justify-between text-[11px]">
             <p className="text-muted-foreground inline-flex items-center gap-1">
-              <Workflow className="size-3" />
+              <Globe className="size-3" />
               Deployment success
             </p>
             <span className="font-medium">
@@ -266,10 +309,16 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
           Branch: {project.repo.default_branch}
         </Badge>
         <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-          Commits: {formatNumber(project.repo.commit_count)}
+          <GitCommitHorizontal className="mr-1 size-3" />
+          Commits: {formatCompactNumber(project.repo.commit_count)}
         </Badge>
         <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-          Open Issues: {formatNumber(project.metadata.openIssues)}
+          <Sparkles className="mr-1 size-3" />
+          Watchers: {formatCompactNumber(project.metadata.watchers)}
+        </Badge>
+        <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
+          <Scale className="mr-1 size-3" />
+          Size: {formatCompactNumber(project.metadata.size)} KB
         </Badge>
         {project.repo.topics.slice(0, 4).map((topic) => (
           <Badge key={topic} variant="outline" className="h-5 px-1.5 text-[10px]">

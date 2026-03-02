@@ -1,4 +1,11 @@
-import { GitFork, GitPullRequest, Star, Users } from "lucide-react";
+import {
+  Activity,
+  CheckCheck,
+  FolderGit2,
+  ShieldAlert,
+  Star,
+  Users,
+} from "lucide-react";
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { RepositoryDashboardSummary } from "@/features/repos/types";
@@ -17,46 +24,87 @@ type RepoOverviewStatsProps = {
 
 type StatCard = {
   label: string;
-  value: number;
+  value: string;
   icon: typeof Star;
   accentClassName: string;
   helper: string;
+  secondary: string;
 };
 
+/**
+ * Render rollup repository metrics for quick dashboard scanning.
+ *
+ * @param summary - Aggregated repository metrics for the current dataset.
+ * @returns A responsive grid of high-signal stat cards.
+ */
 export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
+  const averageContributorsPerRepo =
+    summary.totalRepositories > 0 ? summary.totalContributors / summary.totalRepositories : 0;
+  const averageOpenIssuesPerRepo =
+    summary.totalRepositories > 0 ? summary.totalOpenIssues / summary.totalRepositories : 0;
+
   const statCards: StatCard[] = [
     {
-      label: "Total Stars",
-      value: summary.totalStars,
+      label: "Tracked Repositories",
+      value: formatNumber(summary.totalRepositories),
+      icon: FolderGit2,
+      accentClassName: "from-indigo-500/20 to-indigo-500/5",
+      helper: `${summary.recentlyPushedLast30Days} pushed in last 30 days`,
+      secondary: `${summary.totalRepositories - summary.recentlyPushedLast30Days} stale >30 days`,
+    },
+    {
+      label: "Community Reach",
+      value: formatNumber(summary.totalStars),
       icon: Star,
       accentClassName: "from-amber-500/20 to-amber-500/5",
-      helper: "Community demand signal",
+      helper: `${formatNumber(summary.totalForks)} forks`,
+      secondary: "Stars + forks indicate ecosystem gravity",
     },
     {
       label: "Contributors",
-      value: summary.totalContributors,
+      value: formatNumber(summary.totalContributors),
       icon: Users,
       accentClassName: "from-sky-500/20 to-sky-500/5",
-      helper: "Distinct engineers observed",
+      helper: `${averageContributorsPerRepo.toFixed(1)} avg per repo`,
+      secondary: "Higher spread usually lowers delivery bottlenecks",
     },
     {
-      label: "Open Issues",
-      value: summary.totalOpenIssues,
-      icon: GitFork,
-      accentClassName: "from-orange-500/20 to-orange-500/5",
-      helper: "Current backlog pressure",
-    },
-    {
-      label: "Open Pull Requests",
-      value: summary.totalOpenPullRequests,
-      icon: GitPullRequest,
+      label: "PR Throughput",
+      value: `${summary.averageMergeRate}%`,
+      icon: CheckCheck,
       accentClassName: "from-emerald-500/20 to-emerald-500/5",
-      helper: "Active delivery in flight",
+      helper: `${formatNumber(summary.totalOpenPullRequests)} open PRs`,
+      secondary: "Merge rate from merged vs total pull requests",
+    },
+    {
+      label: "Backlog Pressure",
+      value: formatNumber(summary.totalOpenIssues),
+      icon: ShieldAlert,
+      accentClassName: "from-orange-500/20 to-orange-500/5",
+      helper: `${averageOpenIssuesPerRepo.toFixed(1)} open issues / repo`,
+      secondary: "Open issues signal maintenance load",
+    },
+    {
+      label: "Deploy Reliability",
+      value:
+        summary.averageDeploymentSuccessRate === null
+          ? "N/A"
+          : `${summary.averageDeploymentSuccessRate}%`,
+      icon: Activity,
+      accentClassName: "from-teal-500/20 to-teal-500/5",
+      helper:
+        summary.averageDeploymentSuccessRate === null
+          ? "No deployment telemetry available"
+          : "Average success rate across repos with deployments",
+      secondary:
+        summary.averageDeploymentSuccessRate === null
+          ? "Add deployments metadata to unlock this signal"
+          : "Useful proxy for release confidence",
     },
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
       {statCards.map((card) => {
         const Icon = card.icon;
 
@@ -69,9 +117,10 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
               <CardDescription>{card.label}</CardDescription>
               <CardTitle className="flex items-center gap-2 text-2xl">
                 <Icon className="size-4" />
-                {formatNumber(card.value)}
+                {card.value}
               </CardTitle>
               <p className="text-muted-foreground text-xs">{card.helper}</p>
+              <p className="text-muted-foreground text-xs">{card.secondary}</p>
             </CardHeader>
           </Card>
         );

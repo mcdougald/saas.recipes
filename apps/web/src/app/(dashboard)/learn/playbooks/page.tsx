@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import {
   Card,
   CardContent,
@@ -114,23 +115,20 @@ export default function LearnPlaybooksPage() {
             className="absolute -bottom-10 right-0 size-44 rounded-full bg-primary/10 blur-3xl"
           />
 
-          <div className="relative flex flex-col gap-5">
-            <Badge variant="outline" className="w-fit gap-1.5">
-              <Sparkles aria-hidden className="size-3.5" />
-              Premium library in progress
-            </Badge>
-
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">
-                Snippet Library
-              </h1>
-              <p className="max-w-3xl text-muted-foreground">
-                Practical, production-style code blocks you can map directly to
-                your SaaS roadmap. Each snippet includes context, implementation
-                focus, and clear upgrade paths to full premium breakdowns.
-              </p>
-            </div>
-
+          <DashboardPageHeader
+            containerClassName="px-0 py-0"
+            contentClassName="relative flex flex-col gap-5"
+            titleClassName="text-3xl font-bold tracking-tight md:text-4xl"
+            descriptionClassName="max-w-3xl"
+            title="Snippet Library"
+            description="Practical, production-style code blocks you can map directly to your SaaS roadmap. Each snippet includes context, implementation focus, and clear upgrade paths to full premium breakdowns."
+            eyebrow={
+              <Badge variant="outline" className="w-fit gap-1.5">
+                <Sparkles aria-hidden className="size-3.5" />
+                Premium library in progress
+              </Badge>
+            }
+          >
             <div className="flex flex-wrap items-center gap-3">
               <Badge variant="secondary">{snippets.length} snippet previews</Badge>
               <Badge variant="secondary">{categoryCount} core categories</Badge>
@@ -151,7 +149,7 @@ export default function LearnPlaybooksPage() {
                 <Link href="/learn">Browse learning tracks</Link>
               </Button>
             </div>
-          </div>
+          </DashboardPageHeader>
         </div>
       </div>
 

@@ -21,7 +21,7 @@ export function RepositoryList({ projects }: RepositoryListProps) {
   });
 
   return (
-    <Card className="border-none shadow-none p-0">
+    <Card className="border-none bg-transparent shadow-none py-3">
       <CardHeader className="space-y-3 p-0">
         <CardTitle>Tracked Repositories</CardTitle>
         <CardDescription>

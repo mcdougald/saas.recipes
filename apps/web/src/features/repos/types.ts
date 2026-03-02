@@ -301,6 +301,9 @@ export type RepositoryRepo = {
   [key: string]: unknown;
 };
 
+/**
+ * Represents a fully-hydrated project row used as the source for dashboard list projections.
+ */
 export type RepositoryDashboardItem = {
   id: string;
   name: string;
@@ -325,10 +328,16 @@ export type RepositoryDashboardItem = {
     RepositoryRepo,
     | "owner"
     | "name"
+    | "created_at"
     | "default_branch"
     | "pushed_at"
+    | "stars"
+    | "forks"
     | "commit_count"
     | "contributor_count"
+    | "openIssues"
+    | "closedIssues"
+    | "totalIssues"
     | "openPullRequests"
     | "mergedPullRequests"
     | "totalPullRequests"
@@ -352,9 +361,17 @@ export type RepositoryDashboardListItem = Pick<
   | "repo"
 >;
 
+/**
+ * Defines aggregate metrics rendered in dashboard overview stat cards.
+ */
 export type RepositoryDashboardSummary = {
+  totalRepositories: number;
   totalStars: number;
+  totalForks: number;
   totalContributors: number;
   totalOpenIssues: number;
   totalOpenPullRequests: number;
+  averageMergeRate: number;
+  averageDeploymentSuccessRate: number | null;
+  recentlyPushedLast30Days: number;
 };

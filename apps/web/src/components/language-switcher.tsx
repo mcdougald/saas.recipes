@@ -1,14 +1,18 @@
 "use client";
 
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { useI18n } from "@/hooks/use-i18n";
 import { fallbackLng, supportedLngs, type SupportedLanguage } from "@/i18n/settings";
+import { Globe } from "lucide-react";
 
 const languageLabels: Record<SupportedLanguage, string> = {
   en: "English",
@@ -42,23 +46,49 @@ const languageLabels: Record<SupportedLanguage, string> = {
   "zh-TW": "Chinese (Traditional)",
 };
 
+/**
+ * Switch the active application language from an icon button menu.
+ *
+ * @returns A compact language selector optimized for header action bars.
+ */
 export function LanguageSwitcher() {
   const { t, language, changeLanguage } = useI18n();
   const activeLanguage =
     supportedLngs.find((lng) => lng === language) ?? fallbackLng;
+  const activeLanguageLabel = languageLabels[activeLanguage];
 
   return (
-    <Select value={activeLanguage} onValueChange={changeLanguage}>
-      <SelectTrigger className="w-[150px]" aria-label={t("language.select")}>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {supportedLngs.map((lng) => (
-          <SelectItem key={lng} value={lng}>
-            {languageLabels[lng]}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full text-muted-foreground hover:text-foreground"
+          aria-label={`${t("language.select")}: ${activeLanguageLabel}`}
+        >
+          <Globe className="h-[1.1rem] w-[1.1rem]" />
+          <span className="sr-only">{t("language.select")}</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>{t("language.select")}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuRadioGroup
+          value={activeLanguage}
+          onValueChange={(value) => changeLanguage(value as SupportedLanguage)}
+        >
+          {supportedLngs.map((lng) => (
+            <DropdownMenuRadioItem key={lng} value={lng}>
+              <span className="flex w-full items-center justify-between gap-3">
+                <span>{languageLabels[lng]}</span>
+                <span className="text-muted-foreground text-xs uppercase">
+                  {lng}
+                </span>
+              </span>
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
