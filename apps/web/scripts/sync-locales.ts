@@ -4,7 +4,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
-import { defaultNS, fallbackLng, supportedLngs } from "../src/i18n/settings";
+import { fallbackLng, supportedLngs } from "../src/i18n/settings";
 
 type TranslationMap = Record<string, string>;
 type PlaceholderToken = {
@@ -26,8 +26,8 @@ const { google } = require("@ai-sdk/google") as {
   google: (modelName: string) => unknown;
 };
 const appRoot = path.resolve(__dirname, "..");
-const localesRoot = path.join(appRoot, "public", "locales");
-const baseLocalePath = path.join(localesRoot, fallbackLng, `${defaultNS}.json`);
+const localesRoot = path.join(appRoot, "src", "i18n", "messages");
+const baseLocalePath = path.join(localesRoot, `${fallbackLng}.json`);
 
 function loadEnvFiles() {
   const envCandidates = [
@@ -243,9 +243,8 @@ async function syncLocales() {
   let translatedEntries = 0;
 
   for (const language of supportedLngs) {
-    const languageDir = path.join(localesRoot, language);
-    const languagePath = path.join(languageDir, `${defaultNS}.json`);
-    await mkdir(languageDir, { recursive: true });
+    const languagePath = path.join(localesRoot, `${language}.json`);
+    await mkdir(localesRoot, { recursive: true });
 
     const currentTranslations = await readJsonFile(languagePath);
     const shouldTranslateBaseMatches =

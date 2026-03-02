@@ -7,6 +7,7 @@ import { FontProvider } from "@/contexts/font-context";
 import { SnowProvider } from "@/contexts/snow-context";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Manrope } from "next/font/google";
+import { getLocale, getMessages } from "next-intl/server";
 import NextToploader from "nextjs-toploader";
 import "./globals.css";
 
@@ -38,13 +39,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [locale, messages] = await Promise.all([getLocale(), getMessages()]);
+
   return (
-    <html lang="en" className="font-inter" suppressHydrationWarning>
+    <html lang={locale} className="font-inter" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -71,7 +74,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <I18nProvider>
+          <I18nProvider locale={locale} messages={messages}>
             <AuthProvider>
               <FontProvider>
                 <NextToploader color="var(--primary)" showSpinner={false} />

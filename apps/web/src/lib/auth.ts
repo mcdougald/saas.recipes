@@ -3,11 +3,34 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 
-const betterAuthBaseURL =
-  process.env.BETTER_AUTH_URL ||
-  process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
-  process.env.NEXT_PUBLIC_APP_URL ||
-  "http://localhost:4000";
+function isLocalhostURL(url: string) {
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(url);
+}
+
+function resolveBetterAuthBaseURL() {
+  const explicitBaseURLCandidates = [
+    process.env.BETTER_AUTH_URL,
+    process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
+    process.env.NEXT_PUBLIC_APP_URL,
+  ].filter((value): value is string => Boolean(value));
+
+  for (const url of explicitBaseURLCandidates) {
+    // Prevent accidental production misconfiguration to localhost.
+    if (process.env.NODE_ENV === "production" && isLocalhostURL(url)) {
+      continue;
+    }
+    return url;
+  }
+
+  // On Vercel preview/production, VERCEL_URL is the canonical host.
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  return `http://localhost:${process.env.PORT || "4000"}`;
+}
+
+const betterAuthBaseURL = resolveBetterAuthBaseURL();
 
 const githubClientId = process.env.GITHUB_CLIENT_ID;
 const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;

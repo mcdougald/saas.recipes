@@ -43,8 +43,8 @@ module.exports = {
     defaultNs: "translation",
     defaultValue: "__STRING_NOT_TRANSLATED__",
     resource: {
-      loadPath: "./public/locales/{{lng}}/{{ns}}.json",
-      savePath: "./public/locales/{{lng}}/{{ns}}.json",
+      loadPath: "./src/i18n/messages/{{lng}}.json",
+      savePath: "./src/i18n/messages/{{lng}}.json",
       jsonIndent: 2,
       lineEnding: "\n",
     },

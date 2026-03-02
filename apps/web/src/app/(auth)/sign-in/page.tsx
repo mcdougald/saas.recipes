@@ -87,10 +87,6 @@ export default function SignInPage() {
   return (
     <Card className="w-full max-w-md overflow-hidden border-border/60 bg-background/95 shadow-xl shadow-black/10 backdrop-blur-sm">
       <CardHeader className="space-y-3 pb-2 text-center">
-        <div className="mx-auto inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary">
-          <Sparkles className="h-3.5 w-3.5" aria-hidden />
-          {t("auth.signIn.badge")}
-        </div>
         <CardTitle className="text-3xl font-semibold tracking-tight">
           {t("auth.signIn.title")}
         </CardTitle>
