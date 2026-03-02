@@ -22,8 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import * as React from "react";
-import { Label, Pie, PieChart, Sector } from "recharts";
-import type { PieSectorDataItem } from "recharts/types/polar/Pie";
+import { Label, Pie, PieChart } from "recharts";
 
 const revenueData = [
   {
@@ -157,20 +156,9 @@ export function RevenueBreakdown() {
                   nameKey="category"
                   innerRadius={60}
                   strokeWidth={5}
-                  activeIndex={activeIndex}
-                  activeShape={({
-                    outerRadius = 0,
-                    ...props
-                  }: PieSectorDataItem) => (
-                    <g>
-                      <Sector {...props} outerRadius={outerRadius + 10} />
-                      <Sector
-                        {...props}
-                        outerRadius={outerRadius + 25}
-                        innerRadius={outerRadius + 12}
-                      />
-                    </g>
-                  )}
+                  outerRadius={(entry) =>
+                    entry.category === activeCategory ? 95 : 85
+                  }
                 >
                   <Label
                     content={({ viewBox }) => {

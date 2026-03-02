@@ -16,11 +16,13 @@ export const repositoryDashboardData: RepositoryDashboardListItem[] = [
     sourceType: "template",
     inspirationScore: 1,
     metadata: {
+      size: 51200,
       stars: 46,
       forks: 5,
       openIssues: 9,
       watchers: 46,
       language: "TypeScript",
+      visibility: "public",
       lastSyncedAt: "2026-02-04T03:44:08.417Z",
     },
     repo: {
@@ -48,11 +50,13 @@ export const repositoryDashboardData: RepositoryDashboardListItem[] = [
     sourceType: "reference",
     inspirationScore: 2,
     metadata: {
+      size: 31800,
       stars: 128,
       forks: 18,
       openIssues: 22,
       watchers: 30,
       language: "TypeScript",
+      visibility: "private",
       lastSyncedAt: "2026-02-15T18:02:11.000Z",
     },
     repo: {
@@ -80,11 +84,13 @@ export const repositoryDashboardData: RepositoryDashboardListItem[] = [
     sourceType: "starter",
     inspirationScore: 3,
     metadata: {
+      size: 22400,
       stars: 87,
       forks: 13,
       openIssues: 14,
       watchers: 21,
       language: "Go",
+      visibility: "internal",
       lastSyncedAt: "2026-02-10T14:22:55.000Z",
     },
     repo: {

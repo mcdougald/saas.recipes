@@ -8,9 +8,12 @@ export async function POST(req: Request) {
   }: {
     messages: UIMessage[];
   } = await req.json();
+
+  const modelMessages = await convertToModelMessages(messages);
+
   const result = streamText({
     model: google("gemini-2.0-flash"),
-    messages: convertToModelMessages(messages),
+    messages: modelMessages,
     system:
       "You are a helpful assistant that can answer questions and help with tasks",
   });

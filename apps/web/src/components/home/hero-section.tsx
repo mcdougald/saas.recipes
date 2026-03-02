@@ -63,8 +63,8 @@ export function HeroSection() {
             <Link href="#features">
               <span>{t("hero.cta.secondary")}</span>
               <HiSparkles
-                className="ml-2 inline-block size-4 opacity-70 motion-safe:transition-all motion-safe:duration-300 motion-safe:group-hover:-translate-y-px motion-safe:group-hover:opacity-100"
                 aria-hidden
+                className="ml-2 inline-block size-4 opacity-70 motion-safe:transition-all motion-safe:duration-300 motion-safe:group-hover:-translate-y-px motion-safe:group-hover:opacity-100"
               />
             </Link>
           </Button>

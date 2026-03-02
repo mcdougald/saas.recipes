@@ -70,13 +70,10 @@ export function Mail({
           collapsible={true}
           minSize={15}
           maxSize={20}
-          onCollapse={() => {
-            setIsCollapsed(true);
-            document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)}`;
-          }}
-          onResize={() => {
-            setIsCollapsed(false);
-            document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`;
+          onResize={(panelSize) => {
+            const collapsed = panelSize.asPercentage <= navCollapsedSize;
+            setIsCollapsed(collapsed);
+            document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(collapsed)}`;
           }}
           className={cn(
             isCollapsed && "w-full transition-all duration-300 ease-in-out",

@@ -321,7 +321,20 @@ export type RepositoryDashboardItem = {
   sourceType: RepositorySourceType;
   inspirationScore: number;
   metadata: RepositoryMetadata;
-  repo: RepositoryRepo;
+  repo: Pick<
+    RepositoryRepo,
+    | "owner"
+    | "name"
+    | "default_branch"
+    | "pushed_at"
+    | "commit_count"
+    | "contributor_count"
+    | "openPullRequests"
+    | "mergedPullRequests"
+    | "totalPullRequests"
+    | "topics"
+  > &
+    Partial<Pick<RepositoryRepo, "deployments" | "packageManager" | "packageJson">>;
 };
 
 export type RepositoryDashboardListItem = Pick<
