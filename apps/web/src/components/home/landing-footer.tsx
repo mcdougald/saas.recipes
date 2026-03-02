@@ -1,17 +1,21 @@
+"use client";
+
+import { useI18n } from "@/hooks/use-i18n";
 import Image from "next/image";
 import Link from "next/link";
 
 import { ToggleTheme } from "@/components/theme-toggle";
 
 const footerLinks = [
-  { href: "#features", label: "Features" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "#how-it-works", label: "How it works" },
-  { href: "/sign-in", label: "Sign in" },
-  { href: "/dashboard", label: "Dashboard" },
+  { href: "#features", labelKey: "landingFooter.links.features" },
+  { href: "/pricing", labelKey: "landingFooter.links.pricing" },
+  { href: "#how-it-works", labelKey: "landingFooter.links.howItWorks" },
+  { href: "/sign-in", labelKey: "landingFooter.links.signIn" },
+  { href: "/dashboard", labelKey: "landingFooter.links.dashboard" },
 ];
 
 export function LandingFooter() {
+  const { t } = useI18n();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -25,31 +29,30 @@ export function LandingFooter() {
             >
               <Image
                 src="/SaasRecipesIcon.svg"
-                alt="SaaS Recipes"
+                alt={t("brand.logoAlt")}
                 width={28}
                 height={35}
                 className="h-6 w-auto"
               />
-              <span>Recipes</span>
+              <span>{t("brand.shortName")}</span>
             </Link>
             <p className="max-w-md text-sm leading-6 text-muted-foreground">
-              Discover battle-tested open source SaaS projects, compare their
-              stacks, and ship faster with implementation patterns you can trust.
+              {t("landingFooter.description")}
             </p>
           </div>
 
-          <nav aria-label="Footer navigation">
+          <nav aria-label={t("landingFooter.navLabel")}>
             <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Explore
+              {t("landingFooter.exploreTitle")}
             </p>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-              {footerLinks.map(({ href, label }) => (
+              {footerLinks.map(({ href, labelKey }) => (
                 <Link
                   key={href}
                   href={href}
                   className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  {label}
+                  {t(labelKey)}
                 </Link>
               ))}
             </div>
@@ -57,23 +60,23 @@ export function LandingFooter() {
 
           <div className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Preferences
+              {t("landingFooter.preferencesTitle")}
             </p>
             <div className="inline-flex items-center gap-3 rounded-lg border bg-background p-2 pr-3">
               <ToggleTheme />
-              <span className="text-sm text-muted-foreground">Theme</span>
+              <span className="text-sm text-muted-foreground">{t("theme.label")}</span>
             </div>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col gap-3 border-t pt-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <p>{currentYear} SaaS Recipes. Crafted for builders.</p>
+          <p>{t("landingFooter.copyright", { year: currentYear })}</p>
 
           <Link
             href="https://trev.fyi"
             className="inline-flex items-center gap-2 font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
           >
-            Built by <span>@trev.fyi</span>
+            {t("landingFooter.builtBy")} <span>{t("authLayoutFooter.creatorHandle")}</span>
           </Link>
         </div>
       </div>

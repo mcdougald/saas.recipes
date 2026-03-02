@@ -34,3 +34,5 @@ export const supportedLngs = [
 ] as const;
 
 export type SupportedLanguage = (typeof supportedLngs)[number];
+
+export const supportedLngSet = new Set<SupportedLanguage>(supportedLngs);

@@ -2,40 +2,49 @@
 
 import { BookOpen, Check, Sparkles, TrendingUp } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useI18n } from "@/hooks/use-i18n";
 import { motion } from "motion/react";
 
 type ValuePillar = {
   icon: LucideIcon;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   highlights: readonly [string, string];
 };
 
 const valuePillars: readonly ValuePillar[] = [
   {
     icon: BookOpen,
-    title: "Curated implementation patterns",
-    description:
-      "Browse production-grade repositories and see how real teams structure auth, billing, dashboards, and release workflows.",
-    highlights: ["Reference fullstack architecture decisions", "Learn from proven code organization"],
+    titleKey: "howItWorks.items.patterns.title",
+    descriptionKey: "howItWorks.items.patterns.description",
+    highlights: [
+      "howItWorks.items.patterns.highlights.architecture",
+      "howItWorks.items.patterns.highlights.organization",
+    ],
   },
   {
     icon: Sparkles,
-    title: "Actionable insights for your stack",
-    description:
-      "Compare tooling, complexity, and maintenance signals so you can choose patterns that fit your product constraints.",
-    highlights: ["Filter examples by stack and product type", "Spot tradeoffs before implementation"],
+    titleKey: "howItWorks.items.insights.title",
+    descriptionKey: "howItWorks.items.insights.description",
+    highlights: [
+      "howItWorks.items.insights.highlights.filter",
+      "howItWorks.items.insights.highlights.tradeoffs",
+    ],
   },
   {
     icon: TrendingUp,
-    title: "Faster path from idea to launch",
-    description:
-      "Reuse battle-tested approaches instead of rebuilding foundations, and focus your team on product differentiation.",
-    highlights: ["Reduce time spent on boilerplate", "Ship with more confidence"],
+    titleKey: "howItWorks.items.launch.title",
+    descriptionKey: "howItWorks.items.launch.description",
+    highlights: [
+      "howItWorks.items.launch.highlights.boilerplate",
+      "howItWorks.items.launch.highlights.confidence",
+    ],
   },
 ] as const;
 
 export function HowItWorksSection() {
+  const { t } = useI18n();
+
   return (
     <section
       id="how-it-works"
@@ -48,17 +57,17 @@ export function HowItWorksSection() {
             id="how-it-works-heading"
             className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4"
           >
-            How teams ship faster with saas.recipes
+            {t("howItWorks.heading")}
           </h2>
           <p className="text-lg text-muted-foreground">
-            The recipes are a curated intelligence
-            layer for learning from real products and applying those lessons to your own.
+            {t("howItWorks.description")}
           </p>
         </div>
         <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {valuePillars.map(({ icon: Icon, title, description, highlights }, index) => (
+          {valuePillars.map(
+            ({ icon: Icon, titleKey, descriptionKey, highlights }, index) => (
             <motion.article
-              key={title}
+              key={titleKey}
               className="group relative overflow-hidden rounded-3xl border border-border/70 bg-linear-to-b from-background via-muted/30 to-background text-left shadow-sm transition-all hover:-translate-y-1 hover:border-primary/35 hover:shadow-lg hover:shadow-primary/10"
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -80,9 +89,9 @@ export function HowItWorksSection() {
                   </div>
                 </div>
 
-                <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+                <h3 className="text-xl font-semibold tracking-tight">{t(titleKey)}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {description}
+                  {t(descriptionKey)}
                 </p>
 
                 <ul className="mt-6 space-y-2.5 border-l border-primary/30 pl-4">
@@ -94,7 +103,7 @@ export function HowItWorksSection() {
                       <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                         <Check className="h-3.5 w-3.5" aria-hidden />
                       </span>
-                      <span>{item}</span>
+                      <span>{t(item)}</span>
                     </li>
                   ))}
                 </ul>

@@ -12,8 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useI18n } from "@/hooks/use-i18n";
 
 function ResetPasswordForm() {
+  const { t } = useI18n();
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token") ?? "";
@@ -27,11 +29,11 @@ function ResetPasswordForm() {
     e.preventDefault();
     setError("");
     if (password !== confirm) {
-      setError("Passwords don't match");
+      setError(t("auth.resetPassword.errors.mismatch"));
       return;
     }
     if (password.length < 8) {
-      setError("Use at least 8 characters");
+      setError(t("auth.resetPassword.errors.minLength"));
       return;
     }
     setIsLoading(true);
@@ -40,7 +42,7 @@ function ResetPasswordForm() {
       setDone(true);
       setTimeout(() => router.push("/sign-in"), 2000);
     } catch {
-      setError("Something went wrong. Try again or request a new link.");
+      setError(t("auth.resetPassword.errors.generic"));
     } finally {
       setIsLoading(false);
     }
@@ -51,15 +53,15 @@ function ResetPasswordForm() {
       <Card className="w-full max-w-md border-border/60 shadow-lg shadow-black/5">
         <CardHeader className="space-y-1.5 text-center pb-2">
           <CardTitle className="text-xl font-semibold tracking-tight">
-            Password updated
+            {t("auth.resetPassword.done.title")}
           </CardTitle>
           <CardDescription className="text-muted-foreground">
-            Redirecting you to sign in…
+            {t("auth.resetPassword.done.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Link href="/sign-in" className="block">
-            <Button className="w-full h-10">Sign in now</Button>
+            <Button className="w-full h-10">{t("auth.resetPassword.done.cta")}</Button>
           </Link>
         </CardContent>
       </Card>
@@ -70,12 +72,12 @@ function ResetPasswordForm() {
     <Card className="w-full max-w-md border-border/60 shadow-lg shadow-black/5">
       <CardHeader className="space-y-1.5 text-center pb-2">
         <CardTitle className="text-xl font-semibold tracking-tight">
-          Set new password
+          {t("auth.resetPassword.title")}
         </CardTitle>
         <CardDescription className="text-muted-foreground">
           {token
-            ? "Enter your new password below."
-            : "Use the link from your email to set a new password. If you landed here by mistake, request a new link from the sign-in page."}
+            ? t("auth.resetPassword.description.withToken")
+            : t("auth.resetPassword.description.missingToken")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -83,12 +85,12 @@ function ResetPasswordForm() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium">
-                New password
+                {t("auth.resetPassword.fields.newPassword.label")}
               </label>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t("auth.resetPassword.fields.newPassword.placeholder")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -99,12 +101,12 @@ function ResetPasswordForm() {
             </div>
             <div className="space-y-2">
               <label htmlFor="confirm" className="text-sm font-medium">
-                Confirm password
+                {t("auth.resetPassword.fields.confirmPassword.label")}
               </label>
               <Input
                 id="confirm"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t("auth.resetPassword.fields.confirmPassword.placeholder")}
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
                 required
@@ -126,17 +128,19 @@ function ResetPasswordForm() {
               className="w-full h-10 font-medium"
               disabled={isLoading}
             >
-              {isLoading ? "Updating…" : "Update password"}
+              {isLoading
+                ? t("auth.resetPassword.submit.loading")
+                : t("auth.resetPassword.submit.default")}
             </Button>
           </form>
         ) : null}
         <p className="text-center text-sm text-muted-foreground">
           <Link href="/forgot-password" className="font-medium text-primary hover:underline">
-            Request a new reset link
+            {t("auth.resetPassword.links.requestNewLink")}
           </Link>
           {" · "}
           <Link href="/sign-in" className="font-medium text-primary hover:underline">
-            Sign in
+            {t("common.signIn")}
           </Link>
         </p>
       </CardContent>
@@ -145,12 +149,14 @@ function ResetPasswordForm() {
 }
 
 export default function ResetPasswordPage() {
+  const { t } = useI18n();
+
   return (
     <Suspense
       fallback={
         <Card className="w-full max-w-md border-border/60">
           <CardContent className="py-10 text-center text-muted-foreground">
-            Loading…
+            {t("common.loading")}
           </CardContent>
         </Card>
       }

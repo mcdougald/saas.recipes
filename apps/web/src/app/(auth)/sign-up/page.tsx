@@ -15,8 +15,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { signIn, signUp } from "@/lib/auth-client";
+import { useI18n } from "@/hooks/use-i18n";
 
 export default function SignUpPage() {
+  const { t } = useI18n();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,7 +41,7 @@ export default function SignUpPage() {
       });
 
       if (result.error) {
-        setError(result.error.message || "Couldn't create account");
+        setError(result.error.message || t("auth.signUp.errors.createAccount"));
       } else {
         // Identify user and capture sign-up event on successful registration
         if (result.data?.user) {
@@ -59,7 +61,7 @@ export default function SignUpPage() {
     } catch (err) {
       console.error("Sign-up error:", err);
       posthog.captureException(err);
-      setError("Something went wrong. Try again?");
+      setError(t("auth.signUp.errors.generic"));
     } finally {
       setIsLoading(false);
     }
@@ -77,7 +79,7 @@ export default function SignUpPage() {
     } catch (err) {
       console.error("GitHub sign-in error:", err);
       posthog.captureException(err);
-      setError("Couldn't continue with GitHub. Try again?");
+      setError(t("auth.signUp.errors.github"));
       setIsSocialLoading(false);
     }
   };
@@ -87,14 +89,13 @@ export default function SignUpPage() {
       <CardHeader className="space-y-3 pb-2 text-center">
         <p className="mx-auto inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/3 px-3 py-1 text-xs font-medium text-primary">
           <Sparkles className="h-3.5 w-3.5" aria-hidden />
-          Start free in under a minute
+          {t("auth.signUp.badge")}
         </p>
         <CardTitle className="text-4xl font-semibold tracking-tight">
-          Create your chef account
+          {t("auth.signUp.title")}
         </CardTitle>
         <CardDescription className="mx-auto max-w-sm text-muted-foreground">
-          Turn real SaaS codebases into your launch playbook. Save recipes, compare
-          stacks, and ship with more confidence.
+          {t("auth.signUp.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -106,7 +107,7 @@ export default function SignUpPage() {
           disabled={isBusy}
         >
           <Github className="mr-2 h-4 w-4" aria-hidden />
-          {isSocialLoading ? "Connecting to GitHub..." : "Continue with GitHub"}
+          {isSocialLoading ? t("auth.signUp.github.connecting") : t("auth.signUp.github.cta")}
         </Button>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
@@ -114,19 +115,19 @@ export default function SignUpPage() {
           </div>
           <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background px-2 text-muted-foreground">
-              Or continue with email
+              {t("auth.signUp.divider")}
             </span>
           </div>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
-              Name
+              {t("auth.signUp.fields.name.label")}
             </label>
             <Input
               id="name"
               type="text"
-              placeholder="Alex Chen"
+              placeholder={t("auth.signUp.fields.name.placeholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
               autoComplete="name"
@@ -137,12 +138,12 @@ export default function SignUpPage() {
           </div>
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              Email
+              {t("auth.signUp.fields.email.label")}
             </label>
             <Input
               id="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder={t("auth.signUp.fields.email.placeholder")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
@@ -153,12 +154,12 @@ export default function SignUpPage() {
           </div>
           <div className="space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
-              Password
+              {t("auth.signUp.fields.password.label")}
             </label>
             <Input
               id="password"
               type="password"
-              placeholder="••••••••"
+              placeholder={t("auth.signUp.fields.password.placeholder")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -168,8 +169,7 @@ export default function SignUpPage() {
               className="h-10"
             />
             <p className="text-xs text-muted-foreground">
-              Use at least 8 characters. Your password is encrypted and never stored
-              in plaintext.
+              {t("auth.signUp.passwordHint")}
             </p>
           </div>
           {error ? (
@@ -186,31 +186,31 @@ export default function SignUpPage() {
             className="w-full h-10 font-medium"
             disabled={isBusy}
           >
-            {isLoading ? "Creating your account…" : "Create free account"}
+            {isLoading ? t("auth.signUp.submit.loading") : t("auth.signUp.submit.default")}
           </Button>
         </form>
         <ul className="space-y-2 mt-3 rounded-lg border border-border/60 bg-muted/20 p-3 text-xs text-muted-foreground">
           <li className="flex items-start gap-2">
             <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-            Access curated SaaS recipes and architecture breakdowns instantly.
+            {t("auth.signUp.benefits.recipes")}
           </li>
           <li className="flex items-start gap-2">
             <Clock3 className="mb-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-            Set up once, then jump straight into your next build.
+            {t("auth.signUp.benefits.setup")}
           </li>
           <li className="flex items-start gap-2">
             <ShieldCheck className="mb-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-            Free to start. No credit card required.
+            {t("auth.signUp.benefits.free")}
           </li>
         </ul>
   
         <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
+          {t("auth.signUp.alreadyHaveAccount")}{" "}
           <Link
             href="/sign-in"
             className="font-medium text-primary hover:underline"
           >
-            Sign in
+            {t("common.signIn")}
           </Link>
         </p>
       </CardContent>

@@ -36,7 +36,7 @@ export default function AppSidebar({
   ...props
 }: React.ComponentProps<typeof UISidebar>) {
   const { user } = useAuth();
-  const { config } = useSidebarConfig();
+  const { config, data, startResizing } = useSidebarConfig();
   const isLocalhost =
     typeof window !== "undefined" &&
     ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
@@ -49,6 +49,11 @@ export default function AppSidebar({
       variant={config.variant}
       collapsible={config.collapsible}
       side={config.side}
+      style={
+        {
+          "--sidebar-width": `${data.width}px`,
+        } as React.CSSProperties
+      }
       {...props}
     >
       <SidebarHeader>
@@ -70,7 +75,10 @@ export default function AppSidebar({
           />
         )}
       </SidebarFooter>
-      <SidebarRail />
+      <SidebarRail
+        className={data.isResizing ? "after:bg-sidebar-border" : undefined}
+        onPointerDown={startResizing}
+      />
     </UISidebar>
   );
 }

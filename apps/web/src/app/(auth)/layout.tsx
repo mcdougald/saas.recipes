@@ -14,16 +14,20 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-svh flex flex-col bg-linear-to-b from-background via-background to-muted/30">
+    <div className="min-h-svh flex flex-col bg-background">
       <AuthLayoutHeader />
-      <main className="flex flex-1 flex-col items-center p-4 pt-6 md:p-6 md:pt-8 lg:p-8 lg:pt-10">
-        <div className="grid w-full max-w-5xl flex-1 grid-cols-1 items-start gap-8 overflow-x-auto pt-0 sm:overflow-visible sm:grid-cols-[minmax(340px,1fr)_minmax(320px,400px)] lg:gap-12 lg:pt-4">
-          <div className="order-2 min-w-0 sm:order-1">
-            <AuthCtaContent />
-          </div>
-          <div className="order-1 flex w-full justify-center sm:order-2 sm:min-w-0 sm:justify-end">
-            {children}
-          </div>
+      <main className="flex flex-1">
+        <div className="grid w-full flex-1 grid-cols-1 sm:grid-cols-2">
+          <section className="order-2 min-w-0 bg-white dark:bg-black sm:order-1">
+            <div className="mx-auto w-full max-w-2xl px-6 py-10 md:px-10 md:py-12 lg:px-14 lg:py-14">
+              <AuthCtaContent />
+            </div>
+          </section>
+          <section className="order-1 min-w-0 bg-black text-white dark:bg-white dark:text-black sm:order-2">
+            <div className="mx-auto flex w-full max-w-2xl justify-center px-4 py-10 md:px-8 md:py-12 lg:px-10 lg:py-14">
+              {children}
+            </div>
+          </section>
         </div>
       </main>
       <AuthLayoutFooter />

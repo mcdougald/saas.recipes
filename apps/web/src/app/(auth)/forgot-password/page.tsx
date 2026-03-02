@@ -12,8 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useI18n } from "@/hooks/use-i18n";
 
 export default function ForgotPasswordPage() {
+  const { t } = useI18n();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -43,27 +45,28 @@ export default function ForgotPasswordPage() {
       <Card className="w-full max-w-md border-border/60 shadow-lg shadow-black/5">
         <CardHeader className="space-y-1.5 text-center pb-2">
           <CardTitle className="text-xl font-semibold tracking-tight">
-            Check your inbox
+            {t("auth.forgotPassword.sent.title")}
           </CardTitle>
           <CardDescription className="text-muted-foreground">
-            If an account exists for <strong className="text-foreground">{email}</strong>, we’ve
-            sent a reset link. It may take a minute; check spam if you don’t see it.
+            {t("auth.forgotPassword.sent.descriptionPrefix")}{" "}
+            <strong className="text-foreground">{email}</strong>,{" "}
+            {t("auth.forgotPassword.sent.descriptionSuffix")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Link href="/sign-in" className="block">
             <Button variant="outline" className="w-full h-10">
-              Back to sign in
+              {t("auth.forgotPassword.backToSignIn")}
             </Button>
           </Link>
           <p className="text-center text-sm text-muted-foreground">
-            Wrong email?{" "}
+            {t("auth.forgotPassword.sent.wrongEmail")}{" "}
             <button
               type="button"
               onClick={() => setSent(false)}
               className="font-medium text-primary hover:underline"
             >
-              Try again
+              {t("auth.forgotPassword.sent.tryAgain")}
             </button>
           </p>
         </CardContent>
@@ -75,22 +78,22 @@ export default function ForgotPasswordPage() {
     <Card className="w-full max-w-md border-border/60 shadow-lg shadow-black/5">
       <CardHeader className="space-y-1.5 text-center pb-2">
         <CardTitle className="text-xl font-semibold tracking-tight">
-          Forgot password?
+          {t("auth.forgotPassword.title")}
         </CardTitle>
         <CardDescription className="text-muted-foreground">
-          Enter your account email and we’ll send a link to set a new password.
+          {t("auth.forgotPassword.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              Email
+              {t("auth.forgotPassword.fields.email.label")}
             </label>
             <Input
               id="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder={t("auth.forgotPassword.fields.email.placeholder")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -103,12 +106,14 @@ export default function ForgotPasswordPage() {
             className="w-full h-10 font-medium"
             disabled={isLoading}
           >
-            {isLoading ? "Sending…" : "Send reset link"}
+            {isLoading
+              ? t("auth.forgotPassword.submit.loading")
+              : t("auth.forgotPassword.submit.default")}
           </Button>
         </form>
         <p className="text-center text-sm text-muted-foreground">
           <Link href="/sign-in" className="font-medium text-primary hover:underline">
-            Back to sign in
+            {t("auth.forgotPassword.backToSignIn")}
           </Link>
         </p>
       </CardContent>

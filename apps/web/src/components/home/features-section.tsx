@@ -2,57 +2,78 @@
 
 import { BookOpen, Globe, Lock, Shield, Sparkles, TrendingUp } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useI18n } from "@/hooks/use-i18n";
 
 import { FeatureCard } from "./feature-card";
 import { FeaturesSectionHeader } from "./features-section-header";
 
 type Feature = {
   icon: LucideIcon;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   bullets: readonly [string, string];
 };
 
 const features: readonly Feature[] = [
   {
     icon: Sparkles,
-    title: "See any codebase in minutes",
-    description: "Get a clear map of structure, architecture, and complexity before you write a line.",
-    bullets: ["Visualize modules and ownership", "Catch risky hotspots early"],
+    titleKey: "features.items.analysis.title",
+    descriptionKey: "features.items.analysis.description",
+    bullets: [
+      "features.items.analysis.bullets.modules",
+      "features.items.analysis.bullets.hotspots",
+    ],
   },
   {
     icon: BookOpen,
-    title: "Copy proven product recipes",
-    description: "Learn directly from high-quality SaaS repos and reuse patterns that already ship.",
-    bullets: ["Compare real-world tradeoffs", "Reuse battle-tested workflows"],
+    titleKey: "features.items.recipes.title",
+    descriptionKey: "features.items.recipes.description",
+    bullets: [
+      "features.items.recipes.bullets.tradeoffs",
+      "features.items.recipes.bullets.workflows",
+    ],
   },
   {
     icon: Shield,
-    title: "Latest auth, billing, and security",
-    description: "Skip boilerplate with production-grade implementations your team can trust.",
-    bullets: ["Reference secure auth flows", "Adopt robust billing setups"],
+    titleKey: "features.items.security.title",
+    descriptionKey: "features.items.security.description",
+    bullets: [
+      "features.items.security.bullets.auth",
+      "features.items.security.bullets.billing",
+    ],
   },
   {
     icon: TrendingUp,
-    title: "Choose tools with real momentum",
-    description: "Track adoption signals across active teams so you invest in stacks that last.",
-    bullets: ["Track usage trends over time", "Validate stack bets sooner"],
+    titleKey: "features.items.momentum.title",
+    descriptionKey: "features.items.momentum.description",
+    bullets: [
+      "features.items.momentum.bullets.trends",
+      "features.items.momentum.bullets.validate",
+    ],
   },
   {
     icon: Globe,
-    title: "Build for every product surface",
-    description: "From web apps to bots and self-hosted products, find patterns that fit your roadmap.",
-    bullets: ["Filter by product type", "Find launch-ready examples"],
+    titleKey: "features.items.surface.title",
+    descriptionKey: "features.items.surface.description",
+    bullets: [
+      "features.items.surface.bullets.filter",
+      "features.items.surface.bullets.launch",
+    ],
   },
   {
     icon: Lock,
-    title: "Stay type-safe as you scale",
-    description: "Use strict TypeScript patterns to ship faster, reduce regressions, and refactor safely.",
-    bullets: ["Follow strict typing patterns", "Refactor with safer contracts"],
+    titleKey: "features.items.typesafe.title",
+    descriptionKey: "features.items.typesafe.description",
+    bullets: [
+      "features.items.typesafe.bullets.typing",
+      "features.items.typesafe.bullets.contracts",
+    ],
   },
 ];
 
 export function FeaturesSection() {
+  const { t } = useI18n();
+
   return (
     <section
       id="features"
@@ -63,13 +84,13 @@ export function FeaturesSection() {
       <div className="container px-4 mx-auto">
         <FeaturesSectionHeader />
         <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map(({ icon: Icon, title, description, bullets }, index) => (
+          {features.map(({ icon: Icon, titleKey, descriptionKey, bullets }, index) => (
             <FeatureCard
-              key={title}
+              key={titleKey}
               icon={Icon}
-              title={title}
-              description={description}
-              bullets={bullets}
+              title={t(titleKey)}
+              description={t(descriptionKey)}
+              bullets={[t(bullets[0]), t(bullets[1])]}
               index={index}
             />
           ))}

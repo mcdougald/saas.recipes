@@ -1,14 +1,17 @@
+"use client";
+
+import { useI18n } from "@/hooks/use-i18n";
+
 export function HeroDescription() {
+  const { t } = useI18n();
+
   return (
     <div className="mx-auto max-w-2xl space-y-4 text-center">
       <p className="text-lg text-muted-foreground md:text-xl">
-        Eat the boilerplate. 
-        
-        A platform of proven cookbooks from real kitchens —
-        plus an AI assistant built from experience.
+        {t("hero.description.primary")}
       </p>
       <p className="text-lg text-muted-foreground md:text-xl">
-        Focus on coding the signature dish; we handle the prep.
+        {t("hero.description.secondary")}
       </p>
     </div>
   );

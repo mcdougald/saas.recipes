@@ -12,6 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { tweakcnThemes } from "@/config/theme-data";
 import { useSidebarConfig } from "@/contexts/sidebar-context";
+import { useI18n } from "@/hooks/use-i18n";
 import { useThemeManager } from "@/hooks/use-theme-manager";
 import type { ImportedTheme } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -26,6 +27,7 @@ interface ThemeCustomizerProps {
 }
 
 export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
+  const { t } = useI18n();
   const {
     applyImportedTheme,
     isDarkMode,
@@ -35,7 +37,7 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
     applyTheme,
     applyTweakcnTheme,
   } = useThemeManager();
-  const { config: sidebarConfig, updateConfig: updateSidebarConfig } =
+  const { config: sidebarConfig, resetSidebarData } =
     useSidebarConfig();
 
   const [activeTab, setActiveTab] = React.useState("theme");
@@ -63,11 +65,7 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
     applyRadius("0.5rem");
 
     // 4. Reset sidebar to defaults
-    updateSidebarConfig({
-      variant: "inset",
-      collapsible: "offcanvas",
-      side: "left",
-    });
+    resetSidebarData();
   };
 
   const handleImport = (themeData: ImportedTheme) => {
@@ -127,7 +125,7 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
                 <Settings className="size-4" />
               </div>
               <SheetTitle className="text-lg font-semibold">
-                Customizer
+                {t("themeCustomizer.title")}
               </SheetTitle>
               <div className="ml-auto flex items-center gap-2">
                 <Button
@@ -135,6 +133,7 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
                   size="icon"
                   onClick={handleReset}
                   className="cursor-pointer h-8 w-8"
+                  aria-label={t("themeCustomizer.reset")}
                 >
                   <RotateCcw className="size-4" />
                 </Button>
@@ -143,13 +142,14 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
                   size="icon"
                   onClick={() => onOpenChange(false)}
                   className="cursor-pointer h-8 w-8"
+                  aria-label={t("themeCustomizer.close")}
                 >
                   <X className="size-4" />
                 </Button>
               </div>
             </div>
             <SheetDescription className="text-sm text-muted-foreground sr-only">
-              Customize the them and layout of your dashboard.
+              {t("themeCustomizer.description")}
             </SheetDescription>
           </SheetHeader>
 
@@ -165,13 +165,13 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
                     value="theme"
                     className="cursor-pointer data-[state=active]:bg-background"
                   >
-                    <Palette className="size-4" /> Theme
+                    <Palette className="size-4" /> {t("themeCustomizer.tabs.theme")}
                   </TabsTrigger>
                   <TabsTrigger
                     value="layout"
                     className="cursor-pointer data-[state=active]:bg-background"
                   >
-                    <Layout className="size-4" /> Layout
+                    <Layout className="size-4" /> {t("themeCustomizer.tabs.layout")}
                   </TabsTrigger>
                 </TabsList>
                 {/* <TabsList className="grid w-full grid-cols-2 rounded-none h-12 p-1.5">

@@ -9,6 +9,7 @@
     "lint": "eslint",
     "i18n:scan": "i18next-scanner --config i18next-scanner.config.js",
     "i18n:scan:check": "node -e \"require('./i18next-scanner.config.js'); console.log('i18n scanner config loaded')\"",
+    "i18n:sync": "node ./scripts/with-env.mjs tsx scripts/sync-locales.ts",
     "setup": "./scripts/setup.sh",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",

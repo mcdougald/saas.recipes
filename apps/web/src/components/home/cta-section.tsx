@@ -1,8 +1,10 @@
 "use client";  
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/hooks/use-i18n";
 import Link from "next/link";
 
 export function CtaSection() {
+  const { t } = useI18n();
   const smokePlumes = ["left", "center", "right"] as const;
   const smokeLayers = [1, 2, 3, 4, 5, 6] as const;
 
@@ -37,11 +39,10 @@ export function CtaSection() {
             id="cta-heading"
             className="mb-6 mt-6 text-4xl font-bold tracking-tight dark:text-white sm:text-4xl md:text-6xl"
           >
-            Ready to cook?
+            {t("cta.heading")}
           </h2>
           <p className="mx-auto mb-8 mt-4 max-w-2xl text-lg text-muted-foreground dark:text-muted-foreground/95">
-            Explore real codebases, copy battle-tested architecture decisions,
-            and skip weeks of trial and error. Open the app and get cooking.
+            {t("cta.description")}
           </p>
 
           {/* <div className="mb-8 flex flex-wrap items-center justify-center gap-2">
@@ -62,7 +63,7 @@ export function CtaSection() {
               className="group w-full px-8 text-base shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:shadow-primary/20 dark:hover:shadow-primary/35 active:translate-y-0 sm:w-auto"
             >
               <Link href="/dashboard">
-                Open Recipes
+                {t("cta.primaryAction")}
                 <span
                   className="ml-2 transition-transform duration-200 group-hover:translate-x-0.5"
                   aria-hidden
@@ -78,12 +79,12 @@ export function CtaSection() {
               className="w-full border-border/70 bg-background/70 text-base backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 dark:border-white/20 dark:bg-white/3 dark:hover:border-primary/50 dark:hover:bg-primary/12 active:translate-y-0 sm:w-auto"
             >
               <Link href="/pricing">
-                See Pricing
+                {t("cta.secondaryAction")}
               </Link>
             </Button>
           </div>
           <p className="mt-4 text-sm text-muted-foreground dark:text-muted-foreground/90">
-            Start free today.
+            {t("cta.footnote")}
           </p>
           </div>
         </div>
