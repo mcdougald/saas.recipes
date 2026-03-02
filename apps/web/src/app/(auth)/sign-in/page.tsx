@@ -56,12 +56,29 @@ export default function SignInPage() {
     setIsSocialLoading(true);
 
     try {
-      await signIn.social({
+      const callbackURL = `${window.location.origin}/dashboard?auth=success`;
+      console.info("[auth] Starting GitHub sign-in", { callbackURL });
+
+      const result = await signIn.social({
         provider: "github",
-        callbackURL: "/dashboard?auth=success",
+        callbackURL,
       });
+
+      if (
+        result &&
+        typeof result === "object" &&
+        "error" in result &&
+        result.error
+      ) {
+        console.error("[auth] GitHub sign-in returned an API error", {
+          callbackURL,
+          error: result.error,
+        });
+        setError(t("auth.signIn.errors.github"));
+        setIsSocialLoading(false);
+      }
     } catch (err) {
-      console.error("GitHub sign-in error:", err);
+      console.error("[auth] GitHub sign-in threw an exception", err);
       setError(t("auth.signIn.errors.github"));
       setIsSocialLoading(false);
     }

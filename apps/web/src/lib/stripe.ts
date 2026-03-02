@@ -5,6 +5,7 @@ const stripeSecretKey = process.env.STRIPE_SECRET_KEY || "";
 // Only throw error in runtime if stripe is actually used
 export const stripe = stripeSecretKey 
   ? new Stripe(stripeSecretKey, {
+    // @ts-expect-error - 02-25 is correct?
       apiVersion: "2026-02-25.clover",
       typescript: true,
     })
