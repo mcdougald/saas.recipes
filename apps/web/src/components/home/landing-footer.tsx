@@ -6,76 +6,127 @@ import Link from "next/link";
 
 import { ToggleTheme } from "@/components/theme-toggle";
 
-const footerLinks = [
+type FooterLink = {
+  href: string;
+  labelKey: string;
+};
+
+const footerLinks: FooterLink[] = [
   { href: "#features", labelKey: "landingFooter.links.features" },
   { href: "/pricing", labelKey: "landingFooter.links.pricing" },
   { href: "#how-it-works", labelKey: "landingFooter.links.howItWorks" },
-  { href: "/sign-in", labelKey: "landingFooter.links.signIn" },
   { href: "/dashboard", labelKey: "landingFooter.links.dashboard" },
+  { href: "/sign-in", labelKey: "landingFooter.links.signIn" },
 ];
 
+function LandingFooterLinks({ t }: { t: (key: string, params?: Record<string, string | number>) => string }) {
+  return (
+    <nav aria-label={t("landingFooter.navLabel")} className="flex flex-wrap items-center gap-2.5">
+      {footerLinks.map(({ href, labelKey }) => (
+        <Link
+          key={href}
+          href={href}
+          className="inline-flex items-center rounded-md border border-border/60 bg-card px-3 py-1.5 text-sm font-medium text-muted-foreground shadow-xs transition-all hover:-translate-y-0.5 hover:border-border hover:bg-background hover:text-foreground"
+        >
+          {t(labelKey)}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
+function FooterEaseSignals() {
+  const signals = [
+    "Enterprise-grade security",
+    "No credit card required",
+    "Instant access to proven builds",
+  ];
+
+  return (
+    <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground" role="list">
+      {signals.map((signal) => (
+        <li key={signal} className="inline-flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-foreground/45" aria-hidden />
+          <span>{signal}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/**
+ * Render a marketing-focused landing footer with low-friction auth calls-to-action.
+ *
+ * @returns A footer section that promotes easy sign-up while preserving quick navigation.
+ */
 export function LandingFooter() {
   const { t } = useI18n();
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t bg-linear-to-b from-background to-muted/20" role="contentinfo">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_auto] md:items-start">
-          <div className="space-y-4">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 font-semibold text-foreground text-xl tracking-tight"
-            >
-              <Image
-                src="/SaasRecipesIcon.svg"
-                alt={t("brand.logoAlt")}
-                width={28}
-                height={35}
-                className="h-6 w-auto"
-              />
-              <span>{t("brand.shortName")}</span>
-            </Link>
-            <p className="max-w-md text-sm leading-6 text-muted-foreground">
-              {t("landingFooter.description")}
-            </p>
-          </div>
-
-          <nav aria-label={t("landingFooter.navLabel")}>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              {t("landingFooter.exploreTitle")}
-            </p>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-              {footerLinks.map(({ href, labelKey }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {t(labelKey)}
-                </Link>
-              ))}
+    <footer className="relative overflow-hidden border-t bg-linear-to-b from-background via-background to-muted/25" role="contentinfo">
+      <div className="container relative mx-auto px-4 py-14">
+        <div className="grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-14">
+          <section className="space-y-7 lg:space-y-8">
+            <div className="space-y-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                View profitable SaaS setups in seconds
+              </p>
+              <h2 className="max-w-2xl text-2xl leading-tight font-semibold tracking-tight text-foreground sm:text-3xl">
+                Sign up fast, explore trusted SaaS recipes, and move your idea from the kitchen to a served
+                product with less friction.
+              </h2>
+              <p className="max-w-2xl text-sm leading-6 text-muted-foreground">{t("landingFooter.description")}</p>
             </div>
-          </nav>
 
-          <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              {t("landingFooter.preferencesTitle")}
-            </p>
-            <ToggleTheme variant="labeled" />
-          </div>
+            <div className="flex flex-wrap items-center gap-3.5">
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center rounded-md bg-foreground px-4 py-2.5 text-sm font-semibold text-background transition-opacity hover:opacity-90"
+              >
+                Sign up free
+              </Link>
+              <Link
+                href="/sign-in"
+                className="inline-flex items-center rounded-md border border-border px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
+              >
+                {t("landingFooter.links.signIn")}
+              </Link>
+            </div>
+
+            <FooterEaseSignals />
+          </section>
+
+          <section className="space-y-6">
+            <div className="space-y-3">
+              <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                {t("landingFooter.exploreTitle")}
+              </p>
+              <LandingFooterLinks t={t} />
+            </div>
+            <ToggleTheme variant="footer" className="w-fit" />
+          </section>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t pt-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+        <div className="mt-10 flex flex-col gap-3 pt-4 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
           <p>{t("landingFooter.copyright", { year: currentYear })}</p>
 
           <Link
             href="https://trev.fyi"
-            className="inline-flex items-center gap-2 font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+            className="inline-flex items-center gap-1.5 font-medium text-foreground decoration-foreground/35 underline underline-offset-6 transition-[color,text-decoration-color] hover:text-primary hover:decoration-primary/70"
           >
             {t("landingFooter.builtBy")} <span>{t("authLayoutFooter.creatorHandle")}</span>
           </Link>
         </div>
+
+        <Image
+          src="/SaasRecipesIcon.svg"
+          alt={t("brand.logoAlt")}
+          width={560}
+          height={700}
+          aria-hidden
+          className="pointer-events-none absolute -bottom-5 right-4 z-0 h-auto w-60 rotate-19 opacity-[0.06] dark:opacity-[0.12] sm:-bottom-20 sm:right-6 sm:w-72 md:top-70 md:right-8 md:w-80 lg:-bottom-3 lg:right-10 lg:w-88"
+        />
       </div>
     </footer>
   );

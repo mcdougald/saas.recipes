@@ -27,6 +27,8 @@ export function DashboardHeader() {
   const [mounted, setMounted] = React.useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const quickActionClassName =
+    "size-9 rounded-full text-muted-foreground transition-colors hover:text-foreground";
 
   React.useEffect(() => {
     setMounted(true);
@@ -61,37 +63,37 @@ export function DashboardHeader() {
   return (
     <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b border-border/50 bg-background/80 px-4 backdrop-blur-xl lg:px-6">
       <SidebarTrigger className="-ml-1 text-muted-foreground transition-colors hover:text-foreground" />
-      <Separator orientation="vertical" className="mx-1 h-6! bg-border/60" />
+      <Separator orientation="vertical" className="mx-1 h-6 bg-border/60" />
       <SearchTrigger onClick={() => setCommandSearchOpen(true)} />
       <CommandSearch
         open={commandSearchOpen}
         onOpenChange={setCommandSearchOpen}
       />
-      <div className="ml-auto flex items-center gap-2">
-        <div className="flex items-center gap-0.5 rounded-full p-1 ">
+      <div className="ml-auto flex items-center gap-2.5">
+        <div className="flex items-center gap-1 rounded-full border border-border/55 bg-muted/30 p-1">
           <Button
             variant="ghost"
             size="icon"
             asChild
-            className="rounded-full text-muted-foreground hover:text-foreground"
+            className={quickActionClassName}
           >
             <Link href="/" aria-label={t("header.goToHomepage")}>
               <Home className="h-[1.15rem] w-[1.15rem]" />
             </Link>
           </Button>
-          <LanguageSwitcher />
-          <ToggleTheme />
+          <LanguageSwitcher className={quickActionClassName} />
+          <ToggleTheme className={quickActionClassName} />
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setThemeCustomizerOpen(true)}
-            className="rounded-full text-muted-foreground hover:text-foreground"
+            className={quickActionClassName}
           >
             <Settings className="h-[1.15rem] w-[1.15rem]" />
             <span className="sr-only">{t("header.openThemeCustomizer")}</span>
           </Button>
         </div>
-        <Separator orientation="vertical" className="h-6! bg-border/60" />
+        <Separator orientation="vertical" className="h-6 bg-border/60" />
         <ProfileDropdown />
       </div>
       <ThemeCustomizer

@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/hooks/use-i18n";
 import { fallbackLng, supportedLngs, type SupportedLanguage } from "@/i18n/settings";
+import { cn } from "@/lib/utils";
 import { Globe } from "lucide-react";
 
 const languageLabels: Record<SupportedLanguage, string> = {
@@ -49,9 +50,10 @@ const languageLabels: Record<SupportedLanguage, string> = {
 /**
  * Switch the active application language from an icon button menu.
  *
+ * @param props.className Merge additional classes into the trigger button.
  * @returns A compact language selector optimized for header action bars.
  */
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ className }: { className?: string }) {
   const { t, language, changeLanguage } = useI18n();
   const activeLanguage =
     supportedLngs.find((lng) => lng === language) ?? fallbackLng;
@@ -63,7 +65,10 @@ export function LanguageSwitcher() {
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full text-muted-foreground hover:text-foreground"
+          className={cn(
+            "rounded-full text-muted-foreground hover:text-foreground",
+            className,
+          )}
           aria-label={`${t("language.select")}: ${activeLanguageLabel}`}
         >
           <Globe className="h-[1.1rem] w-[1.1rem]" />

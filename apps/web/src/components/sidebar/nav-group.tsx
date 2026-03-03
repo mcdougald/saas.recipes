@@ -33,10 +33,10 @@ import {
 } from "@/components/ui/sidebar";
 
 const MENU_ITEM_BASE_CLASS =
-  "group/link relative rounded-lg border border-transparent transition-colors duration-150 hover:border-foreground/15 hover:bg-foreground/5 hover:text-foreground";
+  "group/link relative overflow-hidden rounded-md border border-transparent transition-colors duration-150 hover:border-foreground/15 hover:bg-foreground/5 hover:text-foreground";
 
 const MENU_ITEM_ACTIVE_CLASS =
-  "border-foreground/20 bg-foreground/[0.08] text-foreground shadow-[inset_0_0_0_1px_hsl(var(--foreground)/0.06)]";
+  "border-foreground/25 bg-linear-to-r from-foreground/13 via-foreground/9 to-foreground/5 text-foreground shadow-[inset_0_1px_0_hsl(var(--background)/0.78),0_2px_5px_hsl(var(--foreground)/0.12)] before:pointer-events-none before:absolute before:inset-0 before:rounded-md before:bg-linear-to-r before:from-white/16 before:via-white/6 before:to-transparent dark:before:from-white/12 dark:before:via-white/4 dark:before:to-transparent";
 
 const MENU_ICON_BASE_CLASS =
   "transition-colors text-muted-foreground group-hover/link:text-foreground";
@@ -118,10 +118,6 @@ const SidebarMenuLink = ({ item, href }: { item: NavLink; href: string }) => {
           aria-current={isActive ? "page" : undefined}
           onClick={() => setOpenMobile(false)}
         >
-          {/* Active indicator */}
-          {isActive && (
-            <div className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r-full bg-foreground/85" />
-          )}
           {item.icon && (
             <item.icon
               className={cn(
@@ -186,9 +182,9 @@ const SidebarMenuCollapsible = ({
                     asChild
                     isActive={isSubActive}
                     className={cn(
-                      "group/sub rounded-md border border-transparent transition-colors duration-150 hover:border-foreground/10 hover:bg-foreground/5",
+                      "group/sub relative overflow-hidden rounded-sm border border-transparent transition-colors duration-150 hover:border-foreground/10 hover:bg-foreground/5",
                       isSubActive &&
-                        "border-foreground/15 bg-foreground/7.5 text-foreground",
+                        "border-foreground/15 bg-foreground/7.5 text-foreground before:pointer-events-none before:absolute before:inset-0 before:rounded-sm before:bg-linear-to-r before:from-white/14 before:to-transparent dark:before:from-white/10",
                     )}
                   >
                     <Link
@@ -284,9 +280,9 @@ const SidebarMenuCollapsedDropdown = ({
                   href={sub.url}
                   aria-current={isSubActive ? "page" : undefined}
                   className={cn(
-                    "flex items-center gap-2 rounded-lg border border-transparent px-2 py-2 transition-colors hover:border-foreground/10 hover:bg-foreground/5",
+                    "relative flex items-center gap-2 overflow-hidden rounded-md border border-transparent px-2 py-2 transition-colors hover:border-foreground/10 hover:bg-foreground/5",
                     isSubActive &&
-                      "border-foreground/15 bg-foreground/7.5 text-foreground",
+                      "border-foreground/15 bg-foreground/7.5 text-foreground before:pointer-events-none before:absolute before:inset-0 before:rounded-md before:bg-linear-to-r before:from-white/14 before:to-transparent dark:before:from-white/10",
                   )}
                 >
                   {sub.icon && (

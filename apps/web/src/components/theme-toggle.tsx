@@ -1,19 +1,28 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useI18n } from "@/hooks/use-i18n";
 
-type ToggleThemeVariant = "icon" | "labeled";
+type ToggleThemeVariant = "icon" | "labeled" | "footer";
 
 /**
  * Render an interactive theme switch that toggles between light and dark modes.
  *
- * @param props.variant Control whether the switch renders icon-only or with a text label.
+ * @param props.variant Control whether the switch renders icon-only, labeled, or footer-optimized.
  * @param props.className Merge additional classes into the root button.
  * @returns A button that flips the current theme between black/white modes.
  */
@@ -25,9 +34,12 @@ export function ToggleTheme({
   className?: string;
 }) {
   const { t } = useI18n();
-  const { resolvedTheme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme, theme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
   const isDark = resolvedTheme === "dark";
+  const isFooter = variant === "footer";
+  const isLabeled = variant === "labeled" || isFooter;
+  const selectedTheme = theme ?? "system";
 
   React.useEffect(() => {
     setMounted(true);
@@ -37,47 +49,107 @@ export function ToggleTheme({
     setTheme(isDark ? "light" : "dark");
   }, [isDark, setTheme]);
 
+  if (variant === "icon") {
+    const TriggerIcon = !mounted || selectedTheme === "system" ? Monitor : isDark ? Moon : Sun;
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className={cn("rounded-full text-muted-foreground hover:text-foreground", className)}
+            aria-label={t("theme.label")}
+          >
+            <TriggerIcon className="h-[1.1rem] w-[1.1rem]" />
+            <span className="sr-only">{t("theme.label")}</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-44">
+          <DropdownMenuLabel>{t("theme.label")}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuRadioGroup value={selectedTheme} onValueChange={setTheme}>
+            <DropdownMenuRadioItem value="light">Light</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="dark">Dark</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="system">System</DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
   return (
     <Button
       type="button"
       variant="ghost"
-      size={variant === "icon" ? "icon" : "default"}
+      size="default"
       aria-label={t("theme.label")}
       aria-pressed={isDark}
       onClick={handleToggle}
       className={cn(
-        "relative overflow-hidden border border-black/15 bg-white/90 text-black shadow-sm backdrop-blur transition-all hover:bg-white",
-        "dark:border-white/20 dark:bg-black/90 dark:text-white dark:hover:bg-black",
-        variant === "icon"
-          ? "size-9 rounded-full"
-          : "h-10 rounded-full px-2.5 font-medium",
+        "group relative overflow-hidden border border-black/8 bg-white text-black shadow-sm transition-all",
+        "dark:border-white/12 dark:bg-black dark:text-white",
+        isFooter
+          ? "h-12 rounded-full bg-card border-none shadow-none px-3.5 font-medium dark:border-white/10 dark:bg-zinc-950"
+          : "h-11 rounded-md border-black/6 bg-card px-3 font-medium dark:border-white/10 dark:bg-zinc-950",
         className,
       )}
     >
-      {variant === "labeled" ? (
-        <span className="pr-2 text-[11px] font-semibold uppercase tracking-wide text-black/70 dark:text-white/70">
+      {isLabeled ? (
+        <span
+          className={cn(
+            "font-semibold uppercase text-black/45 dark:text-white/45",
+            isFooter ? "pr-2.5 text-[10px] tracking-[0.16em]" : "pr-2 text-[11px] tracking-wide",
+          )}
+        >
           {t("theme.label")}
         </span>
       ) : null}
-      <span className="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border border-black/15 bg-black/8 p-0.5 dark:border-white/20 dark:bg-white/10">
-        <span
-          className={cn(
-            "absolute inset-y-1 h-4 w-4 rounded-full bg-black shadow-sm transition-transform dark:bg-white",
-            mounted && isDark ? "translate-x-5" : "translate-x-0",
-          )}
-        />
+
+      <span
+        className={cn(
+          "relative inline-flex shrink-0 items-center rounded-full border border-black/8 bg-zinc-200 p-0.5 transition-colors duration-300 dark:border-white/12 dark:bg-zinc-800",
+          isFooter ? "h-8 w-16" : "h-7 w-14",
+        )}
+      >
         <Sun
           className={cn(
-            "relative z-10 ml-0.5 h-3 w-3 transition-colors",
-            !mounted || !isDark ? "text-white" : "text-black/40",
+            "absolute transition-all duration-400",
+            isFooter ? "left-2 h-4 w-4" : "left-1.5 h-3.5 w-3.5",
+            !mounted || !isDark ? "scale-100 text-amber-500 opacity-100" : "scale-75 text-zinc-500 opacity-45",
           )}
         />
         <Moon
           className={cn(
-            "relative z-10 ml-auto mr-0.5 h-3 w-3 transition-colors",
-            mounted && isDark ? "text-black" : "text-white/50",
+            "absolute transition-all duration-400",
+            isFooter ? "right-2 h-4 w-4" : "right-1.5 h-3.5 w-3.5",
+            mounted && isDark ? "scale-100 text-indigo-200 opacity-100" : "scale-75 text-zinc-400 opacity-45",
           )}
         />
+
+        <span
+          className={cn(
+            "absolute left-0.5 rounded-full bg-white shadow-[0_1px_6px_rgba(0,0,0,0.2)] transition-transform duration-400 ease-out group-hover:scale-[1.02] dark:bg-black",
+            isFooter ? "h-7 w-7" : "h-6 w-6",
+            mounted && isDark ? (isFooter ? "translate-x-8" : "translate-x-7") : "translate-x-0",
+          )}
+        >
+          <Sun
+            className={cn(
+              "absolute inset-0 m-auto transition-all duration-400",
+              isFooter ? "h-4 w-4" : "h-3.5 w-3.5",
+              !mounted || !isDark ? "rotate-0 scale-100 text-amber-500 opacity-100" : "-rotate-45 scale-0 text-zinc-400 opacity-0",
+            )}
+          />
+          <Moon
+            className={cn(
+              "absolute inset-0 m-auto transition-all duration-400",
+              isFooter ? "h-4 w-4" : "h-3.5 w-3.5",
+              mounted && isDark ? "rotate-0 scale-100 text-indigo-200 opacity-100" : "rotate-45 scale-0 text-zinc-400 opacity-0",
+            )}
+          />
+        </span>
       </span>
     </Button>
   );

@@ -16,7 +16,7 @@ export function CtaSection() {
     >
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_55%_at_50%_100%,var(--primary)/12%,transparent_70%)] dark:bg-[radial-gradient(ellipse_70%_55%_at_50%_100%,var(--primary)/20%,transparent_72%)]" />
       <div className="container px-4 mx-auto">
-        <div className="relative mx-auto max-w-4xl overflow-visible rounded-3xl border border-border/60 bg-linear-to-b from-background/95 via-background to-muted/15 px-6 py-9 text-center shadow-[0_0_0_1px_hsl(var(--foreground)/0.03),0_22px_58px_hsl(var(--foreground)/0.08)] dark:border-white/15 dark:from-background dark:via-background dark:to-primary/8 dark:shadow-[0_0_0_1px_hsl(var(--primary)/0.2),0_34px_90px_hsl(var(--background)/0.9),0_20px_50px_hsl(var(--primary)/0.14)] sm:px-10 md:py-12">
+        <div className="relative mx-auto max-w-4xl overflow-visible rounded-3xl border border-border/60 bg-linear-to-b from-background/95 via-background to-muted/80 px-6 py-9 text-center shadow-[0_0_0_1px_hsl(var(--foreground)/0.03),0_22px_58px_hsl(var(--foreground)/0.08)] dark:border-white/15 dark:from-background dark:via-background dark:to-primary/8 dark:shadow-[0_0_0_1px_hsl(var(--primary)/0.2),0_34px_90px_hsl(var(--background)/0.9),0_20px_50px_hsl(var(--primary)/0.14)] sm:px-10 md:py-12">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/15 to-transparent dark:via-primary/35" />
           <div
             aria-hidden

@@ -163,7 +163,7 @@ export function AuthCtaContent() {
           })}
         </ul>
 
-        <div className="mt-7 w-fit max-w-[400px] rounded-xl border border-black/15 bg-[#f5f5f5ef] p-4 text-sm text-black/70 shadow-sm dark:border-white/20 dark:bg-neutral-900 dark:text-white/70 max-md:mx-auto">
+        <div className="mt-7 w-fit max-w-[400px] rounded-xl border border-black/15 bg-[#f5f5f5ef] p-4 text-sm text-black/70 shadow-sm dark:border-white/10 dark:bg-neutral-950 dark:text-white/70 max-md:mx-auto">
           <p className="font-medium text-black dark:text-white">{t(cta.footerTitleKey)}</p>
           <p className="mt-1 max-w-[440px]">{t(cta.footerCopyKey)}</p>
         </div>
