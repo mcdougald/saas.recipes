@@ -1,60 +1,84 @@
 "use client";
 
-import { Check, Monitor, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useI18n } from "@/hooks/use-i18n";
 
-const themeOptions = [
-  { value: "light", label: "Light", icon: Sun },
-  { value: "dark", label: "Dark", icon: Moon },
-  { value: "system", label: "System", icon: Monitor },
-] as const;
+type ToggleThemeVariant = "icon" | "labeled";
 
-export function ToggleTheme() {
-  const { theme, setTheme } = useTheme();
+/**
+ * Render an interactive theme switch that toggles between light and dark modes.
+ *
+ * @param props.variant Control whether the switch renders icon-only or with a text label.
+ * @param props.className Merge additional classes into the root button.
+ * @returns A button that flips the current theme between black/white modes.
+ */
+export function ToggleTheme({
+  variant = "icon",
+  className,
+}: {
+  variant?: ToggleThemeVariant;
+  className?: string;
+}) {
+  const { t } = useI18n();
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+  const isDark = resolvedTheme === "dark";
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleToggle = React.useCallback(() => {
+    setTheme(isDark ? "light" : "dark");
+  }, [isDark, setTheme]);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
+    <Button
+      type="button"
+      variant="ghost"
+      size={variant === "icon" ? "icon" : "default"}
+      aria-label={t("theme.label")}
+      aria-pressed={isDark}
+      onClick={handleToggle}
+      className={cn(
+        "relative overflow-hidden border border-black/15 bg-white/90 text-black shadow-sm backdrop-blur transition-all hover:bg-white",
+        "dark:border-white/20 dark:bg-black/90 dark:text-white dark:hover:bg-black",
+        variant === "icon"
+          ? "size-9 rounded-full"
+          : "h-10 rounded-full px-2.5 font-medium",
+        className,
+      )}
+    >
+      {variant === "labeled" ? (
+        <span className="pr-2 text-[11px] font-semibold uppercase tracking-wide text-black/70 dark:text-white/70">
+          {t("theme.label")}
+        </span>
+      ) : null}
+      <span className="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border border-black/15 bg-black/8 p-0.5 dark:border-white/20 dark:bg-white/10">
+        <span
           className={cn(
-            "relative size-9 rounded-full border-border/70 bg-background/90 text-slate-700 shadow-sm transition-colors hover:bg-background",
-            "dark:border-white/20 dark:bg-white/10 dark:text-slate-100 dark:hover:bg-white/15",
+            "absolute inset-y-1 h-4 w-4 rounded-full bg-black shadow-sm transition-transform dark:bg-white",
+            mounted && isDark ? "translate-x-5" : "translate-x-0",
           )}
-        >
-          <Sun className="h-[1.1rem] w-[1.1rem] rotate-0 scale-100 text-amber-500 transition-all dark:-rotate-90 dark:scale-0 dark:text-amber-300" />
-          <Moon className="absolute h-[1.1rem] w-[1.1rem] rotate-90 scale-0 text-indigo-300 transition-all dark:rotate-0 dark:scale-100 dark:text-indigo-200" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44">
-        {themeOptions.map((option) => {
-          const Icon = option.icon;
-          const isActive = theme === option.value;
-
-          return (
-            <DropdownMenuItem
-              key={option.value}
-              onClick={() => setTheme(option.value)}
-              className="gap-2"
-            >
-              <Icon className="h-4 w-4 text-muted-foreground" />
-              {option.label}
-              {isActive ? <Check className="ml-auto h-4 w-4" /> : null}
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+        />
+        <Sun
+          className={cn(
+            "relative z-10 ml-0.5 h-3 w-3 transition-colors",
+            !mounted || !isDark ? "text-white" : "text-black/40",
+          )}
+        />
+        <Moon
+          className={cn(
+            "relative z-10 ml-auto mr-0.5 h-3 w-3 transition-colors",
+            mounted && isDark ? "text-black" : "text-white/50",
+          )}
+        />
+      </span>
+    </Button>
   );
 }

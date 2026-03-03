@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AuthCtaBackground } from "./auth-cta-background";
 import { AuthCtaContent } from "./auth-cta-content";
 import { AuthLayoutFooter } from "./auth-layout-footer";
 import { AuthLayoutHeader } from "./auth-layout-header";
@@ -18,7 +19,8 @@ export default function AuthLayout({
       <AuthLayoutHeader />
       <main className="flex flex-1">
         <div className="grid w-full flex-1 grid-cols-1 sm:grid-cols-2">
-          <section className="order-2 min-w-0 bg-white dark:bg-black sm:order-1">
+          <section className="relative order-2 min-w-0 overflow-hidden bg-white dark:bg-black sm:order-1">
+            <AuthCtaBackground />
             <div className="mx-auto w-full max-w-2xl px-6 py-10 md:px-10 md:py-12 lg:px-14 lg:py-14">
               <AuthCtaContent />
             </div>

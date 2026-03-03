@@ -16,6 +16,11 @@ January 2026
 
 Comprehensive performance optimization guide for React and Next.js applications, designed for AI agents and LLMs. Contains 40+ rules across 8 categories, prioritized by impact from critical (eliminating waterfalls, reducing bundle size) to incremental (advanced patterns). Each rule includes detailed explanations, real-world examples comparing incorrect vs. correct implementations, and specific impact metrics to guide automated refactoring and code generation.
 
+### Project Styling Defaults (saas.recipes)
+
+- Prefer `neutral` over `zinc` for grayscale Tailwind tokens unless matching existing local styles.
+- Prefer `rounded-md` for border radius; only use `rounded-xl` or larger when design requirements explicitly call for it.
+
 ---
 
 ## Table of Contents

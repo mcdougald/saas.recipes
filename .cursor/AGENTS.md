@@ -60,5 +60,7 @@ For hero sections, auth layouts, marketing blocks, and refined UI, use component
 
 - **Aceternity UI** – https://ui.aceternity.com (e.g. [Hero Highlight](https://ui.aceternity.com/components/hero-highlight), Spotlight, Aurora, Bento Grids). Install via: `npx shadcn@latest add @aceternity/<component-name>`.
 - **Magic UI** – https://magicui.design – animated borders, gradients, blocks.
+- Default monochrome styling preference: use `neutral` tokens before `zinc`.
+- Border radius preference: use `rounded-md` by default, and avoid `rounded-xl` or larger unless explicitly required by the design.
 
 See **.cursor/rules/stylish-components.mdc** for installation, conventions, and where to place components in `apps/web`.

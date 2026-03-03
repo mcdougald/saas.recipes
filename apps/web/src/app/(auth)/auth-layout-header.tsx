@@ -34,7 +34,7 @@ export function AuthLayoutHeader() {
                 className="hidden h-6 w-auto dark:block"
                 priority
               />
-              <span className="text-black dark:text-white">{t("brand.shortName")}</span>
+              <span className="relative top-[1px] text-black dark:text-white">{t("brand.shortName")}</span>
             </Link>
           </div>
         </section>

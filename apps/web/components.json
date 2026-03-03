@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "rtl": false,
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "registries": {
+    "@tailark": "https://tailark.com/r/{name}.json",
+    "@aceternity": "https://ui.aceternity.com/registry/{name}.json",
+    "@magicui": "https://magicui.design/r/{name}.json",
+    "@animate-ui": "https://animate-ui.com/r/{name}.json",
+    "@reui": "https://reui.io/r/{name}.json",
+    "@fancycomponents": "https://fancycomponents.dev/r/{name}.json",
+    "@hooks": "https://shadcn-hooks.vercel.app/r/{name}.json",
+    "@efferd": "https://efferd.com/r/{name}.json",
+    "@uselayouts": "https://uselayouts.com/r/{name}.json",
+    "@ui-layouts": "https://ui-layouts.com/r/{name}.json",
+    "@hextaui": "https://www.hextaui.com/r/{name}.json",
+    "@jolyui": "https://jolyui.dev/r/{name}.json"
+  }
+}

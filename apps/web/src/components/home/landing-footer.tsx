@@ -62,10 +62,7 @@ export function LandingFooter() {
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {t("landingFooter.preferencesTitle")}
             </p>
-            <div className="inline-flex items-center gap-3 rounded-lg border bg-background p-2 pr-3">
-              <ToggleTheme />
-              <span className="text-sm text-muted-foreground">{t("theme.label")}</span>
-            </div>
+            <ToggleTheme variant="labeled" />
           </div>
         </div>
 

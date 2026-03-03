@@ -17,6 +17,7 @@ import {
 import { signIn } from "@/lib/auth-client";
 import { useI18n } from "@/hooks/use-i18n";
 
+/** Render the sign-in card and authentication actions. */
 export default function SignInPage() {
   const { t } = useI18n();
   const [email, setEmail] = useState("");
@@ -104,26 +105,28 @@ export default function SignInPage() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">
-        <div className="group relative w-full overflow-hidden rounded-md p-px transition-all duration-300 hover:-translate-y-0.5">
+        <div className="group relative mx-auto w-full max-w-88 overflow-hidden rounded-xl p-px transition-all duration-300 hover:-translate-y-0.5">
           <span
             aria-hidden
-            className="pointer-events-none absolute -inset-[140%] animate-[spin_2.8s_linear_infinite] bg-[conic-gradient(from_90deg,#ffffff00_0%,#ffffff_12%,#ffffff00_24%,#ffffff00_100%)] opacity-90"
+            className="pointer-events-none absolute -inset-[120%] animate-[spin_3.2s_linear_infinite] bg-[conic-gradient(from_90deg,#ffffff00_0%,#ffffff_20%,#ffffff00_34%,#ffffff00_100%)] opacity-80"
           />
           <Button
             type="button"
-            className="relative z-10 h-11 w-full cursor-pointer overflow-hidden rounded-[calc(var(--radius)-1px)] border border-white/20 bg-black font-medium text-white shadow-sm transition-all hover:bg-zinc-900 hover:shadow-lg hover:shadow-white/10"
+            className="relative z-10 h-12 w-full cursor-pointer overflow-hidden rounded-[11px] border border-white/20 bg-linear-to-r from-zinc-950 via-black to-zinc-900 px-4 text-white shadow-sm transition-all hover:shadow-lg hover:shadow-white/10"
             onClick={handleGithubSignIn}
             disabled={isBusy}
           >
             <span className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <Github className="mr-2 h-4 w-4" aria-hidden />
-            <span>
+            <span className="relative mr-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10">
+              <Github className="h-4 w-4" aria-hidden />
+            </span>
+            <span className="text-sm font-semibold">
               {isSocialLoading
                 ? t("auth.signIn.github.connecting")
                 : t("auth.signIn.github.cta")}
             </span>
             {!isSocialLoading ? (
-              <ArrowRight className="ml-auto h-4 w-4" aria-hidden />
+              <ArrowRight className="ml-auto h-4 w-4 opacity-80 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden />
             ) : null}
           </Button>
         </div>

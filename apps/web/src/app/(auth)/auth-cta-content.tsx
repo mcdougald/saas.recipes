@@ -106,6 +106,7 @@ function getVariant(pathname: string): CtaVariant {
   return DEFAULT_CTA;
 }
 
+/** Render contextual marketing content for auth pages. */
 export function AuthCtaContent() {
   const { t } = useI18n();
   const pathname = usePathname();
@@ -122,14 +123,14 @@ export function AuthCtaContent() {
         aria-hidden
       />
 
-      <div className="relative flex flex-col">
-        <h2 className="mt-4 text-2xl font-bold tracking-normal text-black dark:text-white sm:text-3xl md:text-4xl lg:text-[2.6rem]">
+      <div className="relative z-10 flex flex-col">
+        <h2 className="mt-4 text-2xl leading-tight font-bold tracking-normal text-black dark:text-white sm:text-3xl md:text-4xl lg:text-[2.6rem]">
           {t(cta.headingKeys[0])}
           <br />
           {t(cta.headingKeys[1])}
         </h2>
 
-        <p className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-black/15 bg-black/5 px-3 py-1 text-xs font-medium tracking-wide text-black/80 dark:border-white/20 dark:bg-white/10 dark:text-white/80 max-md:mx-auto">
+        <p className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-black/15 bg-white px-3 py-1 text-xs font-medium tracking-wide text-black/80 dark:border-white/20 dark:bg-zinc-900 dark:text-white/80 max-md:mx-auto">
           <span className="h-1.5 w-1.5 rounded-full bg-black/70 dark:bg-white/70" aria-hidden />
           {t(cta.badgeKey)}
         </p>
@@ -139,7 +140,7 @@ export function AuthCtaContent() {
         </p>
 
         <ul
-          className="mt-7 flex max-w-xl flex-wrap gap-3 text-sm text-black/70 dark:text-white/70 max-md:mx-auto"
+          className="mt-7 grid max-w-xl gap-3 text-sm text-black/70 dark:text-white/70 max-md:mx-auto"
           role="list"
         >
           {cta.items.map((item) => {
@@ -147,9 +148,9 @@ export function AuthCtaContent() {
             return (
               <li
                 key={item.titleKey}
-                className="flex max-w-4/5 items-start gap-3 rounded-xl border border-black/10 bg-white/80 p-3.5 backdrop-blur-xs dark:border-white/15 dark:bg-white/5 max-md:text-left"
+                className="flex max-w-[400px] items-start gap-3 rounded-xl border border-black/10 bg-white p-4 shadow-sm dark:border-white/15 dark:bg-neutral-900 max-md:text-left"
               >
-                <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-black/5 text-black/75 dark:bg-white/10 dark:text-white/80">
+                <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-black/75 dark:bg-zinc-800 dark:text-white/80">
                   <Icon className="h-4 w-4" aria-hidden />
                 </span>
                 <span>
@@ -162,7 +163,7 @@ export function AuthCtaContent() {
           })}
         </ul>
 
-        <div className="mt-7 w-fit max-w-xl rounded-xl border border-black/15 bg-black/5 p-4 text-sm text-black/70 dark:border-white/20 dark:bg-white/10 dark:text-white/70 max-md:mx-auto">
+        <div className="mt-7 w-fit max-w-[400px] rounded-xl border border-black/15 bg-[#f5f5f5ef] p-4 text-sm text-black/70 shadow-sm dark:border-white/20 dark:bg-neutral-900 dark:text-white/70 max-md:mx-auto">
           <p className="font-medium text-black dark:text-white">{t(cta.footerTitleKey)}</p>
           <p className="mt-1 max-w-[440px]">{t(cta.footerCopyKey)}</p>
         </div>

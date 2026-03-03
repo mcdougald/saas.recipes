@@ -57,7 +57,7 @@ export function AuthLayoutFooter() {
              
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:justify-start">
+            <div className="inline-flex w-fit flex-wrap items-center justify-center gap-2 rounded-md border border-black/10 bg-black/3 p-1 text-xs dark:border-white/15 dark:bg-white/6 sm:justify-start">
               {AUTH_LINKS.map((link) => {
                 const isActive = activePath === normalizeRoute(link.href);
 
@@ -67,8 +67,9 @@ export function AuthLayoutFooter() {
                       key={link.href}
                       aria-current="page"
                       aria-disabled="true"
-                      className="cursor-not-allowed rounded-md border border-primary/45 bg-primary/10 px-3 py-1.5 font-semibold text-primary"
+                      className="inline-flex cursor-default items-center gap-1.5 rounded-md border border-primary/70 bg-primary px-3 py-1.5 font-semibold text-primary-foreground shadow-sm ring-1 ring-primary/30"
                     >
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground/90" aria-hidden />
                       {t(link.labelKey)}
                     </span>
                   );
@@ -78,7 +79,7 @@ export function AuthLayoutFooter() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="rounded-md border border-black/15 bg-black/5 px-3 py-1.5 font-medium text-black/70 transition-colors hover:border-black/30 hover:text-black dark:border-white/20 dark:bg-white/10 dark:text-white/75 dark:hover:border-white/35 dark:hover:text-white"
+                    className="rounded-md border border-transparent px-3 py-1.5 font-medium text-black/75 transition-colors hover:border-black/15 hover:bg-black/5 hover:text-black dark:text-white/75 dark:hover:border-white/20 dark:hover:bg-white/10 dark:hover:text-white"
                   >
                     {t(link.labelKey)}
                   </Link>
@@ -90,12 +91,7 @@ export function AuthLayoutFooter() {
 
         <section className="order-1 min-w-0 bg-black text-white dark:bg-white dark:text-black sm:order-2">
           <div className="mx-auto flex h-full w-full max-w-2xl flex-col px-4 py-5 sm:px-6">
-            <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/8 p-1 pr-3 shadow-sm backdrop-blur-sm dark:border-black/20 dark:bg-black/5">
-              <span className="pl-3 text-[11px] font-semibold uppercase tracking-wide text-white/70 dark:text-black/70">
-                {t("theme.label")}
-              </span>
-              <ToggleTheme />
-            </div>
+            <ToggleTheme variant="labeled" className="mb-4 w-fit" />
 
             <div className="flex h-full items-center">
               <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-white/70 dark:text-black/70 sm:justify-start">

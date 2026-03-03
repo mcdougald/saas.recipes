@@ -32,6 +32,23 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
+const MENU_ITEM_BASE_CLASS =
+  "group/link relative rounded-lg border border-transparent transition-colors duration-150 hover:border-foreground/15 hover:bg-foreground/5 hover:text-foreground";
+
+const MENU_ITEM_ACTIVE_CLASS =
+  "border-foreground/20 bg-foreground/[0.08] text-foreground shadow-[inset_0_0_0_1px_hsl(var(--foreground)/0.06)]";
+
+const MENU_ICON_BASE_CLASS =
+  "transition-colors text-muted-foreground group-hover/link:text-foreground";
+
+const MENU_ICON_ACTIVE_CLASS = "text-foreground";
+
+/**
+ * Render a titled navigation section in the sidebar.
+ *
+ * @param props - Group metadata and navigation items to render.
+ * @returns A sidebar group with direct links and collapsible navigation items.
+ */
 export function NavGroup({ title, items }: NavGroup) {
   const pathName = usePathname();
   const { state } = useSidebar();
@@ -68,19 +85,13 @@ export function NavGroup({ title, items }: NavGroup) {
 
 const NavBadge = ({
   children,
-  color = "violet",
 }: {
   children: ReactNode;
   color?: "violet" | "green";
 }) => {
-  const colorClasses =
-    color === "green"
-      ? "bg-green-500/10 text-green-600 dark:text-green-400"
-      : "bg-violet-500/10 text-violet-600 dark:text-violet-400";
-
   return (
     <Badge
-      className={`ml-auto rounded-full border border-transparent px-2 py-0.5 text-[10px] font-medium backdrop-blur-sm ${colorClasses}`}
+      className="ml-auto rounded-full border border-foreground/15 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/85"
     >
       {children}
     </Badge>
@@ -98,23 +109,24 @@ const SidebarMenuLink = ({ item, href }: { item: NavLink; href: string }) => {
         isActive={isActive}
         tooltip={item.title}
         className={cn(
-          "group/link relative rounded-lg transition-all duration-200 hover:bg-accent/65",
-          isActive &&
-            "bg-primary/12 text-primary shadow-[inset_0_0_0_1px_hsl(var(--primary)/0.18)]",
+          MENU_ITEM_BASE_CLASS,
+          isActive && MENU_ITEM_ACTIVE_CLASS,
         )}
       >
-        <Link href={item.url} onClick={() => setOpenMobile(false)}>
+        <Link
+          href={item.url}
+          aria-current={isActive ? "page" : undefined}
+          onClick={() => setOpenMobile(false)}
+        >
           {/* Active indicator */}
           {isActive && (
-            <div className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r-full bg-primary" />
+            <div className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r-full bg-foreground/85" />
           )}
           {item.icon && (
             <item.icon
               className={cn(
-                "transition-colors",
-                isActive
-                  ? "text-primary"
-                  : "text-muted-foreground group-hover/link:text-foreground",
+                MENU_ICON_BASE_CLASS,
+                isActive && MENU_ICON_ACTIVE_CLASS,
               )}
             />
           )}
@@ -145,18 +157,15 @@ const SidebarMenuCollapsible = ({
           <SidebarMenuButton
             tooltip={item.title}
             className={cn(
-              "group/link rounded-lg transition-all duration-200 hover:bg-accent/65",
-              isActive &&
-                "bg-primary/10 text-primary shadow-[inset_0_0_0_1px_hsl(var(--primary)/0.16)]",
+              MENU_ITEM_BASE_CLASS,
+              isActive && MENU_ITEM_ACTIVE_CLASS,
             )}
           >
             {item.icon && (
               <item.icon
                 className={cn(
-                  "transition-colors",
-                  isActive
-                    ? "text-primary"
-                    : "text-muted-foreground group-hover/link:text-foreground",
+                  MENU_ICON_BASE_CLASS,
+                  isActive && MENU_ICON_ACTIVE_CLASS,
                 )}
               />
             )}
@@ -164,7 +173,7 @@ const SidebarMenuCollapsible = ({
             {item.badge && (
               <NavBadge color={item.badgeColor}>{item.badge}</NavBadge>
             )}
-            <ChevronRight className="ml-auto size-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+            <ChevronRight className="ml-auto size-4 text-muted-foreground transition-transform duration-150 group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>
         </CollapsibleTrigger>
         <CollapsibleContent className="CollapsibleContent pt-1">
@@ -177,16 +186,24 @@ const SidebarMenuCollapsible = ({
                     asChild
                     isActive={isSubActive}
                     className={cn(
-                      "rounded-md transition-all duration-200 hover:bg-accent/60",
+                      "group/sub rounded-md border border-transparent transition-colors duration-150 hover:border-foreground/10 hover:bg-foreground/5",
                       isSubActive &&
-                        "bg-primary/10 text-primary shadow-[inset_0_0_0_1px_hsl(var(--primary)/0.12)]",
+                        "border-foreground/15 bg-foreground/7.5 text-foreground",
                     )}
                   >
                     <Link
                       href={subItem.url}
+                      aria-current={isSubActive ? "page" : undefined}
                       onClick={() => setOpenMobile(false)}
                     >
-                      {subItem.icon && <subItem.icon className="size-4" />}
+                      {subItem.icon && (
+                        <subItem.icon
+                          className={cn(
+                            "size-4 text-muted-foreground transition-colors group-hover/sub:text-foreground",
+                            isSubActive && "text-foreground",
+                          )}
+                        />
+                      )}
                       <span>{subItem.title}</span>
                       {subItem.badge && (
                         <NavBadge color={subItem.badgeColor}>
@@ -221,17 +238,15 @@ const SidebarMenuCollapsedDropdown = ({
           <SidebarMenuButton
             tooltip={item.title}
             className={cn(
-              "rounded-lg transition-all duration-200 hover:bg-accent/65",
-              isActive &&
-                "bg-primary/12 text-primary shadow-[inset_0_0_0_1px_hsl(var(--primary)/0.18)]",
+              MENU_ITEM_BASE_CLASS,
+              isActive && MENU_ITEM_ACTIVE_CLASS,
             )}
           >
             {item.icon && (
               <item.icon
                 className={cn(
-                  isActive
-                    ? "text-primary"
-                    : "text-muted-foreground",
+                  MENU_ICON_BASE_CLASS,
+                  isActive && MENU_ICON_ACTIVE_CLASS,
                 )}
               />
             )}
@@ -239,19 +254,19 @@ const SidebarMenuCollapsedDropdown = ({
             {item.badge && (
               <NavBadge color={item.badgeColor}>{item.badge}</NavBadge>
             )}
-            <ChevronRight className="ml-auto size-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+            <ChevronRight className="ml-auto size-4 text-muted-foreground transition-transform duration-150 group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           side="right"
           align="start"
           sideOffset={4}
-          className="min-w-56 rounded-xl border-border/60 bg-background/95 p-1 backdrop-blur-xl shadow-xl"
+          className="min-w-56 rounded-xl border-foreground/15 bg-background/95 p-1 backdrop-blur-xl shadow-xl"
         >
           <DropdownMenuLabel className="flex items-center gap-2 px-2 py-1.5 text-[10px] text-muted-foreground uppercase tracking-[0.14em]">
             {item.title}
             {item.badge && (
-              <span className="rounded-full bg-primary/12 px-1.5 py-0.5 text-[10px] text-primary">
+              <span className="rounded-full border border-foreground/15 bg-foreground/5 px-1.5 py-0.5 text-[10px] text-foreground/85">
                 {item.badge}
               </span>
             )}
@@ -267,16 +282,24 @@ const SidebarMenuCollapsedDropdown = ({
               >
                 <Link
                   href={sub.url}
+                  aria-current={isSubActive ? "page" : undefined}
                   className={cn(
-                    "flex items-center gap-2 rounded-lg px-2 py-2 transition-colors hover:bg-accent/70",
+                    "flex items-center gap-2 rounded-lg border border-transparent px-2 py-2 transition-colors hover:border-foreground/10 hover:bg-foreground/5",
                     isSubActive &&
-                      "bg-primary/10 text-primary",
+                      "border-foreground/15 bg-foreground/7.5 text-foreground",
                   )}
                 >
-                  {sub.icon && <sub.icon className="size-4" />}
+                  {sub.icon && (
+                    <sub.icon
+                      className={cn(
+                        "size-4 text-muted-foreground transition-colors",
+                        isSubActive && "text-foreground",
+                      )}
+                    />
+                  )}
                   <span className="max-w-52 text-wrap">{sub.title}</span>
                   {sub.badge && (
-                    <span className="ml-auto rounded-full bg-primary/10 px-1.5 py-0.5 text-xs text-primary">
+                    <span className="ml-auto rounded-full border border-foreground/15 bg-foreground/5 px-1.5 py-0.5 text-xs text-foreground/85">
                       {sub.badge}
                     </span>
                   )}
