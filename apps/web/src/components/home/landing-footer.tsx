@@ -1,9 +1,9 @@
 "use client";
 
 import { useI18n } from "@/hooks/use-i18n";
-import Image from "next/image";
 import Link from "next/link";
 
+import { SaasRecipesIcon } from "@/components/common/icons/saas-recipes-icon";
 import { ToggleTheme } from "@/components/theme-toggle";
 
 type FooterLink = {
@@ -97,7 +97,7 @@ export function LandingFooter() {
             <FooterEaseSignals />
           </section>
 
-          <section className="space-y-6">
+          <section className="space-y-6 z-10">
             <div className="space-y-3">
               <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 {t("landingFooter.exploreTitle")}
@@ -119,13 +119,11 @@ export function LandingFooter() {
           </Link>
         </div>
 
-        <Image
-          src="/SaasRecipesIcon.svg"
-          alt={t("brand.logoAlt")}
-          width={560}
-          height={700}
+        <SaasRecipesIcon
           aria-hidden
-          className="pointer-events-none absolute -bottom-5 right-4 z-0 h-auto w-60 rotate-19 opacity-[0.06] dark:opacity-[0.12] sm:-bottom-20 sm:right-6 sm:w-72 md:top-70 md:right-8 md:w-80 lg:-bottom-3 lg:right-10 lg:w-88"
+          width={560}
+          height={560}
+          className="!top-[100px] opacity-30 pointer-events-none absolute -bottom-5 right-4 z-0 h-auto w-60 rotate-19 text-foreground/8 dark:text-foreground/14 sm:-bottom-20 sm:right-6 sm:w-72 md:top-70 md:right-8 md:w-80 lg:-bottom-3 lg:right-10 lg:w-88"
         />
       </div>
     </footer>

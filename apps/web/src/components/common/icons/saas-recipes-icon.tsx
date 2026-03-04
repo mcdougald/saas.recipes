@@ -1,5 +1,48 @@
 import type { SVGProps } from "react";
 
+const OPAQUE_FOREGROUND = "var(--foreground)";
+const OPAQUE_BACKGROUND = "var(--background)";
+
+/**
+ * Resolve a color string into an opaque SVG color.
+ *
+ * @param color Raw color string from props or inherited attributes.
+ * @param fallback Opaque fallback color used when the input is transparent-like.
+ * @returns A color string guaranteed to avoid alpha channels where possible.
+ */
+function resolveOpaqueColor(color: string | undefined, fallback: string): string {
+  if (!color) return fallback;
+
+  const normalized = color.trim();
+  const lower = normalized.toLowerCase();
+
+  if (lower === "none" || lower === "transparent") return fallback;
+
+  // Convert #RGBA and #RRGGBBAA to opaque hex by stripping alpha.
+  if (/^#[0-9a-f]{4}$/i.test(normalized)) {
+    const [r, g, b] = normalized.slice(1, 4).split("");
+    return `#${r}${r}${g}${g}${b}${b}`;
+  }
+
+  if (/^#[0-9a-f]{8}$/i.test(normalized)) return normalized.slice(0, 7);
+
+  // Convert rgba()/rgb(... / alpha) to rgb(...).
+  const rgbModern = normalized.match(/^rgba?\(\s*([^)]*?)\s*\/\s*[^)]+\)$/i);
+  if (rgbModern) return `rgb(${rgbModern[1].trim()})`;
+
+  const rgbaLegacy = normalized.match(/^rgba\(\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*[^)]+\)$/i);
+  if (rgbaLegacy) return `rgb(${rgbaLegacy[1]}, ${rgbaLegacy[2]}, ${rgbaLegacy[3]})`;
+
+  // Convert hsla()/hsl(... / alpha) to hsl(...).
+  const hslModern = normalized.match(/^hsla?\(\s*([^)]*?)\s*\/\s*[^)]+\)$/i);
+  if (hslModern) return `hsl(${hslModern[1].trim()})`;
+
+  const hslaLegacy = normalized.match(/^hsla\(\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*[^)]+\)$/i);
+  if (hslaLegacy) return `hsl(${hslaLegacy[1]}, ${hslaLegacy[2]}, ${hslaLegacy[3]})`;
+
+  return normalized;
+}
+
 /**
  * Configure visual overrides for the Saas Recipes icon.
  */
@@ -41,8 +84,8 @@ export function SaasRecipesIcon({
   primaryStroke,
   detailStroke,
   cloudStroke,
-  primaryFill = "none",
-  cloudFill = "none",
+  primaryFill,
+  cloudFill,
   title,
   stroke,
   fill = "none",
@@ -50,9 +93,11 @@ export function SaasRecipesIcon({
   height = 21,
   ...props
 }: SaasRecipesIconProps) {
-  const resolvedPrimaryStroke = primaryStroke ?? stroke ?? "currentColor";
-  const resolvedDetailStroke = detailStroke ?? resolvedPrimaryStroke;
-  const resolvedCloudStroke = cloudStroke ?? resolvedPrimaryStroke;
+  const sharedStrokeInput = primaryStroke ?? detailStroke ?? cloudStroke ?? stroke;
+  const resolvedSharedStroke = resolveOpaqueColor(sharedStrokeInput, OPAQUE_FOREGROUND);
+  const resolvedPrimaryFill =
+    primaryFill === undefined ? "none" : resolveOpaqueColor(primaryFill, OPAQUE_BACKGROUND);
+  const resolvedCloudFill = cloudFill === undefined ? "none" : resolveOpaqueColor(cloudFill, OPAQUE_BACKGROUND);
 
   return (
     <svg
@@ -67,45 +112,59 @@ export function SaasRecipesIcon({
     >
       {title ? <title>{title}</title> : null}
       <path
-        d="M18.4816 18.6864C18.5582 18.8556 18.5906 19.0408 18.5757 19.2252C18.5608 19.4097 18.4991 19.5876 18.3963 19.7428C18.2935 19.898 18.1527 20.0256 17.9869 20.1139C17.821 20.2022 17.6352 20.2486 17.4465 20.2487H2.71273C2.5239 20.2487 2.33806 20.2025 2.17209 20.1142C2.00612 20.0259 1.86527 19.8983 1.76236 19.7431C1.65944 19.5879 1.59771 19.41 1.58277 19.2254C1.56784 19.0409 1.60017 18.8556 1.67684 18.6864L3.27941 15.2487H16.8798L18.4816 18.6864Z"
-        stroke={resolvedPrimaryStroke}
-        fill={primaryFill}
+        className='computer-base-path'
+        d="M18.5524 18.6864C18.629 18.8556 18.6614 19.0408 18.6465 19.2252C18.6316 19.4097 18.5699 19.5876 18.4671 19.7428C18.3643 19.898 18.2235 20.0256 18.0577 20.1139C17.8918 20.2022 17.706 20.2486 17.5173 20.2487H2.78353C2.5947 20.2487 2.40886 20.2025 2.24289 20.1142C2.07692 20.0259 1.93608 19.8983 1.83316 19.7431C1.73024 19.5879 1.66851 19.41 1.65358 19.2254C1.63864 19.0409 1.67097 18.8556 1.74764 18.6864L3.35022 15.2487H16.9506L18.5524 18.6864Z"
+        stroke={resolvedSharedStroke}
+        fill={resolvedPrimaryFill}
+        fillOpacity={1}
+        strokeOpacity={1}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
+        className='trackpad-path'
         d="M8 18.3H12"
-        stroke={resolvedDetailStroke}
+        stroke={resolvedSharedStroke}
+        strokeOpacity={1}
         strokeWidth="0.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
+        className='hat-line line-1'
         d="M9 11.39V12.99"
-        stroke={resolvedDetailStroke}
+        stroke={resolvedSharedStroke}
+        strokeOpacity={1}
         strokeWidth="0.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
+        className='hat-line line-2'
         d="M11 10V13"
-        stroke={resolvedDetailStroke}
+        stroke={resolvedSharedStroke}
+        strokeOpacity={1}
         strokeWidth="0.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
+        className='hat-line line-3'
         d="M13 8V13"
-        stroke={resolvedDetailStroke}
+        stroke={resolvedSharedStroke}
+        strokeOpacity={1}
         strokeWidth="0.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M3.43945 15.6768C3.43863 15.6781 3.43732 15.6793 3.43652 15.6807C3.44418 15.6683 3.44936 15.6549 3.45605 15.6426C3.45007 15.6539 3.44587 15.666 3.43945 15.6768ZM3.57715 11.6406L3.16602 11.4326C2.23519 10.9611 1.51479 10.2161 1.11133 9.3291C0.708489 8.44345 0.641122 7.46035 0.916992 6.53711C1.19326 5.61294 1.80132 4.79157 2.65527 4.21484C3.51046 3.63734 4.55736 3.34172 5.62402 3.38574L6.10547 3.40625L6.32324 2.97656C6.6561 2.32057 7.18705 1.75749 7.86035 1.36035C8.53392 0.963151 9.31948 0.75 10.125 0.75C10.9305 0.75 11.7161 0.963151 12.3896 1.36035C13.0629 1.75749 13.5939 2.32057 13.9268 2.97656L14.1445 3.40625L14.626 3.38574C15.693 3.34171 16.7399 3.63659 17.5947 4.21387C18.4488 4.79069 19.0568 5.61275 19.333 6.53711C19.6088 7.46023 19.5414 8.44259 19.1387 9.32812C18.7352 10.2151 18.0148 10.9601 17.084 11.4316L16.6729 11.6406V14.707C16.663 14.7158 16.6524 14.7239 16.6426 14.7334C16.5636 14.8101 16.5047 14.8943 16.4609 14.9795C16.3941 14.9929 16.2903 15.0088 16.1328 15.0137C15.9697 15.0187 15.8092 15.0142 15.6133 15.0127C15.4343 15.0113 15.2195 15.012 15.0176 15.0371C14.5152 15.1001 13.8623 15.1016 12.999 15.1016H7.25098C6.38472 15.1016 5.61588 15.1 5.11426 15.0371H5.11328C4.85623 15.0051 4.61142 15.0354 4.4248 15.0674C4.32864 15.0839 4.23478 15.104 4.15332 15.1211C4.06761 15.1391 3.99669 15.1533 3.92773 15.166C3.79431 15.1907 3.72366 15.1928 3.69238 15.1924C3.65447 15.1596 3.61479 15.1275 3.57227 15.0977C3.57472 15.0239 3.57715 14.9359 3.57715 14.8311V11.6406Z"
-        stroke={resolvedCloudStroke}
-        fill={cloudFill}
+        className='chef-hat-path'
+        d="M2.96191 14.5195C2.96936 14.5203 2.97764 14.5232 2.98633 14.5244C2.94265 14.5198 2.91077 14.5167 2.90234 14.5166C2.9155 14.5169 2.93951 14.5172 2.96191 14.5195ZM3.57715 11.6406L3.16602 11.4326C2.23519 10.9611 1.51479 10.2161 1.11133 9.3291C0.708489 8.44345 0.641122 7.46035 0.916992 6.53711C1.19326 5.61294 1.80132 4.79157 2.65527 4.21484C3.51046 3.63734 4.55736 3.34172 5.62402 3.38574L6.10547 3.40625L6.32324 2.97656C6.6561 2.32057 7.18705 1.75749 7.86035 1.36035C8.53392 0.963151 9.31948 0.75 10.125 0.75C10.9305 0.75 11.7161 0.963151 12.3896 1.36035C13.0629 1.75749 13.5939 2.32057 13.9268 2.97656L14.1445 3.40625L14.626 3.38574C15.693 3.34171 16.7399 3.63659 17.5947 4.21387C18.4488 4.79069 19.0568 5.61275 19.333 6.53711C19.6088 7.46023 19.5414 8.44259 19.1387 9.32812C18.7352 10.2151 18.0148 10.9601 17.084 11.4316L16.6729 11.6406V14.5498C16.5611 14.7597 16.4996 14.887 16.4619 14.9746C16.3753 15.0565 16.1917 15.1448 15.877 15.1973C15.5712 15.2482 15.2543 15.25 15 15.25H3.7168C3.7092 15.2142 3.70056 15.1782 3.69043 15.1436C3.67323 15.0847 3.63991 14.9913 3.57715 14.8926V11.6406Z"
+        stroke={resolvedSharedStroke}
+        fill={resolvedCloudFill}
+        fillOpacity={1}
+        strokeOpacity={1}
         strokeWidth="1.5"
       />
     </svg>
