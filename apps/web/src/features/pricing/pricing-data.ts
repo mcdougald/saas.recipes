@@ -1,9 +1,15 @@
+/**
+ * Describe a pricing plan card shown in pricing views.
+ */
 export type PricingPlan = {
   id: string;
   name: string;
   description: string;
   price: string;
   period: string;
+  yearlyPrice?: string;
+  yearlyPeriod?: string;
+  yearlyCallout?: string;
   features: string[];
   buttonText: string;
   variant: "default" | "outline" | "secondary";
@@ -11,98 +17,120 @@ export type PricingPlan = {
   supportImpact?: string;
 };
 
+/**
+ * Describe one feature row used by comparison-style pricing tables.
+ */
 export type PricingFeatureRow = {
   name: string;
   values: Record<string, string | boolean>;
 };
 
+/**
+ * Provide top-level marketing copy used across pricing layouts.
+ */
 export const pricingPageCopy = {
-  headline: "Choose the Plan That Helps You Ship Better SaaS, Faster",
+  headline: "Build with better Dev Environments and Ship Faster",
   description:
-    "Get practical, battle-tested SaaS breakdowns you can apply immediately, so you spend less time guessing architecture and more time shipping product.",
+    "SaaS.Recipes helps developers improve local setup, architecture choices, and production readiness with practical teardown guides from real codebases.",
   supportNote:
-    "Paid plans unlock deeper resources and directly fund consistent platform improvements, fresh breakdowns, and long-term reliability for the community.",
+    "Paid plans fund platform development while I navigate bone-cancer treatment. Your support keeps the product improving and helps me keep showing up for the developer community.",
 };
 
+/**
+ * Define all available plans and their billing display metadata.
+ */
 export const pricingPlans: PricingPlan[] = [
   {
     id: "free",
-    name: "Explorer",
+    name: "Free",
     description:
-      "The SaaS.Recipes platform is free & secure for anyone to try.",
+      "Get started with focused guidance for improving your dev environment.",
     price: "$0",
     period: "/month",
+    yearlyPrice: "$0",
+    yearlyPeriod: "/year",
     features: [
-      "Limited access to selected recipe breakdowns",
-      "Preview live project examples",
+      "Starter access to selected architecture and tooling breakdowns",
+      "See proven repo setup patterns before you commit to a stack",
       "Community support",
     ],
-    buttonText: "Start Exploring",
+    buttonText: "Start for Free",
     variant: "outline",
   },
   {
-    id: "starter",
-    name: "Starter Support",
-    description: "Affordable support for builders who want full core access.",
-    price: "$9",
+    id: "pro",
+    name: "Pro",
+    description: "For developers who want full access and implementation help.",
+    price: "$14.99",
     period: "/month",
+    yearlyPrice: "$149.99",
+    yearlyPeriod: "/year",
+    yearlyCallout: "Save 17% with annual billing",
     features: [
-      "Full access to all learning and repo breakdown content",
-      "Supports ongoing maintenance and platform improvements",
-      "Community support",
-      "No AI Chef or personal time included",
+      "Full access to all recipe breakdowns and playbooks",
+      "AI Chef guidance for better environment and architecture decisions",
+      "Priority support when you're stuck in setup or integration work",
+      "Directly supports ongoing development and health-related stability",
     ],
-    buttonText: "Start Starter Support",
-    variant: "outline",
-    supportImpact:
-      "Your plan helps fund healthier work rhythms and faster product improvements.",
-  },
-  {
-    id: "supporter",
-    name: "Builder Support",
-    description: "Includes AI Chef and direct personal guidance.",
-    price: "$19",
-    period: "/month",
-    features: [
-      "AI Chef support for implementation guidance",
-      "Direct personal time for help and feedback",
-      "Everything in Starter Support",
-      "Directly supports my health and focused development time",
-      "Priority updates as the devtool resource evolves",
-    ],
-    buttonText: "Choose Builder Support",
+    buttonText: "Upgrade to Pro",
     variant: "default",
     popular: true,
     supportImpact:
-      "Your plan helps fund healthier work rhythms and faster product improvements.",
+      "Supports product progress and helps sustain consistent output during treatment.",
+  },
+  {
+    id: "pro_plus",
+    name: "Pro+",
+    description: "For builders who want dedicated 1-1 implementation support.",
+    price: "$34.99",
+    period: "/month",
+    yearlyPrice: "$349.99",
+    yearlyPeriod: "/year",
+    yearlyCallout: "Save 17% with annual billing",
+    features: [
+      "Everything in Pro",
+      "1-1 support for architecture and delivery blockers",
+      "Direct review of your dev-environment setup and workflows",
+      "Priority async help for high-impact implementation decisions",
+    ],
+    buttonText: "Upgrade to Pro+",
+    variant: "secondary",
+    supportImpact:
+      "Adds direct founder support while sustaining focused product development.",
   },
   {
     id: "enterprise",
-    name: "Enterprise Support",
+    name: "Enterprise",
     description:
-      "Business support for teams that want org-wide repo indexing and coaching.",
-    price: "$99",
+      "For teams standardizing dev environments and delivery workflows.",
+    price: "$99.99",
     period: "/month",
+    yearlyPrice: "$999.99",
+    yearlyPeriod: "/year",
+    yearlyCallout: "Save 17% with annual billing",
     features: [
-      "Everything in Builder Support",
-      "Index an entire GitHub organization/team repository portfolio",
-      "Hands-on support to help your team 'cook' better development workflows",
-      "Priority business support and roadmap collaboration",
+      "Everything in Pro",
+      "Team onboarding for shared tooling standards and CI confidence",
+      "Org-wide workflow and environment optimization guidance",
+      "Priority roadmap collaboration and support",
     ],
-    buttonText: "Choose Enterprise Support",
+    buttonText: "Choose Enterprise",
     variant: "outline",
     supportImpact:
-      "Funds the deepest product investment and team-level improvements for high-impact users.",
+      "Accelerates platform investment for higher-impact team needs.",
   },
 ];
 
+/**
+ * Compare plans across high-level capability categories.
+ */
 export const pricingComparisonRows: PricingFeatureRow[] = [
   {
     name: "Content access",
     values: {
       free: "Limited",
-      starter: "Full",
-      supporter: "Full",
+      pro: "Full",
+      pro_plus: "Full + 1-1 support",
       enterprise: "Full + org-level support",
     },
   },
@@ -110,8 +138,8 @@ export const pricingComparisonRows: PricingFeatureRow[] = [
     name: "Live project breakdowns",
     values: {
       free: true,
-      starter: true,
-      supporter: true,
+      pro: true,
+      pro_plus: true,
       enterprise: true,
     },
   },
@@ -119,8 +147,8 @@ export const pricingComparisonRows: PricingFeatureRow[] = [
     name: "Personal time with founder",
     values: {
       free: false,
-      starter: false,
-      supporter: true,
+      pro: true,
+      pro_plus: true,
       enterprise: true,
     },
   },
@@ -128,8 +156,8 @@ export const pricingComparisonRows: PricingFeatureRow[] = [
     name: "AI Chef implementation help",
     values: {
       free: false,
-      starter: false,
-      supporter: true,
+      pro: true,
+      pro_plus: true,
       enterprise: true,
     },
   },
@@ -137,8 +165,8 @@ export const pricingComparisonRows: PricingFeatureRow[] = [
     name: "Direct support of health + dev efforts",
     values: {
       free: false,
-      starter: "Core",
-      supporter: "Expanded",
+      pro: "Expanded",
+      pro_plus: "Priority 1-1",
       enterprise: "Maximum",
     },
   },
@@ -146,8 +174,8 @@ export const pricingComparisonRows: PricingFeatureRow[] = [
     name: "Team / business support",
     values: {
       free: false,
-      starter: false,
-      supporter: false,
+      pro: false,
+      pro_plus: false,
       enterprise: true,
     },
   },
@@ -155,8 +183,8 @@ export const pricingComparisonRows: PricingFeatureRow[] = [
     name: "GitHub org/team repo indexing",
     values: {
       free: false,
-      starter: false,
-      supporter: false,
+      pro: false,
+      pro_plus: false,
       enterprise: true,
     },
   },

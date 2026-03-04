@@ -10,6 +10,9 @@ export const stripe = stripeSecretKey
     })
   : null;
 
+/**
+ * Define Stripe plan metadata and environment price identifiers.
+ */
 export const STRIPE_PLANS = {
   FREE: {
     name: "Free",
@@ -22,40 +25,49 @@ export const STRIPE_PLANS = {
     ],
   },
   BASIC: {
-    name: "Basic",
-    price: 900, // $9.00 in cents
+    name: "Pro",
+    price: 1499, // $14.99 in cents
     interval: "month" as const,
-    stripePriceId: process.env.STRIPE_BASIC_MONTHLY_PRICE_ID,
+    stripePriceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID,
+    stripeYearlyPriceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID,
     features: [
-      "Full access — no time limits",
-      "Notes & repository recipes",
-      "All live projects",
-      "Unlimited recipe browsing",
-      "Community support",
+      "Full access to recipes and implementation breakdowns",
+      "AI Chef guidance for dev environment decisions",
+      "Priority support",
     ],
   },
   PRO: {
-    name: "Pro",
-    price: 1900, // $19.00 in cents
+    name: "Legacy Pro",
+    price: 1499, // Legacy alias for compatibility
     interval: "month" as const,
     stripePriceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID,
+    stripeYearlyPriceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID,
     features: [
-      "Everything in Basic",
-      "AI Chef — recipe help & guidance",
-      "My Help — direct access to my time",
+      "Same as Basic plan",
+    ],
+  },
+  PRO_PLUS: {
+    name: "Pro+",
+    price: 3499, // $34.99 in cents
+    interval: "month" as const,
+    stripePriceId: process.env.STRIPE_PRO_PLUS_MONTHLY_PRICE_ID,
+    stripeYearlyPriceId: process.env.STRIPE_PRO_PLUS_YEARLY_PRICE_ID,
+    features: [
+      "Everything in Pro",
+      "1-1 implementation support",
+      "Priority response windows",
     ],
   },
   ENTERPRISE: {
     name: "Enterprise",
-    price: 4900, // $49.00 in cents
+    price: 9999, // $99.99 in cents
     interval: "month" as const,
     stripePriceId: process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID,
+    stripeYearlyPriceId: process.env.STRIPE_ENTERPRISE_YEARLY_PRICE_ID,
     features: [
       "Everything in Pro",
-      "For teams — workspace & sharing",
-      "AI Chef for the whole team",
-      "Priority My Help (my time)",
-      "Early access to new recipes",
+      "Team rollout and standardization support",
+      "Priority enterprise support",
     ],
   },
 } as const;

@@ -4,6 +4,12 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { getPostHogClient, shutdownPostHog } from "@/lib/posthog-server";
 
+/**
+ * Create a Stripe checkout session for the selected plan and billing interval.
+ *
+ * @param req - Request payload containing `priceId` and optional `billingInterval`.
+ * @returns A checkout URL response or an error payload when creation fails.
+ */
 export async function POST(req: NextRequest) {
   try {
     if (!stripe) {
@@ -21,16 +27,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { priceId } = await req.json();
+    const payload = (await req.json()) as {
+      priceId?: string;
+      billingInterval?: "monthly" | "yearly";
+    };
+    const priceId = payload.priceId;
+    const billingInterval = payload.billingInterval ?? "monthly";
 
     // Get the price ID from environment variables based on the plan
     let stripePriceId: string | undefined;
-    if (priceId === "basic") {
-      stripePriceId = STRIPE_PLANS.BASIC.stripePriceId;
-    } else if (priceId === "pro") {
-      stripePriceId = STRIPE_PLANS.PRO.stripePriceId;
+    if (priceId === "basic" || priceId === "pro") {
+      stripePriceId =
+        billingInterval === "yearly"
+          ? STRIPE_PLANS.PRO.stripeYearlyPriceId
+          : STRIPE_PLANS.PRO.stripePriceId;
+    } else if (priceId === "pro_plus") {
+      stripePriceId =
+        billingInterval === "yearly"
+          ? STRIPE_PLANS.PRO_PLUS.stripeYearlyPriceId
+          : STRIPE_PLANS.PRO_PLUS.stripePriceId;
     } else if (priceId === "enterprise") {
-      stripePriceId = STRIPE_PLANS.ENTERPRISE.stripePriceId;
+      stripePriceId =
+        billingInterval === "yearly"
+          ? STRIPE_PLANS.ENTERPRISE.stripeYearlyPriceId
+          : STRIPE_PLANS.ENTERPRISE.stripePriceId;
     }
 
     if (!stripePriceId) {
@@ -64,6 +84,7 @@ export async function POST(req: NextRequest) {
       event: "checkout_session_created",
       properties: {
         plan_id: priceId,
+        billing_interval: billingInterval,
         checkout_session_id: checkoutSession.id,
         email: session.user.email,
       },

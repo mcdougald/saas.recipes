@@ -16,7 +16,7 @@ import { useState } from "react";
 
 export function SinglePricing() {
   const [isAnnual, setIsAnnual] = useState(false);
-  const supporterPlan = pricingPlans.find((plan) => plan.id === "supporter");
+  const supporterPlan = pricingPlans.find((plan) => plan.id === "pro");
 
   if (!supporterPlan) {
     return null;

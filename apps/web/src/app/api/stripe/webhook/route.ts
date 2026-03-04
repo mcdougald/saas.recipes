@@ -6,6 +6,12 @@ import { eq } from "drizzle-orm";
 import Stripe from "stripe";
 import { getPostHogClient, shutdownPostHog } from "@/lib/posthog-server";
 
+/**
+ * Process incoming Stripe webhook events and sync subscription state.
+ *
+ * @param req - Raw Stripe webhook request containing signed event data.
+ * @returns A success response when processed or an error status when verification fails.
+ */
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const signature = req.headers.get("stripe-signature");
@@ -96,9 +102,20 @@ export async function POST(req: NextRequest) {
         
         // Determine subscription tier
         let tier = "free";
-        if (priceId === process.env.STRIPE_PRO_MONTHLY_PRICE_ID) {
+        if (
+          priceId === process.env.STRIPE_PRO_MONTHLY_PRICE_ID ||
+          priceId === process.env.STRIPE_PRO_YEARLY_PRICE_ID
+        ) {
           tier = "pro";
-        } else if (priceId === process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID) {
+        } else if (
+          priceId === process.env.STRIPE_PRO_PLUS_MONTHLY_PRICE_ID ||
+          priceId === process.env.STRIPE_PRO_PLUS_YEARLY_PRICE_ID
+        ) {
+          tier = "pro_plus";
+        } else if (
+          priceId === process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID ||
+          priceId === process.env.STRIPE_ENTERPRISE_YEARLY_PRICE_ID
+        ) {
           tier = "enterprise";
         }
 

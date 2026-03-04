@@ -1,5 +1,5 @@
 import { ColumnPricing } from "@/features/pricing/column-pricing";
-import { pricingPageCopy } from "@/features/pricing/pricing-data";
+import { PricingPageHeader } from "@/features/pricing/pricing-page-header";
 import { db } from "@/lib/db";
 import { subscription, user } from "@/lib/db/schema";
 import { getServerSession } from "@/lib/session";
@@ -51,17 +51,18 @@ export default async function PricingPage() {
   }
 
   return (
-    <section className="space-y-8">
+    <section className="space-y-8 pb-8">
+      <PricingPageHeader
+        currentTier={currentTier}
+        subscriptionStatus={subscriptionStatus}
+        isSignedIn={Boolean(session?.user.id)}
+      />
       <ColumnPricing
         currentTier={currentTier}
         subscriptionStatus={subscriptionStatus}
         hasStripeCustomer={hasStripeCustomer}
         isSignedIn={Boolean(session?.user.id)}
       />
-      <div className="border-border bg-muted/30 mx-4 rounded-lg border p-4 text-sm lg:mx-6">
-        <p className="font-medium">Why this pricing model exists</p>
-        <p className="text-muted-foreground mt-2">{pricingPageCopy.supportNote}</p>
-      </div>
     </section>
   );
 }
