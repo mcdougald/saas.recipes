@@ -43,11 +43,9 @@ export default function AppSidebar({
   const { user } = useAuth();
   const { isMobile, open, openMobile, setOpen, setOpenMobile } = useSidebar();
   const { config, data, startResizing } = useSidebarConfig();
-  const isLocalhost =
-    typeof window !== "undefined" &&
-    ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+  const isAdminNavEnabled = user?.admin === true;
   const navGroups = sidebarData.navGroups.filter(
-    (nav) => nav.title !== "Admin" || isLocalhost
+    (nav) => nav.title !== "Admin" || isAdminNavEnabled
   );
   const handleSidebarDoubleClick: React.MouseEventHandler<HTMLDivElement> = (
     event

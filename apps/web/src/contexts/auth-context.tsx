@@ -25,6 +25,39 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+type SessionUserWithMetadata = {
+  id: string;
+  name: string;
+  email: string;
+  image?: string | null;
+  subscriptionTier?: string | null;
+  admin?: boolean;
+};
+
+/**
+ * Map Better Auth session users into the app-level auth context user.
+ *
+ * @param sessionUser - Session user payload from Better Auth client APIs.
+ * @returns Normalized user object consumed by UI and navigation.
+ */
+function mapSessionUserToAuthUser(sessionUser: SessionUserWithMetadata): User {
+  return {
+    id: sessionUser.id,
+    name: sessionUser.name,
+    email: sessionUser.email,
+    avatar: sessionUser.image || "",
+    role: sessionUser.admin ? "admin" : "user",
+    admin: sessionUser.admin === true,
+    subscriptionTier: sessionUser.subscriptionTier ?? null,
+  };
+}
+
+/**
+ * Provide client-side auth state and auth actions to React children.
+ *
+ * @param props - Provider props including children.
+ * @returns Auth context provider wrapping children.
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,18 +68,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { data: session } = await authClient.getSession();
 
         if (session?.user) {
-          const sessionUser = session.user as typeof session.user & {
-            subscriptionTier?: string | null;
-          };
+          const sessionUser = session.user as SessionUserWithMetadata;
 
-          setUser({
-            id: sessionUser.id,
-            name: sessionUser.name,
-            email: sessionUser.email,
-            avatar: sessionUser.image || "",
-            role: "user",
-            subscriptionTier: sessionUser.subscriptionTier ?? null,
-          });
+          setUser(mapSessionUserToAuthUser(sessionUser));
 
           // Identify user in PostHog on session restore
           posthog.identify(sessionUser.id, {
@@ -76,18 +100,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     if (data?.user) {
-      const loginUser = data.user as typeof data.user & {
-        subscriptionTier?: string | null;
-      };
+      const loginUser = data.user as SessionUserWithMetadata;
 
-      setUser({
-        id: loginUser.id,
-        name: loginUser.name,
-        email: loginUser.email,
-        avatar: loginUser.image || "",
-        role: "user",
-        subscriptionTier: loginUser.subscriptionTier ?? null,
-      });
+      setUser(mapSessionUserToAuthUser(loginUser));
 
       // Identify user in PostHog on login
       posthog.identify(loginUser.id, {
@@ -154,6 +169,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Access the current auth context.
+ *
+ * @returns Auth context value with user and auth actions.
+ * @throws Error when used outside `AuthProvider`.
+ */
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

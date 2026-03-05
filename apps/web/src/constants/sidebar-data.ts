@@ -23,6 +23,7 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import {
+  Activity,
   Blocks,
   BookOpen,
   Database,
@@ -258,6 +259,11 @@ export const sidebarData: SidebarData = {
               icon: IconBarrierBlock,
             },
           ],
+        },
+        {
+          title: "API Monitor",
+          url: "/admin/api-health",
+          icon: Activity,
         },
       ],
     },

@@ -6,6 +6,10 @@ interface User {
   email: string;
   avatar: string;
   role?: string;
+  /**
+   * Indicates whether the user has admin privileges.
+   */
+  admin?: boolean;
   subscriptionTier?: string | null;
 }
 

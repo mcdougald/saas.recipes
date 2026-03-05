@@ -8,6 +8,13 @@
       "when": 1771302163350,
       "tag": "0000_busy_bug",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1772750637451,
+      "tag": "0001_conscious_true_believers",
+      "breakpoints": true
     }
   ]
 }
