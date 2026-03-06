@@ -13,11 +13,17 @@ import {
 import { sidebarData } from "@/constants/sidebar-data";
 import { useAuth } from "@/contexts/auth-context";
 import { useSidebarConfig } from "@/contexts/sidebar-context";
-import { Search } from "lucide-react";
+import { hasAdminAccess } from "@/lib/auth-access";
+import { LogIn, Search, UserPlus } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 import { NavGroup } from "./nav-group";
 import { NavUser } from "./nav-user";
 import { TeamSwitcher } from "./team-switcher";
+
+interface AppSidebarProps extends React.ComponentProps<typeof UISidebar> {
+  initialAdminAccess?: boolean;
+}
 
 /**
  * Primary application sidebar shell used across dashboard routes.
@@ -29,6 +35,7 @@ import { TeamSwitcher } from "./team-switcher";
  *   footer user profile, and rail.
  * - Hydrates team and navigation data from `sidebarData`.
  * - Connects authenticated user state to the footer account menu.
+ * - Renders footer auth actions when a user session is unavailable.
  * - Toggles the sidebar open state on double-click for quick layout focus.
  * - Expands the sidebar when a resize drag starts while collapsed.
  *
@@ -39,15 +46,17 @@ import { TeamSwitcher } from "./team-switcher";
  * this component focused on composition and data wiring.
  */
 export default function AppSidebar({
+  initialAdminAccess = false,
   ...props
-}: React.ComponentProps<typeof UISidebar>) {
+}: AppSidebarProps) {
   const COLLAPSE_DRAG_THRESHOLD_PX = 24;
   const { onDoubleClick, ...sidebarProps } = props;
   const [commandSearchOpen, setCommandSearchOpen] = React.useState(false);
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+  const isAuthenticated = Boolean(user);
   const { isMobile, open, openMobile, setOpen, setOpenMobile } = useSidebar();
   const { config, data, startResizing } = useSidebarConfig();
-  const isAdminNavEnabled = user?.admin === true;
+  const isAdminNavEnabled = initialAdminAccess || hasAdminAccess(user);
   const navGroups = sidebarData.navGroups.filter(
     (nav) => nav.title !== "Admin" || isAdminNavEnabled
   );
@@ -192,7 +201,7 @@ export default function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         {navGroups.map((nav) => (
-          <NavGroup key={nav.title} {...nav} />
+          <NavGroup key={nav.title} {...nav} isAuthenticated={isAuthenticated} />
         ))}
       </SidebarContent>
       <SidebarFooter>
@@ -204,6 +213,50 @@ export default function AppSidebar({
               avatar: user.avatar || "",
             }}
           />
+        )}
+        {!user && !isLoading && (
+          <>
+            <div className="group-data-[collapsible=icon]:hidden">
+              <div className="rounded-md border border-sidebar-border/60 bg-sidebar-accent/35 p-3 shadow-xs">
+                <p className="text-xs font-semibold text-sidebar-foreground">
+                  Welcome back
+                </p>
+                <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
+                  Sign-in to unlock your personalized dashboard and saved recipes.
+                </p>
+                <div className="mt-3 grid gap-2">
+                  <Button asChild size="sm" className="w-full shadow-sm">
+                    <Link href="/sign-in">Sign-in</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="sm" className="w-full bg-background/70">
+                    <Link href="/sign-up">Create account</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="hidden flex-col items-center gap-2 group-data-[collapsible=icon]:flex">
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
+                className="size-8 rounded-md border border-sidebar-border/60 bg-sidebar-accent/45"
+              >
+                <Link href="/sign-in" aria-label="Sign-in">
+                  <LogIn className="size-4" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
+                className="size-8 rounded-md border border-sidebar-border/60 bg-sidebar-accent/45"
+              >
+                <Link href="/sign-up" aria-label="Sign up">
+                  <UserPlus className="size-4" />
+                </Link>
+              </Button>
+            </div>
+          </>
         )}
       </SidebarFooter>
       <SidebarRail

@@ -52,7 +52,7 @@ export interface HelpFAQ {
 export interface HelpFAQSection {
   id: string;
   category: string;
-  questions: HelpFAQ[];
+  questions: readonly HelpFAQ[];
 }
 
 /**
@@ -63,6 +63,7 @@ export const HELP_CENTER_SUGGESTED_TOPICS = [
   "Recipes & repos",
   "Plans & pricing",
   "Billing",
+  "Similar projects",
   "AI Chef",
 ] as const;
 
@@ -211,7 +212,7 @@ export const HELP_CENTER_POPULAR_ARTICLES: HelpArticle[] = [
 /**
  * FAQ sections and entries rendered in the accordion.
  */
-export const HELP_CENTER_FAQ_SECTIONS: HelpFAQSection[] = [
+export const HELP_CENTER_FAQ_SECTIONS = [
   {
     id: "getting-started",
     category: "Getting Started",
@@ -234,6 +235,19 @@ export const HELP_CENTER_FAQ_SECTIONS: HelpFAQSection[] = [
         answer:
           "Sign up for a free account, then use the dashboard to browse recipes and live project demos. Upgrade to Basic for full access to recipes and projects, or to Pro for the AI Chef and My Help when you're ready.",
       },
+      {
+        id: "where-to-learn-platform",
+        question: "What's the fastest way to learn the platform?",
+        answer:
+          "Start with the Getting Started and Recipes categories, then open the most-viewed projects in your stack. Compare two or three projects side by side, save notes, and use AI Chef to turn findings into an implementation checklist.",
+      },
+      {
+        id: "similar-projects-landscape",
+        question:
+          "What projects overlap with saas.recipes, and when should I use each one?",
+        answer:
+          "Use getstack for broad stack detection visuals, repo-doctor for self-hosted Copilot SDK analysis, Devfolios for presentation-first portfolio output, and stack-analyser for deep stack classification. saas.recipes complements these with curated product-level context and reusable implementation patterns.",
+      },
     ],
   },
   {
@@ -251,6 +265,12 @@ export const HELP_CENTER_FAQ_SECTIONS: HelpFAQSection[] = [
         question: "Can I use recipe code in my own project?",
         answer:
           "Yes. Recipes are meant to be copied and adapted. Use what fits your stack, skip the wiring, and ship faster. Check each recipe for license and usage details.",
+      },
+      {
+        id: "how-projects-selected",
+        question: "How are projects selected for saas.recipes?",
+        answer:
+          "Projects are curated based on practical production patterns, ecosystem relevance, maintenance signals, and learning value. The goal is to help you understand how real teams shipped features, not just showcase trendy repos.",
       },
     ],
   },
@@ -276,6 +296,12 @@ export const HELP_CENTER_FAQ_SECTIONS: HelpFAQSection[] = [
         answer:
           "Go to Settings > Account (or Security) and turn on Two-Factor Authentication. Scan the QR code with an authenticator app (for example, Google Authenticator or Authy) and store your backup codes somewhere safe.",
       },
+      {
+        id: "team-account-sharing",
+        question: "Can teammates share one account?",
+        answer:
+          "For security and auditability, each person should use their own login. Team features are available on the Enterprise plan so workspace activity, notes, and collaboration history stay tied to the right member.",
+      },
     ],
   },
   {
@@ -300,6 +326,18 @@ export const HELP_CENTER_FAQ_SECTIONS: HelpFAQSection[] = [
         answer:
           "We offer a 30-day money-back guarantee for new subscriptions. Contact support within 30 days for a full refund. Annual plan refunds may be prorated for unused time.",
       },
+      {
+        id: "upgrade-downgrade-workflow",
+        question: "What happens if I upgrade or downgrade my plan?",
+        answer:
+          "Upgrades apply immediately with prorated billing. Downgrades usually take effect on the next billing cycle so you keep current access through the paid period. You can review upcoming changes in Billing before confirming.",
+      },
     ],
   },
-];
+] as const satisfies readonly HelpFAQSection[];
+
+/**
+ * Union of all FAQ item ids used by answer-renderer components.
+ */
+export type HelpFAQItemId =
+  (typeof HELP_CENTER_FAQ_SECTIONS)[number]["questions"][number]["id"];

@@ -25,88 +25,71 @@ export function PricingPageHeader({
 
   return (
     <div className="space-y-6 px-4 pt-4 lg:px-6">
-      <div className="from-background via-background to-muted/30 relative overflow-hidden rounded-md border bg-linear-to-br p-6 md:p-8 lg:p-10">
+      <div className="from-background via-background to-muted/30 relative overflow-hidden rounded-md border bg-linear-to-br p-6 md:p-9 lg:p-12">
         <div className="bg-primary/10 pointer-events-none absolute -right-20 -top-16 h-56 w-56 rounded-full blur-3xl" />
         <div className="bg-muted-foreground/10 pointer-events-none absolute -bottom-24 -left-16 h-52 w-52 rounded-full blur-3xl" />
 
-        <div className="relative mx-auto grid max-w-5xl gap-8 lg:grid-cols-[1.7fr_1fr] lg:items-center">
-          <div>
-            <p className="text-primary/80 mb-3 text-xs font-semibold uppercase tracking-[0.2em]">
-              Developer Acceleration
-            </p>
-            <h1 className="max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
-              {pricingPageCopy.headline}
-            </h1>
-            <p className="text-muted-foreground mt-4 max-w-3xl text-balance text-base leading-relaxed md:text-lg">
-              {pricingPageCopy.description}
-            </p>
-
-            <div className="mt-5 flex flex-wrap gap-2 text-xs font-medium">
-              <span className="bg-background/90 rounded-full border px-3 py-1">Recipe breakdowns</span>
-              <span className="bg-background/90 rounded-full border px-3 py-1">Architecture patterns</span>
-              <span className="bg-background/90 rounded-full border px-3 py-1">Implementation support</span>
+        <div className="relative mx-auto flex max-w-5xl flex-col gap-9 lg:gap-11">
+          <div className="grid gap-8 lg:grid-cols-[1.7fr_1fr] lg:items-start">
+            <div className="space-y-6 lg:space-y-7">
+              <p className="text-primary/80 text-xs font-semibold uppercase tracking-[0.2em]">
+                Developer Acceleration
+              </p>
+              <h1 className="max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
+                {pricingPageCopy.headline}
+              </h1>
+              <p className="text-muted-foreground max-w-2xl text-balance text-base leading-relaxed md:text-lg">
+                {pricingPageCopy.description}
+              </p>
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="rounded-md border bg-background/85 p-4">
-                <p className="text-sm font-semibold">Setup confidence</p>
-                <p className="text-muted-foreground mt-1.5 text-sm">
-                  Standardize dependencies, scripts, and onboarding from proven repos.
+            <div className="space-y-4">
+              <div className="bg-background/80 rounded-md border p-6 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80">Next step</p>
+                <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
+                  {isSignedIn
+                    ? `You're on ${hasPaidPlan ? currentTier : "the free tier"}. Choose the plan that matches your roadmap.`
+                    : "Sign in to unlock full analysis, AI Chef support, and one-click checkout."}
                 </p>
+
+                <div className="mt-5 grid gap-2.5">
+                  {isSignedIn ? (
+                    <Button asChild className="w-full">
+                      <Link href="/pricing">Compare plans</Link>
+                    </Button>
+                  ) : (
+                    <>
+                      <Button asChild className="w-full">
+                        <Link href="/sign-in?redirect=%2Fpricing">Sign in to continue</Link>
+                      </Button>
+                      <Button asChild variant="outline" className="w-full">
+                        <Link href="/sign-up?redirect=%2Fpricing">Create free account</Link>
+                      </Button>
+                    </>
+                  )}
+                </div>
               </div>
-              <div className="rounded-md border bg-background/85 p-4">
-                <p className="text-sm font-semibold">Faster delivery</p>
-                <p className="text-muted-foreground mt-1.5 text-sm">
-                  Reuse architecture decisions that reduce rework and shipping delays.
-                </p>
-              </div>
-              <div className="rounded-md border bg-background/85 p-4 sm:col-span-2 lg:col-span-1">
-                <p className="text-sm font-semibold">Ongoing momentum</p>
-                <p className="text-muted-foreground mt-1.5 text-sm">
-                  Invest in a platform focused on practical guides for real production builds.
+
+              <div className="bg-primary/5 rounded-md border p-4">
+                <p className="text-sm font-medium">Your unfair shipping advantage</p>
+                <p className="text-muted-foreground mt-1.5 text-xs leading-relaxed">
+                  Use battle-tested repo analysis and AI Chef guidance to ship faster with fewer costly missteps.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-background/80 rounded-md border p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80">Next step</p>
-            <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-              {isSignedIn
-                ? `You're on ${hasPaidPlan ? currentTier : "the free tier"}. Choose the plan that matches your roadmap.`
-                : "Sign in to unlock full analysis, AI Chef support, and one-click checkout."}
-            </p>
-
-            <div className="mt-4 grid gap-2">
-              {isSignedIn ? (
-                <Button asChild className="w-full">
-                  <Link href="/pricing">Compare plans</Link>
-                </Button>
-              ) : (
-                <>
-                  <Button asChild className="w-full">
-                    <Link href="/sign-in?redirect=%2Fpricing">Sign in to continue</Link>
-                  </Button>
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href="/sign-up?redirect=%2Fpricing">Create free account</Link>
-                  </Button>
-                </>
-              )}
-            </div>
-
-            <div className="bg-primary/5 mt-4 rounded-md border p-3">
-              <p className="text-sm font-medium">Your unfair shipping advantage</p>
-              <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
-                Use battle-tested repo analysis and AI Chef guidance to ship faster with fewer costly missteps.
+          <div className="border-t border-border/30 pt-5 md:pt-6">
+            <div>
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-foreground/70">
+                Why the pricing models exist
+              </p>
+              <p className="text-muted-foreground mt-2 max-w-2xl text-xs leading-relaxed md:text-sm">
+                {pricingPageCopy.supportNote}
               </p>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="border-border bg-muted/30 rounded-md border p-4 text-sm md:p-5">
-        <p className="font-medium">Why this pricing model exists</p>
-        <p className="text-muted-foreground mt-2">{pricingPageCopy.supportNote}</p>
       </div>
     </div>
   );

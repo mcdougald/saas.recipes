@@ -2,7 +2,7 @@ import AppSidebar from "@/components/sidebar/app-sidebar";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarConfigProvider } from "@/contexts/sidebar-context";
-import { isAuthenticated } from "@/lib/session";
+import { isAdmin, isAuthenticated } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -13,7 +13,10 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const authenticated = await isAuthenticated();
+  const [authenticated, hasAdminAccess] = await Promise.all([
+    isAuthenticated(),
+    isAdmin(),
+  ]);
 
   if (!authenticated) {
     redirect("/sign-in");
@@ -22,7 +25,7 @@ export default async function DashboardLayout({
   return (
     <SidebarConfigProvider>
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar initialAdminAccess={hasAdminAccess} />
         <SidebarInset className="min-w-0">
           <Suspense>
             <DashboardHeader />

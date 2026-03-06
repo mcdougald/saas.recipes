@@ -13,9 +13,10 @@ import {
 import type { PricingPlan } from "@/features/pricing/pricing-data";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { toast } from "sonner";
 
 type ActiveBadge = {
@@ -192,6 +193,13 @@ export function PriceColumns({
     }
   };
 
+  const isPlainLeftClick = (event: MouseEvent<HTMLAnchorElement>) =>
+    event.button === 0 &&
+    !event.metaKey &&
+    !event.ctrlKey &&
+    !event.shiftKey &&
+    !event.altKey;
+
   useEffect(() => {
     if (!isSignedIn || busyPlanId || hasAutoStartedCheckout.current) {
       return;
@@ -248,12 +256,20 @@ export function PriceColumns({
           const isBusy = busyPlanId === plan.id;
           const badge = getActiveBadge(isCurrent, subscriptionStatus, isPopular);
           const canManageCurrentPlan = isCurrent && plan.id !== "free" && hasStripeCustomer;
+          const isActionDisabled = isBusy || (isCurrent && !canManageCurrentPlan);
+          const isCardLinkDisabled = isBusy || isCurrent;
+          const planHref = `/pricing?subscribePlan=${encodeURIComponent(plan.id)}&billingInterval=${billingInterval}`;
 
           return (
             <Card
               key={plan.id}
               className={cn(
-                "flex h-full flex-col overflow-hidden rounded-md border transition-all",
+                "relative flex h-full flex-col overflow-hidden rounded-md border transition-all",
+                isCurrent
+                  ? "cursor-not-allowed"
+                  : isBusy
+                    ? "cursor-progress"
+                    : "cursor-pointer hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md",
                 isCurrent
                   ? "border-primary bg-primary/3 ring-primary/20 ring-2 shadow-lg"
                   : isPopular
@@ -261,9 +277,33 @@ export function PriceColumns({
                     : "hover:border-primary/40 hover:shadow-sm",
               )}
             >
+              {!isCardLinkDisabled ? (
+                <Link
+                  href={planHref}
+                  prefetch={false}
+                  className="absolute inset-0 z-10 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                  aria-label={`Select ${plan.name} plan`}
+                  onClick={(event) => {
+                    if (!isPlainLeftClick(event)) {
+                      return;
+                    }
+
+                    event.preventDefault();
+                    void onPlanAction(plan, isCurrent);
+                  }}
+                />
+              ) : null}
               <div className="min-h-10 px-4 pt-4">
                 {badge ? (
-                  <Badge variant={badge.variant} className="capitalize">
+                  <Badge
+                    variant={badge.variant}
+                    className={cn(
+                      "capitalize rounded-sm",
+                      isCurrent
+                        ? "border-transparent bg-black text-white hover:bg-black dark:bg-white dark:text-black dark:hover:bg-white"
+                        : null,
+                    )}
+                  >
                     {badge.label}
                   </Badge>
                 ) : (
@@ -301,9 +341,12 @@ export function PriceColumns({
               <CardFooter className="px-4 pb-4 pt-3">
                 <Button
                   variant={isCurrent ? "secondary" : plan.variant}
-                  className="w-full"
-                  disabled={isBusy || (isCurrent && !canManageCurrentPlan)}
-                  onClick={() => onPlanAction(plan, isCurrent)}
+                  className="relative z-20 w-full"
+                  disabled={isActionDisabled}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    void onPlanAction(plan, isCurrent);
+                  }}
                 >
                   {isBusy
                     ? "Redirecting..."

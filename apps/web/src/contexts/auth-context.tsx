@@ -1,6 +1,7 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import { hasAdminAccess } from "@/lib/auth-access";
 import { User } from "@/lib/types";
 import posthog from "posthog-js";
 import {
@@ -31,7 +32,10 @@ type SessionUserWithMetadata = {
   email: string;
   image?: string | null;
   subscriptionTier?: string | null;
-  admin?: boolean;
+  admin?: boolean | string | number;
+  isAdmin?: boolean | string | number;
+  role?: string | null;
+  roles?: string[] | null;
 };
 
 /**
@@ -41,13 +45,21 @@ type SessionUserWithMetadata = {
  * @returns Normalized user object consumed by UI and navigation.
  */
 function mapSessionUserToAuthUser(sessionUser: SessionUserWithMetadata): User {
+  const isAdminUser = hasAdminAccess(sessionUser);
+  const role =
+    typeof sessionUser.role === "string" && sessionUser.role.trim().length > 0
+      ? sessionUser.role
+      : isAdminUser
+        ? "admin"
+        : "user";
+
   return {
     id: sessionUser.id,
     name: sessionUser.name,
     email: sessionUser.email,
     avatar: sessionUser.image || "",
-    role: sessionUser.admin ? "admin" : "user",
-    admin: sessionUser.admin === true,
+    role,
+    admin: isAdminUser,
     subscriptionTier: sessionUser.subscriptionTier ?? null,
   };
 }
@@ -99,24 +111,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(error.message || "Failed to sign in");
     }
 
-    if (data?.user) {
-      const loginUser = data.user as SessionUserWithMetadata;
-
-      setUser(mapSessionUserToAuthUser(loginUser));
-
-      // Identify user in PostHog on login
-      posthog.identify(loginUser.id, {
-        email: loginUser.email,
-        name: loginUser.name,
-        subscriptionTier: loginUser.subscriptionTier ?? "free",
-      });
-
-      // Capture login event
-      posthog.capture("user_signed_in", {
-        method: "email",
-        email: loginUser.email,
-      });
+    if (!data?.user) {
+      throw new Error("Sign in failed: missing user payload in auth response.");
     }
+
+    const loginUser = data.user as SessionUserWithMetadata;
+
+    setUser(mapSessionUserToAuthUser(loginUser));
+
+    // Identify user in PostHog on login
+    posthog.identify(loginUser.id, {
+      email: loginUser.email,
+      name: loginUser.name,
+      subscriptionTier: loginUser.subscriptionTier ?? "free",
+    });
+
+    // Capture login event
+    posthog.capture("user_signed_in", {
+      method: "email",
+      email: loginUser.email,
+    });
   };
 
   const signInSocial = async (
@@ -128,10 +142,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ? `${redirectUrl}&auth=success`
       : `${redirectUrl}?auth=success`;
 
-    await authClient.signIn.social({
-      provider,
-      callbackURL: urlWithParam,
-    });
+    try {
+      await authClient.signIn.social({
+        provider,
+        callbackURL: urlWithParam,
+      });
+    } catch (error) {
+      console.error("Social sign-in failed:", error);
+      throw new Error("Failed to start social sign-in.");
+    }
   };
 
   const logout = async () => {

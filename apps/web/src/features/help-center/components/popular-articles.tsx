@@ -19,29 +19,30 @@ interface PopularArticlesProps {
  */
 export function PopularArticles({ articles, searchQuery }: PopularArticlesProps) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold tracking-tight">
-          Popular Articles
-          {searchQuery ? (
-            <span className="text-muted-foreground ml-2 text-sm font-normal">
-              ({articles.length} match{articles.length === 1 ? "" : "es"})
-            </span>
-          ) : null}
-        </h2>
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold tracking-tight">Popular Articles</h2>
+          <p className="text-muted-foreground text-sm">
+            High-signal guides most builders read first.
+            {searchQuery
+              ? ` Showing ${articles.length} match${articles.length === 1 ? "" : "es"} for "${searchQuery}".`
+              : ""}
+          </p>
+        </div>
         <Link
           href="/help-center#faq"
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+          className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
         >
           View FAQ →
         </Link>
       </div>
 
       {articles.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {articles.map((article) => (
             <Link key={article.id} href={article.href}>
-              <Card className="h-full border-border/70 bg-linear-to-b from-card to-muted/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+              <Card className="h-full border-border/70 bg-linear-to-b from-card via-card to-muted/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
                 <CardContent className="flex h-full flex-col gap-3 p-5">
                   <div className="flex items-start justify-between gap-2">
                     <Badge variant="outline" className="h-5 px-2 text-[11px]">

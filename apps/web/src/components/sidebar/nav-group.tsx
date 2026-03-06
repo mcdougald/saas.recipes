@@ -8,9 +8,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { NavCollapsible, NavGroup, NavItem, NavLink } from "@/lib/types";
+import type {
+  NavCollapsible,
+  NavGroup as NavGroupData,
+  NavItem,
+  NavLink,
+} from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Lock } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
@@ -42,14 +47,22 @@ const MENU_ICON_BASE_CLASS =
   "transition-colors text-muted-foreground group-hover/link:text-foreground";
 
 const MENU_ICON_ACTIVE_CLASS = "text-foreground";
+const MENU_ITEM_LOCKED_CLASS =
+  "cursor-not-allowed border-dashed border-foreground/12 text-muted-foreground hover:border-foreground/12 hover:bg-transparent hover:text-muted-foreground";
+const MENU_ICON_LOCKED_CLASS = "text-muted-foreground/75";
+
+interface NavGroupProps extends NavGroupData {
+  isAuthenticated: boolean;
+}
 
 /**
  * Render a titled navigation section in the sidebar.
  *
  * @param props - Group metadata and navigation items to render.
+ * @param props.isAuthenticated - Indicates whether the current user is signed in.
  * @returns A sidebar group with direct links and collapsible navigation items.
  */
-export function NavGroup({ title, items }: NavGroup) {
+export function NavGroup({ title, items, isAuthenticated }: NavGroupProps) {
   const pathName = usePathname();
   const { state } = useSidebar();
 
@@ -61,6 +74,9 @@ export function NavGroup({ title, items }: NavGroup) {
       <SidebarMenu className="gap-1.5">
         {items.map((item) => {
           const key = `${item.title}-${item.url}`;
+          const isLocked = checkIsLocked(item, isAuthenticated);
+
+          if (isLocked) return <SidebarMenuLockedItem key={key} item={item} />;
 
           if (!item.items)
             return <SidebarMenuLink key={key} item={item} href={pathName} />;
@@ -95,6 +111,25 @@ const NavBadge = ({
     >
       {children}
     </Badge>
+  );
+};
+
+const SidebarMenuLockedItem = ({ item }: { item: NavItem }) => {
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        disabled
+        aria-disabled="true"
+        tooltip={`${item.title} (sign in required)`}
+        className={cn(MENU_ITEM_BASE_CLASS, MENU_ITEM_LOCKED_CLASS)}
+      >
+        {item.icon && (
+          <item.icon className={cn(MENU_ICON_BASE_CLASS, MENU_ICON_LOCKED_CLASS)} />
+        )}
+        <span className="font-medium tracking-tight">{item.title}</span>
+        <Lock className="ml-auto size-3.5 text-muted-foreground/75" />
+      </SidebarMenuButton>
+    </SidebarMenuItem>
   );
 };
 
@@ -318,4 +353,8 @@ function checkIsActive(href: string, item: NavItem, mainNav = false) {
       href.split("/")[1] !== "" &&
       href.split("/")[1] === item?.url?.toString().split("/")[1])
   );
+}
+
+function checkIsLocked(item: NavItem, isAuthenticated: boolean) {
+  return Boolean(item.requiresAuth && !isAuthenticated);
 }

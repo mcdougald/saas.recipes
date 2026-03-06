@@ -56,6 +56,15 @@ export type SaasRecipesIconProps = Omit<SVGProps<SVGSVGElement>, "color"> & {
    */
   detailStroke?: string;
   /**
+   * Set the stroke color used by the vertical hat detail lines.
+   * Falls back to `detailStroke` and then other stroke props when omitted.
+   */
+  hatLineStroke?: string;
+  /**
+   * Set the fill color used by the vertical hat detail lines.
+   */
+  hatLineFill?: string;
+  /**
    * Set the stroke color used by the cloud path.
    * Falls back to `primaryStroke` when not provided.
    */
@@ -83,6 +92,8 @@ export type SaasRecipesIconProps = Omit<SVGProps<SVGSVGElement>, "color"> & {
 export function SaasRecipesIcon({
   primaryStroke,
   detailStroke,
+  hatLineStroke,
+  hatLineFill,
   cloudStroke,
   primaryFill,
   cloudFill,
@@ -95,9 +106,15 @@ export function SaasRecipesIcon({
 }: SaasRecipesIconProps) {
   const sharedStrokeInput = primaryStroke ?? detailStroke ?? cloudStroke ?? stroke;
   const resolvedSharedStroke = resolveOpaqueColor(sharedStrokeInput, OPAQUE_FOREGROUND);
+  const resolvedHatLineStroke = resolveOpaqueColor(
+    hatLineStroke ?? detailStroke ?? sharedStrokeInput,
+    OPAQUE_FOREGROUND,
+  );
   const resolvedPrimaryFill =
     primaryFill === undefined ? "none" : resolveOpaqueColor(primaryFill, OPAQUE_BACKGROUND);
   const resolvedCloudFill = cloudFill === undefined ? "none" : resolveOpaqueColor(cloudFill, OPAQUE_BACKGROUND);
+  const resolvedHatLineFill =
+    hatLineFill === undefined ? "none" : resolveOpaqueColor(hatLineFill, OPAQUE_BACKGROUND);
 
   return (
     <svg
@@ -134,7 +151,8 @@ export function SaasRecipesIcon({
       <path
         className='hat-line line-1'
         d="M9 11.39V12.99"
-        stroke={resolvedSharedStroke}
+        stroke={resolvedHatLineStroke}
+        fill={resolvedHatLineFill}
         strokeOpacity={1}
         strokeWidth="0.5"
         strokeLinecap="round"
@@ -143,7 +161,8 @@ export function SaasRecipesIcon({
       <path
         className='hat-line line-2'
         d="M11 10V13"
-        stroke={resolvedSharedStroke}
+        stroke={resolvedHatLineStroke}
+        fill={resolvedHatLineFill}
         strokeOpacity={1}
         strokeWidth="0.5"
         strokeLinecap="round"
@@ -152,7 +171,8 @@ export function SaasRecipesIcon({
       <path
         className='hat-line line-3'
         d="M13 8V13"
-        stroke={resolvedSharedStroke}
+        stroke={resolvedHatLineStroke}
+        fill={resolvedHatLineFill}
         strokeOpacity={1}
         strokeWidth="0.5"
         strokeLinecap="round"

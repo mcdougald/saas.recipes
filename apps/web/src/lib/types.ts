@@ -24,7 +24,15 @@ interface BaseNavItem {
   badge?: string;
   badgeColor?: "violet" | "green";
   icon?: React.ElementType;
+  /**
+   * Limit access to authenticated users.
+   */
+  requiresAuth?: boolean;
 }
+
+type NavSubItem = BaseNavItem & {
+  url: LinkProps["href"];
+};
 
 type NavLink = BaseNavItem & {
   url: LinkProps["href"];
@@ -32,7 +40,7 @@ type NavLink = BaseNavItem & {
 };
 
 type NavCollapsible = BaseNavItem & {
-  items: (BaseNavItem & { url: LinkProps["href"] })[];
+  items: NavSubItem[];
   url?: never;
 };
 
@@ -103,6 +111,7 @@ export type {
   NavGroup,
   NavItem,
   NavLink,
+  NavSubItem,
   RadiusOption,
   SidebarCollapsibleOption,
   SidebarData,

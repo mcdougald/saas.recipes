@@ -1,4 +1,8 @@
 import { auth } from "@/lib/auth";
+import { hasAdminAccess } from "@/lib/auth-access";
+import { db } from "@/lib/db";
+import { user as userTable } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -62,7 +66,10 @@ export function getAppSessionUser(session: Session | null): AppSessionUser | nul
   }
 
   const sessionUser = session.user as typeof session.user & {
-    admin?: boolean;
+    admin?: boolean | string | number;
+    isAdmin?: boolean | string | number;
+    role?: string | null;
+    roles?: string[] | null;
     subscriptionTier?: string | null;
   };
 
@@ -71,9 +78,30 @@ export function getAppSessionUser(session: Session | null): AppSessionUser | nul
     name: sessionUser.name,
     email: sessionUser.email,
     image: sessionUser.image ?? null,
-    admin: sessionUser.admin === true,
+    admin: hasAdminAccess(sessionUser),
     subscriptionTier: sessionUser.subscriptionTier ?? null,
   };
+}
+
+/**
+ * Resolve admin access from persisted user data when claims are missing.
+ *
+ * @param userId - Authenticated user id from session payload.
+ * @returns True when the persisted user row has admin access enabled.
+ */
+async function getPersistedAdminStatus(userId: string): Promise<boolean> {
+  try {
+    const result = await db
+      .select({ admin: userTable.admin })
+      .from(userTable)
+      .where(eq(userTable.id, userId))
+      .limit(1);
+
+    return result[0]?.admin === true;
+  } catch (error) {
+    console.error("Failed to resolve persisted admin status:", error);
+    return false;
+  }
 }
 
 /**
@@ -136,7 +164,15 @@ export async function isAuthenticated(): Promise<boolean> {
 export async function isAdmin(): Promise<boolean> {
   const session = await getServerSession();
   const user = getAppSessionUser(session);
-  return user?.admin === true;
+  if (!user) {
+    return false;
+  }
+
+  if (user.admin) {
+    return true;
+  }
+
+  return getPersistedAdminStatus(user.id);
 }
 
 /**
@@ -156,9 +192,14 @@ export async function requireAdminUser(): Promise<AppSessionUser> {
     redirect("/sign-in");
   }
 
-  if (!user.admin) {
+  const hasAdminPrivileges = user.admin || (await getPersistedAdminStatus(user.id));
+
+  if (!hasAdminPrivileges) {
     redirect("/forbidden");
   }
 
-  return user;
+  return {
+    ...user,
+    admin: true,
+  };
 }

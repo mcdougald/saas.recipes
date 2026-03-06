@@ -92,6 +92,7 @@ export const sidebarData: SidebarData = {
         {
           title: "Concepts",
           icon: Blocks,
+          requiresAuth: true,
           items: [
             {
               title: "System Design",
@@ -139,10 +140,11 @@ export const sidebarData: SidebarData = {
       title: "USER",
       items: [
         {
-          title: "Recipes",
+          title: "Your Recipes",
           url: "/your-recipes",
           icon: BookOpen,
           badge: "Beta",
+          requiresAuth: true,
         },
         {
           title: "Tasks",
@@ -160,6 +162,7 @@ export const sidebarData: SidebarData = {
         {
           title: "Settings",
           icon: IconSettings,
+          requiresAuth: true,
           items: [
             {
               title: "Profile",
@@ -267,6 +270,7 @@ export const sidebarData: SidebarData = {
           title: "API Monitor",
           url: "/admin/api-health",
           icon: Activity,
+          requiresAuth: true,
         },
       ],
     },

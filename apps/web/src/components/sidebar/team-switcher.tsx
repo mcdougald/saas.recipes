@@ -3,6 +3,7 @@
 import { ChevronsUpDown, Plus } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
+import { SaasRecipesIcon } from "@/components/common/icons/saas-recipes-icon";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,10 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/auth-context";
+
+const TEAM_ICON_PRIMARY_FILL = "#FFFFFF";
+const TEAM_ICON_CLOUD_FILL = "#E5E7EB";
+const TEAM_ICON_STROKE = "#09090B";
 
 export function TeamSwitcher({
   teams,
@@ -45,8 +50,17 @@ export function TeamSwitcher({
               className="group/team relative overflow-hidden data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               {/* Gradient Logo Container */}
-              <div className="relative flex aspect-square size-8 items-center justify-center rounded-lg bg-linear-to-br from-black via-zinc-700 to-white shadow-md shadow-black/25 transition-transform group-hover/team:scale-105">
-                <activeTeam.logo className="size-4 text-white" />
+              <div className="relative flex aspect-square size-8 items-center justify-center rounded-lg border border-zinc-200/20 bg-linear-to-br from-zinc-950 via-zinc-800 to-zinc-600 shadow-md shadow-black/35 transition-transform group-hover/team:scale-105">
+                <SaasRecipesIcon
+                  className="size-4"
+                  primaryFill={TEAM_ICON_PRIMARY_FILL}
+                  cloudFill={TEAM_ICON_CLOUD_FILL}
+                  primaryStroke={TEAM_ICON_STROKE}
+                  detailStroke={TEAM_ICON_STROKE}
+                  hatLineStroke={TEAM_ICON_STROKE}
+                  hatLineFill={TEAM_ICON_STROKE}
+                  cloudStroke={TEAM_ICON_STROKE}
+                />
                 {/* Shine effect */}
                 <div className="absolute inset-0 rounded-lg bg-linear-to-br from-white/15 to-transparent" />
               </div>
@@ -81,8 +95,17 @@ export function TeamSwitcher({
                 onClick={() => setActiveTeam(team)}
                 className="gap-3 p-2.5 cursor-pointer rounded-lg transition-colors"
               >
-                <div className="flex size-8 items-center justify-center rounded-lg bg-linear-to-br from-zinc-500/10 to-zinc-200/30 border border-zinc-300/40 dark:border-zinc-700/50">
-                  <team.logo className="size-4 text-black dark:text-white" />
+                <div className="flex size-8 items-center justify-center rounded-lg border border-zinc-200/20 bg-linear-to-br from-zinc-950 via-zinc-800 to-zinc-600 shadow-sm shadow-black/30">
+                  <SaasRecipesIcon
+                    className="size-4"
+                    primaryFill={TEAM_ICON_PRIMARY_FILL}
+                    cloudFill={TEAM_ICON_CLOUD_FILL}
+                    primaryStroke={TEAM_ICON_STROKE}
+                    detailStroke={TEAM_ICON_STROKE}
+                    hatLineStroke={TEAM_ICON_STROKE}
+                    hatLineFill={TEAM_ICON_STROKE}
+                    cloudStroke={TEAM_ICON_STROKE}
+                  />
                 </div>
                 <div className="flex-1">
                   <div className="font-medium">{team.name}</div>
