@@ -105,6 +105,16 @@ export const repositoryDashboardData: RepositoryDashboardListItem[] = rawProject
       project.repo?.packageJson && typeof project.repo.packageJson === "object"
         ? project.repo.packageJson
         : null,
+    dependencyCount: Array.isArray(project.repo?.dependencies) ? project.repo.dependencies.length : 0,
+    workspacePackageCount: Array.isArray(project.repo?.workspacePackageJsons)
+      ? project.repo.workspacePackageJsons.length
+      : 0,
+    totalFilesTouched: Array.isArray(project.repo?.commits)
+      ? project.repo.commits.reduce(
+          (sum, commit) => sum + safeNumber(commit.files_changed),
+          0,
+        )
+      : 0,
   },
 }));
 
@@ -121,6 +131,14 @@ export function getRepositoryDashboardSummary(
   const totalStars = projects.reduce((sum, project) => sum + project.metadata.stars, 0);
   const totalForks = projects.reduce((sum, project) => sum + project.metadata.forks, 0);
   const totalContributors = projects.reduce((sum, project) => sum + project.repo.contributor_count, 0);
+  const totalCommits = projects.reduce((sum, project) => sum + project.repo.commit_count, 0);
+  const totalDependencies = projects.reduce((sum, project) => sum + project.repo.dependencyCount, 0);
+  const totalWorkspacePackages = projects.reduce(
+    (sum, project) => sum + project.repo.workspacePackageCount,
+    0,
+  );
+  const totalFilesTouched = projects.reduce((sum, project) => sum + project.repo.totalFilesTouched, 0);
+  const totalRepoSizeKb = projects.reduce((sum, project) => sum + project.metadata.size, 0);
   const totalOpenIssues = projects.reduce((sum, project) => sum + project.metadata.openIssues, 0);
   const totalOpenPullRequests = projects.reduce(
     (sum, project) => sum + project.repo.openPullRequests,
@@ -151,6 +169,11 @@ export function getRepositoryDashboardSummary(
     totalStars,
     totalForks,
     totalContributors,
+    totalCommits,
+    totalDependencies,
+    totalWorkspacePackages,
+    totalFilesTouched,
+    totalRepoSizeKb,
     totalOpenIssues,
     totalOpenPullRequests,
     averageMergeRate:

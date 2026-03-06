@@ -141,8 +141,8 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
         : "bg-rose-500/10 text-rose-700 dark:text-rose-300";
 
   return (
-    <article className="group relative overflow-hidden rounded-xl border bg-card p-3 transition-all hover:-translate-y-0.5 hover:shadow-sm [content-visibility:auto] lg:p-4">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-r from-primary/10 via-primary/5 to-transparent opacity-70" />
+    <article className="group relative overflow-hidden rounded-lg border bg-card p-3 transition-all hover:-translate-y-0.5 hover:shadow-sm [content-visibility:auto] lg:p-4">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-14 bg-linear-to-r from-primary/10 via-primary/5 to-transparent opacity-70" />
 
       <div className="relative flex flex-wrap items-start justify-between gap-2.5">
         <div className="flex min-w-0 items-start gap-2.5">
@@ -209,122 +209,141 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
         </div>
       </div>
 
-      <div className="relative mt-3 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-muted/40 rounded-md border px-2 py-1.5">
-          <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
-            <Star className="size-3.5" />
-            Stars
-          </p>
-          <p className="text-sm font-semibold">{formatCompactNumber(project.metadata.stars)}</p>
-        </div>
-        <div className="bg-muted/40 rounded-md border px-2 py-1.5">
-          <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
-            <GitFork className="size-3.5" />
-            Forks
-          </p>
-          <p className="text-sm font-semibold">{formatCompactNumber(project.metadata.forks)}</p>
-        </div>
-        <div className="bg-muted/40 rounded-md border px-2 py-1.5">
-          <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
-            <Users className="size-3.5" />
-            Contributors
-          </p>
-          <p className="text-sm font-semibold">
-            {formatNumber(project.repo.contributor_count)}
-          </p>
-        </div>
-        <div className="bg-muted/40 rounded-md border px-2 py-1.5">
-          <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
-            <GitPullRequest className="size-3.5" />
-            Open PRs / Issues
-          </p>
-          <p className="text-sm font-semibold">
-            {formatNumber(project.repo.openPullRequests)} / {formatNumber(project.metadata.openIssues)}
-          </p>
-        </div>
-      </div>
+      <div className="relative mt-3 grid gap-2.5 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+        <section className="rounded-md border bg-muted/20 p-2.5">
+          <p className="text-muted-foreground text-[11px] font-medium">Signals and trends</p>
 
-      <div className="relative mt-3 grid gap-1.5 lg:grid-cols-3">
-        <div className="rounded-md border bg-muted/20 px-2 py-1.5">
-          <div className="mb-1 flex items-center justify-between text-[11px]">
-            <p className="text-muted-foreground inline-flex items-center gap-1">
-              <GitMerge className="size-3" />
-              Merge rate
-            </p>
-            <span className="font-medium">{mergeRate}%</span>
+          <div className="mt-2 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="bg-background/70 rounded-md border px-2 py-1.5">
+              <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
+                <Star className="size-3.5" />
+                Stars
+              </p>
+              <p className="text-sm font-semibold">{formatCompactNumber(project.metadata.stars)}</p>
+            </div>
+            <div className="bg-background/70 rounded-md border px-2 py-1.5">
+              <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
+                <GitFork className="size-3.5" />
+                Forks
+              </p>
+              <p className="text-sm font-semibold">{formatCompactNumber(project.metadata.forks)}</p>
+            </div>
+            <div className="bg-background/70 rounded-md border px-2 py-1.5">
+              <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
+                <Users className="size-3.5" />
+                Contributors
+              </p>
+              <p className="text-sm font-semibold">{formatNumber(project.repo.contributor_count)}</p>
+            </div>
+            <div className="bg-background/70 rounded-md border px-2 py-1.5">
+              <p className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
+                <GitPullRequest className="size-3.5" />
+                Open PRs / Issues
+              </p>
+              <p className="text-sm font-semibold">
+                {formatNumber(project.repo.openPullRequests)} / {formatNumber(project.metadata.openIssues)}
+              </p>
+            </div>
           </div>
-          <Progress value={mergeRate} className="h-1.5" />
-        </div>
 
-        <div className="rounded-md border bg-blue-500/8 px-2 py-1.5">
-          <div className="mb-1 flex items-center justify-between text-[11px]">
-            <p className="text-muted-foreground inline-flex items-center gap-1">
-              <BookOpenCheck className="size-3" />
-              Issue closure
-            </p>
-            <span className="font-medium">{issueClosureRate}%</span>
+          <div className="mt-2 grid gap-1.5 sm:grid-cols-3">
+            <div className="rounded-md border bg-background/70 px-2 py-1.5">
+              <div className="mb-1 flex items-center justify-between text-[11px]">
+                <p className="text-muted-foreground inline-flex items-center gap-1">
+                  <GitMerge className="size-3" />
+                  Merge rate
+                </p>
+                <span className="font-medium">{mergeRate}%</span>
+              </div>
+              <Progress value={mergeRate} className="h-1.5" />
+            </div>
+
+            <div className="rounded-md border bg-background/70 px-2 py-1.5">
+              <div className="mb-1 flex items-center justify-between text-[11px]">
+                <p className="text-muted-foreground inline-flex items-center gap-1">
+                  <BookOpenCheck className="size-3" />
+                  Issue closure
+                </p>
+                <span className="font-medium">{issueClosureRate}%</span>
+              </div>
+              <Progress value={issueClosureRate} className="h-1.5 bg-muted **:data-[slot=progress-indicator]:bg-primary/80" />
+            </div>
+
+            <div className="rounded-md border bg-background/70 px-2 py-1.5">
+              <div className="mb-1 flex items-center justify-between text-[11px]">
+                <p className="text-muted-foreground inline-flex items-center gap-1">
+                  <Globe className="size-3" />
+                  Deployment success
+                </p>
+                <span className="font-medium">
+                  {formatPercent(deploymentSuccessRate)} ({deploymentCount})
+                </span>
+              </div>
+              <Progress value={deploymentSuccessRate} className="h-1.5 bg-muted **:data-[slot=progress-indicator]:bg-primary/80" />
+            </div>
           </div>
-          <Progress
-            value={issueClosureRate}
-            className="h-1.5 bg-blue-500/20 **:data-[slot=progress-indicator]:bg-blue-500"
-          />
-        </div>
+        </section>
 
-        <div className="rounded-md border bg-emerald-500/8 px-2 py-1.5">
-          <div className="mb-1 flex items-center justify-between text-[11px]">
-            <p className="text-muted-foreground inline-flex items-center gap-1">
-              <Globe className="size-3" />
-              Deployment success
-            </p>
-            <span className="font-medium">
-              {formatPercent(deploymentSuccessRate)} ({deploymentCount})
-            </span>
+        <section className="rounded-md border bg-background/80 p-2.5">
+          <p className="text-muted-foreground text-[11px] font-medium">Repository context</p>
+
+          <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
+            <div className="rounded-md border bg-muted/30 px-2 py-1.5">
+              <p className="text-muted-foreground text-[10px]">Language</p>
+              <p className="text-xs font-medium">{project.metadata.language}</p>
+            </div>
+            <div className="rounded-md border bg-muted/30 px-2 py-1.5">
+              <p className="text-muted-foreground text-[10px]">License</p>
+              <p className="text-xs font-medium">{project.license ?? "Unknown"}</p>
+            </div>
+            <div className="rounded-md border bg-muted/30 px-2 py-1.5">
+              <p className="text-muted-foreground text-[10px]">Default branch</p>
+              <p className="text-xs font-medium">{project.repo.default_branch}</p>
+            </div>
+            <div className="rounded-md border bg-muted/30 px-2 py-1.5">
+              <p className="text-muted-foreground text-[10px] inline-flex items-center gap-1">
+                <GitCommitHorizontal className="size-3" />
+                Commits
+              </p>
+              <p className="text-xs font-medium">{formatCompactNumber(project.repo.commit_count)}</p>
+            </div>
+            <div className="rounded-md border bg-muted/30 px-2 py-1.5">
+              <p className="text-muted-foreground text-[10px] inline-flex items-center gap-1">
+                <Sparkles className="size-3" />
+                Watchers
+              </p>
+              <p className="text-xs font-medium">{formatCompactNumber(project.metadata.watchers)}</p>
+            </div>
+            <div className="rounded-md border bg-muted/30 px-2 py-1.5">
+              <p className="text-muted-foreground text-[10px] inline-flex items-center gap-1">
+                <Scale className="size-3" />
+                Size
+              </p>
+              <p className="text-xs font-medium">{formatCompactNumber(project.metadata.size)} KB</p>
+            </div>
           </div>
-          <Progress
-            value={deploymentSuccessRate}
-            className="h-1.5 bg-emerald-500/20 **:data-[slot=progress-indicator]:bg-emerald-500"
-          />
-        </div>
-      </div>
 
-      <div className="text-muted-foreground relative mt-2 flex flex-wrap items-center gap-2 text-[11px]">
-        <p className="inline-flex items-center gap-1">
-          <Clock3 className="size-3" />
-          Synced {formatDate(project.metadata.lastSyncedAt)}
-        </p>
-        <p className="inline-flex items-center gap-1">
-          <Clock3 className="size-3" />
-          Pushed {formatDate(project.repo.pushed_at)}
-        </p>
-      </div>
+          <div className="text-muted-foreground mt-2 flex flex-wrap items-center gap-2 text-[11px]">
+            <p className="inline-flex items-center gap-1">
+              <Clock3 className="size-3" />
+              Synced {formatDate(project.metadata.lastSyncedAt)}
+            </p>
+            <p className="inline-flex items-center gap-1">
+              <Clock3 className="size-3" />
+              Pushed {formatDate(project.repo.pushed_at)}
+            </p>
+          </div>
 
-      <div className="relative mt-2.5 flex flex-wrap gap-1.5">
-        <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-          {project.metadata.language}
-        </Badge>
-        <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-          License: {project.license ?? "Unknown"}
-        </Badge>
-        <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-          Branch: {project.repo.default_branch}
-        </Badge>
-        <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-          <GitCommitHorizontal className="mr-1 size-3" />
-          Commits: {formatCompactNumber(project.repo.commit_count)}
-        </Badge>
-        <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-          <Sparkles className="mr-1 size-3" />
-          Watchers: {formatCompactNumber(project.metadata.watchers)}
-        </Badge>
-        <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-          <Scale className="mr-1 size-3" />
-          Size: {formatCompactNumber(project.metadata.size)} KB
-        </Badge>
-        {project.repo.topics.slice(0, 4).map((topic) => (
-          <Badge key={topic} variant="outline" className="h-5 px-1.5 text-[10px]">
-            #{topic}
-          </Badge>
-        ))}
+          {project.repo.topics.length > 0 ? (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {project.repo.topics.slice(0, 4).map((topic) => (
+                <Badge key={topic} variant="outline" className="h-5 px-1.5 text-[10px]">
+                  #{topic}
+                </Badge>
+              ))}
+            </div>
+          ) : null}
+        </section>
       </div>
     </article>
   );

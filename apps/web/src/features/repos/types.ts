@@ -343,7 +343,16 @@ export type RepositoryDashboardItem = {
     | "totalPullRequests"
     | "topics"
   > &
-    Partial<Pick<RepositoryRepo, "deployments" | "packageManager" | "packageJson">>;
+    Partial<
+      Pick<
+        RepositoryRepo,
+        "deployments" | "packageManager" | "packageJson" | "dependencies" | "workspacePackageJsons" | "commits"
+      >
+    > & {
+      dependencyCount: number;
+      workspacePackageCount: number;
+      totalFilesTouched: number;
+    };
 };
 
 export type RepositoryDashboardListItem = Pick<
@@ -369,6 +378,11 @@ export type RepositoryDashboardSummary = {
   totalStars: number;
   totalForks: number;
   totalContributors: number;
+  totalCommits: number;
+  totalDependencies: number;
+  totalWorkspacePackages: number;
+  totalFilesTouched: number;
+  totalRepoSizeKb: number;
   totalOpenIssues: number;
   totalOpenPullRequests: number;
   averageMergeRate: number;
