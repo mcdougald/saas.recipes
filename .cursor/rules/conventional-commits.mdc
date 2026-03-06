@@ -1,0 +1,43 @@
+---
+description: Enforce Conventional Commits for AI-generated commit messages
+alwaysApply: true
+---
+
+# Conventional Commits
+
+When generating git commit messages for this workspace, always follow the Conventional Commits specification.
+
+## Required format
+
+- Use: `<type>(<optional-scope>): <subject>`
+- Keep the subject concise and imperative (e.g. "add pricing badge", "fix auth redirect loop")
+- Do not end the subject with a period
+- Use lowercase types
+
+## Allowed types
+
+- `feat` for new features
+- `fix` for bug fixes
+- `revert` for reverting a previous commit
+- `chore` for maintenance tasks not affecting product behavior
+- `docs` for documentation-only changes
+- `refactor` for code changes that do not change behavior
+- `test` for adding or updating tests
+- `perf` for performance improvements
+- `build` for build system or dependency changes
+- `ci` for CI/CD configuration changes
+- `style` for formatting-only changes (no logic changes)
+
+## Selection guidance
+
+- Prefer `feat` when user-facing behavior is added
+- Prefer `fix` when behavior is corrected
+- Prefer `chore` for tooling/config/cleanup work
+- Prefer `revert` when the change explicitly undoes an earlier commit
+
+## Examples
+
+- `feat(home): add recipe cards preview section`
+- `fix(theme): resolve dark mode toggle hydration mismatch`
+- `chore(config): align workspace lint settings`
+- `revert: revert "feat(auth): add social login buttons"`
