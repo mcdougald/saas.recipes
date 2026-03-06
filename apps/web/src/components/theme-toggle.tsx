@@ -18,6 +18,38 @@ import {
 import { useI18n } from "@/hooks/use-i18n";
 
 type ToggleThemeVariant = "icon" | "labeled" | "footer";
+type ThemeMode = "light" | "dark" | "system";
+
+function isThemeMode(value: string): value is ThemeMode {
+  return value === "light" || value === "dark" || value === "system";
+}
+
+function syncDocumentThemeClass(nextTheme: ThemeMode) {
+  if (typeof document === "undefined" || typeof window === "undefined") {
+    return;
+  }
+
+  const shouldUseDark =
+    nextTheme === "dark" ||
+    (nextTheme === "system" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+  document.documentElement.classList.toggle("dark", shouldUseDark);
+}
+
+function resolveNextTheme(nextTheme: ThemeMode): "light" | "dark" {
+  if (nextTheme === "light" || nextTheme === "dark") {
+    return nextTheme;
+  }
+
+  if (typeof window === "undefined") {
+    return "light";
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}
 
 /**
  * Render an interactive theme switch that toggles between light and dark modes.
@@ -36,7 +68,11 @@ export function ToggleTheme({
   const { t } = useI18n();
   const { resolvedTheme, setTheme, theme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
-  const isDark = resolvedTheme === "dark";
+  const [optimisticResolvedTheme, setOptimisticResolvedTheme] = React.useState<
+    "light" | "dark" | null
+  >(null);
+  const effectiveResolvedTheme = optimisticResolvedTheme ?? resolvedTheme;
+  const isDark = effectiveResolvedTheme === "dark";
   const isFooter = variant === "footer";
   const isLabeled = variant === "labeled" || isFooter;
   const selectedTheme = theme ?? "system";
@@ -45,9 +81,24 @@ export function ToggleTheme({
     setMounted(true);
   }, []);
 
+  React.useEffect(() => {
+    if (resolvedTheme === "light" || resolvedTheme === "dark") {
+      setOptimisticResolvedTheme(null);
+    }
+  }, [resolvedTheme]);
+
+  const handleThemeChange = React.useCallback(
+    (nextTheme: ThemeMode) => {
+      setOptimisticResolvedTheme(resolveNextTheme(nextTheme));
+      syncDocumentThemeClass(nextTheme);
+      setTheme(nextTheme);
+    },
+    [setTheme],
+  );
+
   const handleToggle = React.useCallback(() => {
-    setTheme(isDark ? "light" : "dark");
-  }, [isDark, setTheme]);
+    handleThemeChange(isDark ? "light" : "dark");
+  }, [handleThemeChange, isDark]);
 
   if (variant === "icon") {
     const TriggerIcon = !mounted || selectedTheme === "system" ? Monitor : isDark ? Moon : Sun;
@@ -69,7 +120,13 @@ export function ToggleTheme({
         <DropdownMenuContent align="end" className="w-44">
           <DropdownMenuLabel>{t("theme.label")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup value={selectedTheme} onValueChange={setTheme}>
+          <DropdownMenuRadioGroup
+            value={selectedTheme}
+            onValueChange={(value) => {
+              if (!isThemeMode(value)) return;
+              handleThemeChange(value);
+            }}
+          >
             <DropdownMenuRadioItem value="light">Light</DropdownMenuRadioItem>
             <DropdownMenuRadioItem value="dark">Dark</DropdownMenuRadioItem>
             <DropdownMenuRadioItem value="system">System</DropdownMenuRadioItem>

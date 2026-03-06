@@ -51,6 +51,7 @@ export const sidebarData: SidebarData = {
           title: "Recipes",
           url: "/dashboard",
           icon: IconLayoutDashboard,
+          badge: "Beta",
         },
         {
           title: "Analytics",
@@ -86,8 +87,7 @@ export const sidebarData: SidebarData = {
           title: "Academy",
           url: "/learn",
           icon: BookOpen,
-          badge: "New",
-          badgeColor: "green",
+          badge: "Beta",
         },
         {
           title: "Concepts",
@@ -124,11 +124,13 @@ export const sidebarData: SidebarData = {
           title: "Case Studies",
           url: "/learn/case-studies",
           icon: IconChartBar,
+          badge: "Beta",
         },
         {
           title: "Snippets",
           url: "/learn/playbooks",
           icon: IconChecklist,
+          badge: "Beta",
         },
         
       ],
@@ -140,18 +142,19 @@ export const sidebarData: SidebarData = {
           title: "Recipes",
           url: "/your-recipes",
           icon: BookOpen,
+          badge: "Beta",
         },
         {
           title: "Tasks",
           url: "/tasks",
           icon: IconChecklist,
+          badge: "Beta",
         },
         {
           title: "AI Chef",
           url: "/ai-chef",
           icon: IconBrain,
-          badge: "New",
-          badgeColor: "green",
+          badge: "Beta",
         },
         
         {
@@ -274,7 +277,7 @@ export const sidebarData: SidebarData = {
           title: "Help Center",
           url: "/help-center",
           icon: IconHelp,
-          badge: "Coming Soon",
+          badge: "Beta",
         },
         {
           title: "Pricing",

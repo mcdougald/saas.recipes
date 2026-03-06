@@ -29,11 +29,11 @@ export type PricingFeatureRow = {
  * Provide top-level marketing copy used across pricing layouts.
  */
 export const pricingPageCopy = {
-  headline: "Build with better Dev Environments and Ship Faster",
+  headline: "Cook Better Code, Faster",
   description:
-    "SaaS.Recipes helps developers improve local setup, architecture choices, and production readiness with practical teardown guides from real codebases.",
+    "SaaS.Recipes analyzes real SaaS codebases and pairs each breakdown with AI Chef, your helper for setup, architecture decisions, and production-ready execution.",
   supportNote:
-    "Paid plans fund platform development while I navigate bone-cancer treatment. Your support keeps the product improving and helps me keep showing up for the developer community.",
+    "Paid plans fund platform development, deeper product research, and faster rollout of high-impact features while I continue dealing with bone-tumors.",
 };
 
 /**
@@ -70,13 +70,12 @@ export const pricingPlans: PricingPlan[] = [
       "Full access to all recipe breakdowns and playbooks",
       "AI Chef guidance for better environment and architecture decisions",
       "Priority support when you're stuck in setup or integration work",
-      "Directly supports ongoing development and health-related stability",
+      "Directly supports ongoing platform development and stability",
     ],
     buttonText: "Upgrade to Pro",
     variant: "default",
     popular: true,
-    supportImpact:
-      "Supports product progress and helps sustain consistent output during treatment.",
+    supportImpact: "Supports product progress and sustained founder-led output.",
   },
   {
     id: "pro_plus",
@@ -162,7 +161,7 @@ export const pricingComparisonRows: PricingFeatureRow[] = [
     },
   },
   {
-    name: "Direct support of health + dev efforts",
+    name: "Direct support of product + dev efforts",
     values: {
       free: false,
       pro: "Expanded",

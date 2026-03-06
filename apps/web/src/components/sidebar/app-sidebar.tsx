@@ -1,5 +1,7 @@
 "use client";
 
+import { CommandSearch, SearchTrigger } from "@/components/command-search";
+import { Button } from "@/components/ui/button";
 import {
   SidebarContent,
   SidebarFooter,
@@ -11,6 +13,7 @@ import {
 import { sidebarData } from "@/constants/sidebar-data";
 import { useAuth } from "@/contexts/auth-context";
 import { useSidebarConfig } from "@/contexts/sidebar-context";
+import { Search } from "lucide-react";
 import React from "react";
 import { NavGroup } from "./nav-group";
 import { NavUser } from "./nav-user";
@@ -40,6 +43,7 @@ export default function AppSidebar({
 }: React.ComponentProps<typeof UISidebar>) {
   const COLLAPSE_DRAG_THRESHOLD_PX = 24;
   const { onDoubleClick, ...sidebarProps } = props;
+  const [commandSearchOpen, setCommandSearchOpen] = React.useState(false);
   const { user } = useAuth();
   const { isMobile, open, openMobile, setOpen, setOpenMobile } = useSidebar();
   const { config, data, startResizing } = useSidebarConfig();
@@ -47,6 +51,19 @@ export default function AppSidebar({
   const navGroups = sidebarData.navGroups.filter(
     (nav) => nav.title !== "Admin" || isAdminNavEnabled
   );
+
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setCommandSearchOpen((isOpen) => !isOpen);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const handleSidebarDoubleClick: React.MouseEventHandler<HTMLDivElement> = (
     event
   ) => {
@@ -149,8 +166,29 @@ export default function AppSidebar({
       }
       {...sidebarProps}
     >
-      <SidebarHeader>
+      <SidebarHeader className="gap-2.5 border-b border-sidebar-border/60 pb-3">
         <TeamSwitcher teams={sidebarData.teams} />
+        <div className="group-data-[collapsible=icon]:hidden">
+          <SearchTrigger
+            onClick={() => setCommandSearchOpen(true)}
+            className="w-full min-w-0 md:w-full lg:w-full"
+          />
+        </div>
+        <div className="hidden group-data-[collapsible=icon]:block">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setCommandSearchOpen(true)}
+            className="size-8 rounded-md border border-sidebar-border/60 bg-sidebar-accent/45"
+            aria-label="Open command search"
+          >
+            <Search className="size-4" />
+          </Button>
+        </div>
+        <CommandSearch
+          open={commandSearchOpen}
+          onOpenChange={setCommandSearchOpen}
+        />
       </SidebarHeader>
       <SidebarContent>
         {navGroups.map((nav) => (
