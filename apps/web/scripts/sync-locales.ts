@@ -1,80 +1,201 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { createRequire } from "node:module";
-import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { z } from "zod";
-import { fallbackLng, supportedLngs } from "../src/i18n/settings";
+import { env, pipeline } from "@huggingface/transformers";
+import { fallbackLng, supportedLngs, type SupportedLanguage } from "../src/i18n/settings";
 
 type TranslationMap = Record<string, string>;
-type TranslationProvider = "auto" | "google" | "openai";
-type ConcreteTranslationProvider = Exclude<TranslationProvider, "auto">;
+type TranslatorDType = "fp32" | "fp16" | "q8" | "q4" | "q4f16";
 type PlaceholderToken = {
   token: string;
   value: string;
 };
+type TranslationAssessment = {
+  suspicious: boolean;
+  reasons: string[];
+};
+type TranslationStats = {
+  translated: number;
+  retried: number;
+  keptCurrent: number;
+  keptSource: number;
+  suspicious: number;
+};
+type ScriptFamily =
+  | "latin"
+  | "arabic"
+  | "cyrillic"
+  | "greek"
+  | "devanagari"
+  | "hangul"
+  | "han"
+  | "hebrew"
+  | "thai"
+  | "bengali"
+  | "tamil"
+  | "sinhala"
+  | "tibetan"
+  | "hiragana"
+  | "katakana";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const require = createRequire(import.meta.url);
-const { generateObject } = require("ai") as {
-  generateObject: (input: {
-    model: unknown;
-    schema: z.ZodTypeAny;
-    prompt: string;
-  }) => Promise<{ object: TranslationMap }>;
-};
-const { google } = require("@ai-sdk/google") as {
-  google: (modelName: string) => unknown;
-};
 const appRoot = path.resolve(__dirname, "..");
 const localesRoot = path.join(appRoot, "src", "i18n", "messages");
 const baseLocalePath = path.join(localesRoot, `${fallbackLng}.json`);
+const placeholderReplacePattern =
+  /\{\{[^}]+\}\}|%[a-zA-Z]|@[a-zA-Z0-9._-]+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|https?:\/\/\S+|•+/g;
+const placeholderExtractPattern =
+  /\{\{[^}]+\}\}|%[a-zA-Z]|@[a-zA-Z0-9._-]+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|https?:\/\/\S+|•+/g;
+const tokenRemnantPattern = /__(?:EDGE|TERM|PH)_\d+__/;
+const protectedLiterals = [
+  "SaaS Recipes",
+  "saas.recipes",
+  "GitHub",
+  "PostHog",
+  "Next.js",
+  "TypeScript",
+  "@trev.fyi",
+  "you@example.com",
+].sort((left, right) => right.length - left.length);
+const nllbLanguageByLocale: Record<SupportedLanguage, string> = {
+  en: "eng_Latn",
+  de: "deu_Latn",
+  ja: "jpn_Jpan",
+  es: "spa_Latn",
+  fa: "pes_Arab",
+  fr: "fra_Latn",
+  it: "ita_Latn",
+  el: "ell_Grek",
+  ko: "kor_Hang",
+  uk: "ukr_Cyrl",
+  nl: "nld_Latn",
+  sv: "swe_Latn",
+  pl: "pol_Latn",
+  pt: "por_Latn",
+  ru: "rus_Cyrl",
+  tr: "tur_Latn",
+  hi: "hin_Deva",
+  id: "ind_Latn",
+  vi: "vie_Latn",
+  ms: "zsm_Latn",
+  he: "heb_Hebr",
+  ar: "arb_Arab",
+  th: "tha_Thai",
+  bo: "bod_Tibt",
+  bn: "ben_Beng",
+  ta: "tam_Taml",
+  si: "sin_Sinh",
+  "zh-CN": "zho_Hans",
+  "zh-TW": "zho_Hant",
+};
+const validDTypes = new Set(["fp32", "fp16", "q8", "q4", "q4f16"]);
+const modelId = process.env.I18N_LOCAL_MODEL_ID ?? "Xenova/nllb-200-distilled-600M";
+const modelCacheDir =
+  process.env.I18N_MODEL_CACHE_DIR ?? path.join(appRoot, ".cache", "transformers");
+const configuredDType = process.env.I18N_MODEL_DTYPE ?? "q8";
+const modelDType = (validDTypes.has(configuredDType) ? configuredDType : "q8") as TranslatorDType;
+const configuredRetryDType = process.env.I18N_RETRY_MODEL_DTYPE ?? "fp32";
+const retryModelDType = (
+  validDTypes.has(configuredRetryDType) ? configuredRetryDType : "fp32"
+) as TranslatorDType;
+const batchSize = parsePositiveInteger(process.env.I18N_TRANSLATION_BATCH_SIZE, 64);
+const preciseModelThreshold = parsePositiveInteger(
+  process.env.I18N_PRECISE_MODEL_MAX_SOURCE_LENGTH,
+  32,
+);
+const missingOnly = process.argv.includes("--missing-only");
+const offlineOnly = process.argv.includes("--offline");
+const targetLocales = parseTargetLocales(process.argv.slice(2));
+const translatorPromises = new Map<TranslatorDType, Promise<any>>();
+const localeScriptFamilies: Record<SupportedLanguage, ScriptFamily[]> = {
+  en: ["latin"],
+  de: ["latin"],
+  ja: ["han", "hiragana", "katakana"],
+  es: ["latin"],
+  fa: ["arabic"],
+  fr: ["latin"],
+  it: ["latin"],
+  el: ["greek"],
+  ko: ["hangul"],
+  uk: ["cyrillic"],
+  nl: ["latin"],
+  sv: ["latin"],
+  pl: ["latin"],
+  pt: ["latin"],
+  ru: ["cyrillic"],
+  tr: ["latin"],
+  hi: ["devanagari"],
+  id: ["latin"],
+  vi: ["latin"],
+  ms: ["latin"],
+  he: ["hebrew"],
+  ar: ["arabic"],
+  th: ["thai"],
+  bo: ["tibetan"],
+  bn: ["bengali"],
+  ta: ["tamil"],
+  si: ["sinhala"],
+  "zh-CN": ["han"],
+  "zh-TW": ["han"],
+};
+const scriptRegexByFamily: Record<ScriptFamily, RegExp> = {
+  latin: /\p{Script_Extensions=Latin}/u,
+  arabic: /\p{Script_Extensions=Arabic}/u,
+  cyrillic: /\p{Script_Extensions=Cyrillic}/u,
+  greek: /\p{Script_Extensions=Greek}/u,
+  devanagari: /\p{Script_Extensions=Devanagari}/u,
+  hangul: /\p{Script_Extensions=Hangul}/u,
+  han: /\p{Script_Extensions=Han}/u,
+  hebrew: /\p{Script_Extensions=Hebrew}/u,
+  thai: /\p{Script_Extensions=Thai}/u,
+  bengali: /\p{Script_Extensions=Bengali}/u,
+  tamil: /\p{Script_Extensions=Tamil}/u,
+  sinhala: /\p{Script_Extensions=Sinhala}/u,
+  tibetan: /\p{Script_Extensions=Tibetan}/u,
+  hiragana: /\p{Script_Extensions=Hiragana}/u,
+  katakana: /\p{Script_Extensions=Katakana}/u,
+};
 
-function loadEnvFiles() {
-  const envCandidates = [
-    path.resolve(appRoot, ".env.local"),
-    path.resolve(appRoot, ".env"),
-    path.resolve(appRoot, "../../.env.local"),
-    path.resolve(appRoot, "../../.env"),
-  ];
-
-  for (const envPath of envCandidates) {
-    if (!existsSync(envPath)) {
-      continue;
-    }
-
-    if (typeof process.loadEnvFile === "function") {
-      process.loadEnvFile(envPath);
-    }
+function parsePositiveInteger(value: string | undefined, fallbackValue: number): number {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return fallbackValue;
   }
+  return parsed;
 }
 
-loadEnvFiles();
+function parseTargetLocales(args: string[]): SupportedLanguage[] {
+  const localeValues = args.flatMap((argument) => {
+    if (argument.startsWith("--locale=")) {
+      return argument.slice("--locale=".length).split(",");
+    }
+    if (argument.startsWith("--locales=")) {
+      return argument.slice("--locales=".length).split(",");
+    }
+    return [];
+  });
 
-const providerFromEnv = process.env.I18N_TRANSLATION_PROVIDER?.toLowerCase();
-const translationProvider: TranslationProvider =
-  providerFromEnv === "google" || providerFromEnv === "openai" || providerFromEnv === "auto"
-    ? providerFromEnv
-    : "auto";
-const googleModelName = process.env.I18N_TRANSLATION_MODEL ?? "gemini-2.0-flash";
-const openAiModelName = process.env.I18N_OPENAI_MODEL ?? "gpt-4o-mini";
-const batchSize = Number(process.env.I18N_TRANSLATION_BATCH_SIZE ?? "30");
-const requestDelayMs = Number(process.env.I18N_REQUEST_DELAY_MS ?? "1500");
-const maxBatchRetries = Number(process.env.I18N_MAX_BATCH_RETRIES ?? "8");
-const retryBaseDelayMs = Number(process.env.I18N_RETRY_BASE_DELAY_MS ?? "2000");
-const retryMaxDelayMs = Number(process.env.I18N_RETRY_MAX_DELAY_MS ?? "90000");
-const retryJitterMs = Number(process.env.I18N_RETRY_JITTER_MS ?? "400");
-const forceRetranslate = process.argv.includes("--force");
-const translationSchema = z.record(z.string(), z.string());
-const placeholderPattern = /\{\{[^}]+\}\}|%[a-zA-Z]/g;
-const languageNames = new Intl.DisplayNames(["en"], { type: "language" });
-let lastTranslationRequestAt = 0;
-const providerAvailability: Record<ConcreteTranslationProvider, boolean> = {
-  google: Boolean(process.env.GOOGLE_GENERATIVE_AI_API_KEY),
-  openai: Boolean(process.env.OPENAI_API_KEY),
-};
-const providerDisableReason: Partial<Record<ConcreteTranslationProvider, string>> = {};
+  if (localeValues.length === 0) {
+    return [...supportedLngs];
+  }
+
+  const uniqueLocales = new Set<SupportedLanguage>();
+  for (const rawLocale of localeValues) {
+    const locale = rawLocale.trim();
+    if (!locale) {
+      continue;
+    }
+    if (!supportedLngs.includes(locale as SupportedLanguage)) {
+      throw new Error(
+        `Unsupported locale "${locale}". Expected one of: ${supportedLngs.join(", ")}.`,
+      );
+    }
+    uniqueLocales.add(locale as SupportedLanguage);
+  }
+
+  return [...uniqueLocales];
+}
 
 function normalizeErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -84,118 +205,6 @@ function normalizeErrorMessage(error: unknown): string {
     return error;
   }
   return JSON.stringify(error);
-}
-
-function isQuotaExceededError(error: unknown): boolean {
-  const message = normalizeErrorMessage(error).toLowerCase();
-  return (
-    message.includes("quota exceeded") ||
-    message.includes("resource_exhausted") ||
-    message.includes("statuscode: 429") ||
-    message.includes("status code: 429")
-  );
-}
-
-function isHardQuotaLimitError(error: unknown): boolean {
-  const message = normalizeErrorMessage(error).toLowerCase();
-  return (
-    message.includes("limit: 0") ||
-    message.includes("generaterequestsperdayperprojectpermodel-freetier") ||
-    message.includes("daily") ||
-    message.includes("billing details") ||
-    message.includes("insufficient_quota")
-  );
-}
-
-function isTransientError(error: unknown): boolean {
-  const message = normalizeErrorMessage(error).toLowerCase();
-  return (
-    message.includes("statuscode: 429") ||
-    message.includes("status code: 429") ||
-    message.includes("resource_exhausted") ||
-    message.includes("rate limit") ||
-    message.includes("timed out") ||
-    message.includes("timeout") ||
-    message.includes("econnreset") ||
-    message.includes("econnrefused") ||
-    message.includes("503") ||
-    message.includes("502")
-  );
-}
-
-function extractRetryDelayMs(error: unknown): number | null {
-  const message = normalizeErrorMessage(error);
-  const directMatch = message.match(/retry in\s+([0-9.]+)s/i);
-  if (directMatch?.[1]) {
-    const seconds = Number(directMatch[1]);
-    if (Number.isFinite(seconds) && seconds > 0) {
-      return Math.ceil(seconds * 1000);
-    }
-  }
-
-  const retryInfoMatch = message.match(/"retryDelay"\s*:\s*"([0-9]+)s"/i);
-  if (retryInfoMatch?.[1]) {
-    const seconds = Number(retryInfoMatch[1]);
-    if (Number.isFinite(seconds) && seconds > 0) {
-      return seconds * 1000;
-    }
-  }
-
-  return null;
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, Math.max(0, ms));
-  });
-}
-
-async function enforceRequestDelay(): Promise<void> {
-  const now = Date.now();
-  const elapsed = now - lastTranslationRequestAt;
-  if (elapsed < requestDelayMs) {
-    await sleep(requestDelayMs - elapsed);
-  }
-  lastTranslationRequestAt = Date.now();
-}
-
-async function withRetries<T>(operationName: string, run: () => Promise<T>): Promise<T> {
-  let lastError: unknown;
-
-  for (let attempt = 1; attempt <= maxBatchRetries; attempt += 1) {
-    try {
-      return await run();
-    } catch (error) {
-      lastError = error;
-      const hardQuota = isHardQuotaLimitError(error);
-      const retryable = !hardQuota && isTransientError(error);
-
-      if (!retryable || attempt === maxBatchRetries) {
-        throw error;
-      }
-
-      const retryHintMs = extractRetryDelayMs(error) ?? 0;
-      const exponentialBackoffMs = Math.min(retryMaxDelayMs, retryBaseDelayMs * 2 ** (attempt - 1));
-      const jitter = Math.floor(Math.random() * retryJitterMs);
-      const waitMs = Math.max(retryHintMs, exponentialBackoffMs) + jitter;
-
-      console.warn(
-        `[${operationName}] attempt ${attempt}/${maxBatchRetries} failed; retrying in ${Math.ceil(waitMs / 1000)}s.`,
-      );
-      await sleep(waitMs);
-    }
-  }
-
-  throw lastError;
-}
-
-function availableProviders(): ConcreteTranslationProvider[] {
-  return (["google", "openai"] as const).filter((provider) => providerAvailability[provider]);
-}
-
-function disableProvider(provider: ConcreteTranslationProvider, reason: string): void {
-  providerAvailability[provider] = false;
-  providerDisableReason[provider] = reason;
 }
 
 async function readJsonFile(filePath: string): Promise<TranslationMap> {
@@ -211,58 +220,27 @@ async function readJsonFile(filePath: string): Promise<TranslationMap> {
   }
 }
 
-function formatLanguageName(language: string): string {
-  const baseLanguage = language.split("-")[0];
-  return languageNames.of(baseLanguage) ?? language;
-}
-
-function shouldUseMachineTranslation(
-  baseTranslations: TranslationMap,
-  currentTranslations: TranslationMap,
-): boolean {
-  for (const [key, baseValue] of Object.entries(baseTranslations)) {
-    const currentValue = currentTranslations[key];
-    if (
-      typeof currentValue === "string" &&
-      currentValue.trim() !== "" &&
-      currentValue !== baseValue
-    ) {
-      return false;
-    }
-  }
-  return true;
-}
-
-function collectKeysToTranslate(
-  baseTranslations: TranslationMap,
-  currentTranslations: TranslationMap,
-  translateBaseMatches: boolean,
-): string[] {
-  const keys: string[] = [];
-  for (const [key, baseValue] of Object.entries(baseTranslations)) {
-    const currentValue = currentTranslations[key];
-    const isMissing = typeof currentValue !== "string" || currentValue.trim() === "";
-    const isBaseMatch = currentValue === baseValue;
-    if (isMissing || (translateBaseMatches && isBaseMatch)) {
-      keys.push(key);
-    }
-  }
-  return keys;
-}
-
-function protectPlaceholders(text: string): { text: string; tokens: PlaceholderToken[] } {
+function protectText(text: string): { text: string; tokens: PlaceholderToken[] } {
   const tokens: PlaceholderToken[] = [];
-  let index = 0;
-  const protectedText = text.replace(placeholderPattern, (match) => {
-    const token = `__PLACEHOLDER_${index}__`;
-    tokens.push({ token, value: match });
-    index += 1;
+  const nextToken = (kind: "EDGE" | "TERM" | "PH", value: string): string => {
+    const token = `__${kind}_${tokens.length}__`;
+    tokens.push({ token, value });
     return token;
-  });
-  return { text: protectedText, tokens };
+  };
+  let workingText = text.replace(/^\s+|\s+$/g, (match) => nextToken("EDGE", match));
+
+  for (const literal of protectedLiterals) {
+    if (!workingText.includes(literal)) {
+      continue;
+    }
+    workingText = workingText.split(literal).join(nextToken("TERM", literal));
+  }
+
+  workingText = workingText.replace(placeholderReplacePattern, (match) => nextToken("PH", match));
+  return { text: workingText, tokens };
 }
 
-function restorePlaceholders(text: string, tokens: PlaceholderToken[]): string {
+function restoreProtectedText(text: string, tokens: PlaceholderToken[]): string {
   let restored = text;
   for (const { token, value } of tokens) {
     restored = restored.replaceAll(token, value);
@@ -270,213 +248,291 @@ function restorePlaceholders(text: string, tokens: PlaceholderToken[]): string {
   return restored;
 }
 
-function createTranslationPrompt(language: string, promptPayload: TranslationMap): string {
-  return [
-    `Translate the JSON values from English into ${formatLanguageName(language)} (${language}).`,
-    "Return the same keys with translated string values only.",
-    "Do not translate brand names: SaaS Recipes, GitHub, PostHog, Next.js.",
-    "Never alter placeholder tokens like __PLACEHOLDER_0__ and keep punctuation/whitespace intent.",
-    "If a string should remain unchanged, return it exactly as-is.",
-    "",
-    JSON.stringify(promptPayload),
-  ].join("\n");
-}
-
-async function translateWithGoogle(language: string, promptPayload: TranslationMap): Promise<TranslationMap> {
-  if (!providerAvailability.google) {
-    throw new Error(
-      providerDisableReason.google ??
-        "Google provider is unavailable for this run (key missing or quota exhausted).",
-    );
-  }
-
-  const object = await withRetries(
-    `google:${language}`,
-    async () => {
-      await enforceRequestDelay();
-      const response = await generateObject({
-        model: google(googleModelName),
-        schema: translationSchema,
-        prompt: createTranslationPrompt(language, promptPayload),
-      });
-      return response.object;
-    },
-  );
-
-  return object;
-}
-
-function coerceJsonObject(text: string): unknown {
+function shouldBypassTranslation(text: string): boolean {
   const trimmed = text.trim();
-
-  if (trimmed.startsWith("{")) {
-    return JSON.parse(trimmed);
+  if (!trimmed) {
+    return true;
   }
-
-  const fencedMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-  if (!fencedMatch) {
-    throw new Error("OpenAI response did not contain a JSON object.");
+  if (/^[\d\W_]+$/u.test(trimmed)) {
+    return true;
   }
-
-  return JSON.parse(fencedMatch[1]);
+  if (protectedLiterals.includes(trimmed)) {
+    return true;
+  }
+  return false;
 }
 
-async function translateWithOpenAI(language: string, promptPayload: TranslationMap): Promise<TranslationMap> {
-  if (!providerAvailability.openai) {
-    throw new Error(
-      providerDisableReason.openai ??
-        "OpenAI provider is unavailable for this run (key missing or quota exhausted).",
-    );
+function getPlaceholderMatches(text: string): string[] {
+  return text.match(placeholderExtractPattern) ?? [];
+}
+
+function getProtectedLiteralsInText(text: string): string[] {
+  return protectedLiterals.filter((literal) => text.includes(literal));
+}
+
+function getLetterMatches(text: string): string[] {
+  return text.match(/\p{Letter}+/gu) ?? [];
+}
+
+function hasRepeatedWordRun(text: string): boolean {
+  const words = getLetterMatches(text)
+    .map((word) => word.toLocaleLowerCase())
+    .filter((word) => word.length >= 3);
+  let runLength = 1;
+  for (let index = 1; index < words.length; index += 1) {
+    if (words[index] === words[index - 1]) {
+      runLength += 1;
+      if (runLength >= 3) {
+        return true;
+      }
+    } else {
+      runLength = 1;
+    }
+  }
+  return false;
+}
+
+function getUnexpectedScriptFamilies(text: string, locale: SupportedLanguage): ScriptFamily[] {
+  const expectedScripts = new Set<ScriptFamily>(["latin", ...localeScriptFamilies[locale]]);
+  return (Object.keys(scriptRegexByFamily) as ScriptFamily[]).filter((family) => {
+    if (expectedScripts.has(family)) {
+      return false;
+    }
+    return scriptRegexByFamily[family].test(text);
+  });
+}
+
+function missingExpectedNonLatinScript(text: string, locale: SupportedLanguage): boolean {
+  const expectedScripts = localeScriptFamilies[locale].filter((family) => family !== "latin");
+  if (expectedScripts.length === 0) {
+    return false;
+  }
+  const letterCount = getLetterMatches(text).join("").length;
+  if (letterCount < 6) {
+    return false;
+  }
+  return !expectedScripts.some((family) => scriptRegexByFamily[family].test(text));
+}
+
+function assessTranslation(
+  source: string,
+  candidate: string,
+  locale: SupportedLanguage,
+): TranslationAssessment {
+  const reasons: string[] = [];
+  const normalizedCandidate = candidate.trim();
+  const normalizedSource = source.trim();
+
+  if (!normalizedCandidate) {
+    reasons.push("empty");
+  }
+  if (tokenRemnantPattern.test(candidate)) {
+    reasons.push("token-remnant");
+  }
+  if (normalizedCandidate === normalizedSource && getLetterMatches(source).length > 0) {
+    reasons.push("unchanged-source");
+  }
+  if (/^\s*[-•]/u.test(candidate) && !/^\s*[-•]/u.test(source)) {
+    reasons.push("unexpected-prefix");
+  }
+  if (hasRepeatedWordRun(candidate)) {
+    reasons.push("repeated-words");
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error(
-      "Missing OPENAI_API_KEY. Set it or use I18N_TRANSLATION_PROVIDER=google with a valid Gemini quota.",
-    );
+  const sourcePlaceholders = getPlaceholderMatches(source);
+  for (const placeholder of sourcePlaceholders) {
+    if (!candidate.includes(placeholder)) {
+      reasons.push(`missing-placeholder:${placeholder}`);
+    }
   }
 
-  const data = await withRetries(`openai:${language}`, async () => {
-    await enforceRequestDelay();
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: openAiModelName,
-        response_format: { type: "json_object" },
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a localization assistant. Return only a valid JSON object mapping the exact same keys to translated string values.",
-          },
-          {
-            role: "user",
-            content: createTranslationPrompt(language, promptPayload),
-          },
-        ],
-      }),
+  const sourceLiterals = getProtectedLiteralsInText(source);
+  for (const literal of sourceLiterals) {
+    if (!candidate.includes(literal)) {
+      reasons.push(`missing-literal:${literal}`);
+    }
+  }
+
+  const sourceLength = Math.max(normalizedSource.length, 1);
+  const candidateLength = normalizedCandidate.length;
+  if (candidateLength > sourceLength * 3 && sourceLength < 120) {
+    reasons.push("too-long");
+  }
+  if (candidateLength < sourceLength * 0.35 && sourceLength > 20) {
+    reasons.push("too-short");
+  }
+
+  const unexpectedScripts = getUnexpectedScriptFamilies(candidate, locale);
+  if (unexpectedScripts.length > 0) {
+    reasons.push(`unexpected-script:${unexpectedScripts.join(",")}`);
+  }
+  if (missingExpectedNonLatinScript(candidate, locale)) {
+    reasons.push("missing-target-script");
+  }
+
+  return {
+    suspicious: reasons.length > 0,
+    reasons,
+  };
+}
+
+function chooseTranslatorOrder(source: string): TranslatorDType[] {
+  const shouldPreferPreciseModel =
+    source.length <= preciseModelThreshold ||
+    getLetterMatches(source).length <= 4 ||
+    getPlaceholderMatches(source).length > 0 ||
+    getProtectedLiteralsInText(source).length > 0;
+
+  const ordered: TranslatorDType[] = shouldPreferPreciseModel
+    ? [retryModelDType, modelDType]
+    : [modelDType, retryModelDType];
+
+  return ordered.filter((dtype, index) => ordered.indexOf(dtype) === index);
+}
+
+async function getTranslator(dtype: TranslatorDType): Promise<any> {
+  const existing = translatorPromises.get(dtype);
+  if (existing) {
+    return existing;
+  }
+
+  const nextPromise = (async () => {
+    await mkdir(modelCacheDir, { recursive: true });
+    env.cacheDir = modelCacheDir;
+    env.allowLocalModels = true;
+    env.allowRemoteModels = !offlineOnly;
+    return pipeline("translation", modelId, {
+      dtype,
     });
+  })();
 
-    if (!response.ok) {
-      const responseText = await response.text();
-      throw new Error(
-        `OpenAI translation request failed (${response.status} ${response.statusText}): ${responseText}`,
-      );
-    }
-
-    return (await response.json()) as {
-      choices?: Array<{ message?: { content?: string | null } }>;
-    };
-  });
-
-  const content = data.choices?.[0]?.message?.content;
-  if (!content) {
-    throw new Error("OpenAI translation response did not include content.");
-  }
-
-  return translationSchema.parse(coerceJsonObject(content));
+  translatorPromises.set(dtype, nextPromise);
+  return nextPromise;
 }
 
-async function translateBatch(language: string, sourceBatch: TranslationMap): Promise<TranslationMap> {
-  const preparedEntries = Object.entries(sourceBatch).map(([key, value]) => {
-    const protectedValue = protectPlaceholders(value);
-    return [key, protectedValue] as const;
-  });
+async function translateWithDType(
+  text: string,
+  language: SupportedLanguage,
+  dtype: TranslatorDType,
+): Promise<string> {
+  const translator = await getTranslator(dtype);
+  const result = (await translator(text, {
+    src_lang: nllbLanguageByLocale[fallbackLng],
+    tgt_lang: nllbLanguageByLocale[language],
+  })) as Array<{ translation_text?: string }>;
 
-  const promptPayload = Object.fromEntries(
-    preparedEntries.map(([key, protectedValue]) => [key, protectedValue.text]),
-  );
+  return result[0]?.translation_text?.trim() ?? "";
+}
 
-  let object: TranslationMap;
+function collectKeysToTranslate(
+  language: SupportedLanguage,
+  baseTranslations: TranslationMap,
+  currentTranslations: TranslationMap,
+): string[] {
+  if (language === fallbackLng) {
+    return [];
+  }
 
-  if (translationProvider === "google") {
-    try {
-      object = await translateWithGoogle(language, promptPayload);
-    } catch (error) {
-      if (isHardQuotaLimitError(error)) {
-        disableProvider("google", `Google quota exhausted: ${normalizeErrorMessage(error)}`);
-      }
-      throw error;
+  const keys: string[] = [];
+  for (const [key, baseValue] of Object.entries(baseTranslations)) {
+    const currentValue = currentTranslations[key];
+    if (!missingOnly) {
+      keys.push(key);
+      continue;
     }
-  } else if (translationProvider === "openai") {
-    try {
-      object = await translateWithOpenAI(language, promptPayload);
-    } catch (error) {
-      if (isHardQuotaLimitError(error)) {
-        disableProvider("openai", `OpenAI quota exhausted: ${normalizeErrorMessage(error)}`);
-      }
-      throw error;
-    }
-  } else {
-    let attemptedGoogle = false;
-    try {
-      if (providerAvailability.google) {
-        attemptedGoogle = true;
-        object = await translateWithGoogle(language, promptPayload);
-      } else if (providerAvailability.openai) {
-        object = await translateWithOpenAI(language, promptPayload);
-      } else {
-        throw new Error("No translation providers are available for this run.");
-      }
-    } catch (error) {
-      if (attemptedGoogle && isHardQuotaLimitError(error)) {
-        disableProvider("google", `Google quota exhausted: ${normalizeErrorMessage(error)}`);
-      }
-
-      if (!isQuotaExceededError(error) || !providerAvailability.openai) {
-        throw error;
-      }
-      console.warn(
-        `Google translation quota exhausted for ${language}; falling back to OpenAI (${openAiModelName}).`,
-      );
-      try {
-        object = await translateWithOpenAI(language, promptPayload);
-      } catch (fallbackError) {
-        if (isHardQuotaLimitError(fallbackError)) {
-          disableProvider("openai", `OpenAI quota exhausted: ${normalizeErrorMessage(fallbackError)}`);
-        }
-        throw fallbackError;
-      }
+    const isMissing = typeof currentValue !== "string" || currentValue.trim() === "";
+    const stillEnglish = currentValue === baseValue;
+    if (isMissing || stillEnglish) {
+      keys.push(key);
     }
   }
 
+  return keys;
+}
+
+async function translateBatch(
+  language: SupportedLanguage,
+  sourceBatch: TranslationMap,
+  currentTranslations: TranslationMap,
+  stats: TranslationStats,
+): Promise<TranslationMap> {
   const translated: TranslationMap = {};
-  for (const [key, protectedValue] of preparedEntries) {
-    const rawResult = object[key];
-    const normalized =
-      typeof rawResult === "string" && rawResult.trim() !== ""
-        ? rawResult
-        : protectedValue.text;
-    translated[key] = restorePlaceholders(normalized, protectedValue.tokens);
+
+  for (const [key, value] of Object.entries(sourceBatch)) {
+    if (shouldBypassTranslation(value)) {
+      translated[key] = value;
+      continue;
+    }
+
+    const protectedValue = protectText(value);
+    const attempts = chooseTranslatorOrder(value);
+    let acceptedTranslation: string | null = null;
+    let acceptedAssessment: TranslationAssessment | null = null;
+
+    for (const [attemptIndex, dtype] of attempts.entries()) {
+      const rawTranslation = await translateWithDType(protectedValue.text, language, dtype);
+      const restoredTranslation = restoreProtectedText(rawTranslation || value, protectedValue.tokens);
+      const assessment = assessTranslation(value, restoredTranslation, language);
+      if (!assessment.suspicious) {
+        acceptedTranslation = restoredTranslation;
+        acceptedAssessment = assessment;
+        if (attemptIndex > 0) {
+          stats.retried += 1;
+        }
+        break;
+      }
+      acceptedAssessment = assessment;
+    }
+
+    if (acceptedTranslation) {
+      translated[key] = acceptedTranslation;
+      stats.translated += 1;
+      continue;
+    }
+
+    stats.suspicious += 1;
+    const currentValue = currentTranslations[key];
+    const hasUsableCurrentValue =
+      typeof currentValue === "string" &&
+      currentValue.trim() !== "" &&
+      !assessTranslation(value, currentValue, language).suspicious;
+
+    if (hasUsableCurrentValue) {
+      translated[key] = currentValue;
+      stats.keptCurrent += 1;
+      continue;
+    }
+
+    translated[key] = value;
+    stats.keptSource += 1;
+    console.warn(
+      `Suspicious translation for ${language}:${key}; falling back to source. Reasons: ${acceptedAssessment?.reasons.join(", ") ?? "unknown"}.`,
+    );
   }
 
   return translated;
 }
 
 async function generateTranslations(
-  language: string,
+  language: SupportedLanguage,
   baseTranslations: TranslationMap,
+  currentTranslations: TranslationMap,
   keysToTranslate: string[],
+  stats: TranslationStats,
   onChunkTranslated?: (partialGenerated: TranslationMap) => Promise<void>,
 ): Promise<TranslationMap> {
   const generated: TranslationMap = {};
 
-  for (let i = 0; i < keysToTranslate.length; i += batchSize) {
-    const chunkKeys = keysToTranslate.slice(i, i + batchSize);
-    const chunkSource: TranslationMap = Object.fromEntries(
-      chunkKeys.map((key) => [key, baseTranslations[key]]),
-    );
-    const translatedChunk = await translateBatch(language, chunkSource);
+  for (let index = 0; index < keysToTranslate.length; index += batchSize) {
+    const chunkKeys = keysToTranslate.slice(index, index + batchSize);
+    const chunkSource = Object.fromEntries(chunkKeys.map((key) => [key, baseTranslations[key]]));
+    const translatedChunk = await translateBatch(language, chunkSource, currentTranslations, stats);
     Object.assign(generated, translatedChunk);
     if (onChunkTranslated) {
       await onChunkTranslated(generated);
     }
     console.log(
-      `Translated ${Math.min(i + batchSize, keysToTranslate.length)}/${keysToTranslate.length} keys for ${language}.`,
+      `Translated ${Math.min(index + batchSize, keysToTranslate.length)}/${keysToTranslate.length} keys for ${language}.`,
     );
   }
 
@@ -484,6 +540,7 @@ async function generateTranslations(
 }
 
 function buildLocaleTranslations(
+  language: SupportedLanguage,
   baseTranslations: TranslationMap,
   currentTranslations: TranslationMap,
   generatedTranslations: TranslationMap,
@@ -491,14 +548,18 @@ function buildLocaleTranslations(
   const next: TranslationMap = {};
 
   for (const [key, baseValue] of Object.entries(baseTranslations)) {
-    const generatedValue = generatedTranslations[key];
-    const currentValue = currentTranslations[key];
+    if (language === fallbackLng) {
+      next[key] = baseValue;
+      continue;
+    }
 
+    const generatedValue = generatedTranslations[key];
     if (typeof generatedValue === "string" && generatedValue.trim() !== "") {
       next[key] = generatedValue;
       continue;
     }
 
+    const currentValue = currentTranslations[key];
     if (typeof currentValue === "string" && currentValue.trim() !== "") {
       next[key] = currentValue;
       continue;
@@ -528,83 +589,57 @@ async function writeLocaleIfChanged(
 }
 
 async function syncLocales() {
-  const hasGoogleKey = Boolean(process.env.GOOGLE_GENERATIVE_AI_API_KEY);
-  const hasOpenAiKey = Boolean(process.env.OPENAI_API_KEY);
-
-  if (translationProvider === "google" && !hasGoogleKey) {
-    throw new Error(
-      "Missing GOOGLE_GENERATIVE_AI_API_KEY. Set it or switch to I18N_TRANSLATION_PROVIDER=openai.",
-    );
-  }
-
-  if (translationProvider === "openai" && !hasOpenAiKey) {
-    throw new Error(
-      "Missing OPENAI_API_KEY. Set it or switch to I18N_TRANSLATION_PROVIDER=google.",
-    );
-  }
-
-  if (translationProvider === "auto" && !hasGoogleKey && !hasOpenAiKey) {
-    throw new Error(
-      "Missing translation credentials. Set GOOGLE_GENERATIVE_AI_API_KEY and/or OPENAI_API_KEY before running i18n:sync.",
-    );
-  }
-
-  if (!Number.isInteger(batchSize) || batchSize <= 0) {
-    throw new Error("I18N_TRANSLATION_BATCH_SIZE must be a positive integer.");
-  }
-  if (!Number.isInteger(requestDelayMs) || requestDelayMs < 0) {
-    throw new Error("I18N_REQUEST_DELAY_MS must be a non-negative integer.");
-  }
-  if (!Number.isInteger(maxBatchRetries) || maxBatchRetries <= 0) {
-    throw new Error("I18N_MAX_BATCH_RETRIES must be a positive integer.");
-  }
-  if (!Number.isInteger(retryBaseDelayMs) || retryBaseDelayMs <= 0) {
-    throw new Error("I18N_RETRY_BASE_DELAY_MS must be a positive integer.");
-  }
-  if (!Number.isInteger(retryMaxDelayMs) || retryMaxDelayMs <= 0) {
-    throw new Error("I18N_RETRY_MAX_DELAY_MS must be a positive integer.");
+  if (targetLocales.length === 0) {
+    throw new Error("No locales selected for sync.");
   }
 
   const baseTranslations = await readJsonFile(baseLocalePath);
   const baseKeyCount = Object.keys(baseTranslations).length;
-
   if (baseKeyCount === 0) {
     throw new Error(
       `Base locale is empty or missing at ${baseLocalePath}. Add keys before syncing locales.`,
     );
   }
 
+  await mkdir(localesRoot, { recursive: true });
+
   let createdFiles = 0;
   let updatedFiles = 0;
-  let translatedEntries = 0;
+  const stats: TranslationStats = {
+    translated: 0,
+    retried: 0,
+    keptCurrent: 0,
+    keptSource: 0,
+    suspicious: 0,
+  };
   const failedLanguages: string[] = [];
 
-  for (const language of supportedLngs) {
-    const languagePath = path.join(localesRoot, `${language}.json`);
-    await mkdir(localesRoot, { recursive: true });
+  console.log(
+    `Using local model ${modelId} (${modelDType}) with cache at ${modelCacheDir}${offlineOnly ? " in offline-only mode" : ""}.`,
+  );
+  console.log(
+    `Syncing ${targetLocales.length} locale(s) from ${fallbackLng}.json${missingOnly ? " (missing-only mode)." : "."}`,
+  );
 
+  for (const language of targetLocales) {
+    const languagePath = path.join(localesRoot, `${language}.json`);
     const currentTranslations = await readJsonFile(languagePath);
-    const shouldTranslateBaseMatches =
-      forceRetranslate || shouldUseMachineTranslation(baseTranslations, currentTranslations);
-    const keysToTranslate =
-      language === fallbackLng
-        ? []
-        : collectKeysToTranslate(
-            baseTranslations,
-            currentTranslations,
-            shouldTranslateBaseMatches,
-          );
+    const keysToTranslate = collectKeysToTranslate(language, baseTranslations, currentTranslations);
 
     console.log(`Processing locale ${language}...`);
+
     let generatedTranslations: TranslationMap = {};
-    if (keysToTranslate.length > 0 && availableProviders().length > 0) {
+    if (keysToTranslate.length > 0) {
       try {
         generatedTranslations = await generateTranslations(
           language,
           baseTranslations,
+          currentTranslations,
           keysToTranslate,
+          stats,
           async (partialGenerated) => {
-            const partialLocaleTranslations = buildLocaleTranslations(
+            const partialTranslations = buildLocaleTranslations(
+              language,
               baseTranslations,
               currentTranslations,
               partialGenerated,
@@ -612,7 +647,7 @@ async function syncLocales() {
             const writeResult = await writeLocaleIfChanged(
               languagePath,
               currentTranslations,
-              partialLocaleTranslations,
+              partialTranslations,
             );
             if (writeResult !== "unchanged") {
               console.log(`Saved ${language}.json (${writeResult}) with partial progress.`);
@@ -622,50 +657,33 @@ async function syncLocales() {
       } catch (error) {
         failedLanguages.push(language);
         console.error(
-          `Failed translating ${language}; preserving progress and continuing. Reason: ${normalizeErrorMessage(error)}`,
+          `Failed translating ${language}; preserving current values. Reason: ${normalizeErrorMessage(error)}`,
         );
       }
-    } else if (keysToTranslate.length > 0) {
-      failedLanguages.push(language);
-      console.warn(
-        `Skipping API translation for ${language}; no providers are currently available for this run.`,
-      );
     }
-    translatedEntries += Object.keys(generatedTranslations).length;
 
     const nextTranslations = buildLocaleTranslations(
+      language,
       baseTranslations,
       currentTranslations,
       generatedTranslations,
     );
-    const finalWriteResult = await writeLocaleIfChanged(
-      languagePath,
-      currentTranslations,
-      nextTranslations,
-    );
-    if (finalWriteResult === "created") {
+    const writeResult = await writeLocaleIfChanged(languagePath, currentTranslations, nextTranslations);
+    if (writeResult === "created") {
       createdFiles += 1;
-    } else if (finalWriteResult === "updated") {
+    } else if (writeResult === "updated") {
       updatedFiles += 1;
     }
   }
 
   console.log(
-    `i18n sync complete: ${supportedLngs.length} locales, ${baseKeyCount} keys, ${translatedEntries} generated, ${createdFiles} created, ${updatedFiles} updated.`,
+    `i18n sync complete: ${targetLocales.length} locales, ${baseKeyCount} keys, ${stats.translated} translated, ${stats.retried} retried, ${stats.keptCurrent} kept-current, ${stats.keptSource} source-fallback, ${createdFiles} created, ${updatedFiles} updated.`,
   );
-  if (failedLanguages.length > 0) {
-    console.warn(
-      `Locales with translation failures (saved with best-effort progress): ${failedLanguages.join(", ")}.`,
-    );
+  if (stats.suspicious > 0) {
+    console.warn(`Suspicious translations detected: ${stats.suspicious}.`);
   }
-  const unavailableProviders = (["google", "openai"] as const).filter(
-    (provider) => !providerAvailability[provider],
-  );
-  if (unavailableProviders.length > 0) {
-    const details = unavailableProviders
-      .map((provider) => `${provider}: ${providerDisableReason[provider] ?? "unavailable"}`)
-      .join(" | ");
-    console.warn(`Disabled translation providers for this run -> ${details}`);
+  if (failedLanguages.length > 0) {
+    console.warn(`Locales with translation failures: ${failedLanguages.join(", ")}.`);
   }
 }
 

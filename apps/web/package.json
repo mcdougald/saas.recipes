@@ -9,7 +9,8 @@
     "lint": "eslint",
     "i18n:scan": "i18next-scanner --config i18next-scanner.config.js",
     "i18n:scan:check": "node -e \"require('./i18next-scanner.config.js'); console.log('i18n scanner config loaded')\"",
-    "i18n:sync": "node ./scripts/with-env.mjs tsx scripts/sync-locales.ts",
+    "i18n:sync": "tsx scripts/sync-locales.ts",
+    "i18n:sync:missing": "tsx scripts/sync-locales.ts --missing-only",
     "setup": "./scripts/setup.sh",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
@@ -92,6 +93,7 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@huggingface/transformers": "^3.8.1",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^25.3.3",
     "@types/react": "^19.2.14",

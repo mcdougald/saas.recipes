@@ -40,6 +40,7 @@ next-env.d.ts
 
 # turbo
 .turbo
+apps/web/.cache/
 
 *project-mock-*.json
 .mocks/
