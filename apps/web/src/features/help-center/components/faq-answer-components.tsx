@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import type { HelpFAQItemId } from "@/features/help-center/help-center-data";
+import type { JSX } from "react";
 
 /**
  * Props passed to FAQ answer renderer components.

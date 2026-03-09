@@ -54,7 +54,7 @@ function isPushedWithinDays(pushedAt: string, days: number): boolean {
   return Date.now() - parsedDate <= days * DAY_IN_MS;
 }
 
-const rawProjects = (projectMockData as { data?: RepositoryDashboardItem[] }).data ?? [];
+const rawProjects = ((projectMockData as unknown) as { data?: RepositoryDashboardItem[] }).data ?? [];
 
 /**
  * Provide repository dashboard rows from the latest mock payload's `data` array.
