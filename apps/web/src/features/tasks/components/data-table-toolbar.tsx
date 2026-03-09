@@ -8,13 +8,13 @@ import { Input } from "@/components/ui/input";
 import { AddTaskModal } from "./add-task-modal";
 import { DataTableViewOptions } from "./data-table-view-options";
 
-import type { Task } from "../utils/schema";
+import type { Task, TaskFormSchema } from "../utils/schema";
 import { priorities, statuses } from "../utils/task-data";
 import { DataTableFacetedFilter } from "./data-table-filtered";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  onAddTask?: (task: Task) => void;
+  onAddTask?: (task: TaskFormSchema) => Promise<Task | void> | Task | void;
 }
 
 export function DataTableToolbar<TData>({

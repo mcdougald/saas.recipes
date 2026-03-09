@@ -9,13 +9,15 @@ import {
 } from "@/components/ui/card";
 import { LearningTopicExplorer } from "@/features/learn/components/learning-topic-explorer";
 import { learningTopics } from "@/features/learn/data/learning-topics";
+import { listCurrentUserFavoriteTopicSlugs } from "@/features/learn/server/learn-favorites";
 import { ArrowRight, CheckCircle2, LockKeyhole, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 /**
  * Render the learn overview page with premium AI notes positioning.
  */
-export function LearningOverviewPage() {
+export async function LearningOverviewPage() {
+  const favoriteTopicSlugs = await listCurrentUserFavoriteTopicSlugs();
   const totalWalkthroughs = learningTopics.reduce(
     (count, topic) => count + topic.recipes.length,
     0,
@@ -81,7 +83,10 @@ export function LearningOverviewPage() {
       </div>
 
       <div className="@container/main space-y-6 px-4 pb-6 lg:px-6">
-        <LearningTopicExplorer topics={learningTopics} />
+        <LearningTopicExplorer
+          topics={learningTopics}
+          favoriteTopicSlugs={favoriteTopicSlugs}
+        />
 
         <div>
           <Card className="border w-fit">

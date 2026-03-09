@@ -3,6 +3,7 @@ import {
   getLearningTopicBySlug,
   learningTopics,
 } from "@/features/learn/data/learning-topics";
+import { listCurrentUserFavoriteTopicSlugs } from "@/features/learn/server/learn-favorites";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -48,11 +49,19 @@ export async function generateMetadata({
  */
 export default async function LearnTopicPage({ params }: LearnTopicPageProps) {
   const { topic } = await params;
-  const learningTopic = getLearningTopicBySlug(topic);
+  const [learningTopic, favoriteTopicSlugs] = await Promise.all([
+    Promise.resolve(getLearningTopicBySlug(topic)),
+    listCurrentUserFavoriteTopicSlugs(),
+  ]);
 
   if (!learningTopic) {
     notFound();
   }
 
-  return <LearningTopicPage topic={learningTopic} />;
+  return (
+    <LearningTopicPage
+      topic={learningTopic}
+      isFavorited={favoriteTopicSlugs.includes(learningTopic.slug)}
+    />
+  );
 }

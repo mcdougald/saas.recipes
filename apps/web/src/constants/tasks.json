@@ -16,7 +16,7 @@
   {
     "id": "TASK-1003",
     "title": "Create reusable data table component",
-    "status": "in progress",
+    "status": "in_progress",
     "label": "feature",
     "priority": "high"
   },
@@ -44,7 +44,7 @@
   {
     "id": "TASK-1007",
     "title": "Implement task filtering by status and priority",
-    "status": "in progress",
+    "status": "in_progress",
     "label": "feature",
     "priority": "medium"
   },
@@ -79,7 +79,7 @@
   {
     "id": "TASK-1012",
     "title": "Fix table row selection not persisting",
-    "status": "in progress",
+    "status": "in_progress",
     "label": "bug",
     "priority": "medium"
   },
@@ -163,7 +163,7 @@
   {
     "id": "TASK-1024",
     "title": "Fix chart rendering on dashboard",
-    "status": "in progress",
+    "status": "in_progress",
     "label": "bug",
     "priority": "high"
   },

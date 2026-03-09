@@ -2,8 +2,9 @@
 
 import { Plus } from "lucide-react";
 import posthog from "posthog-js";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { z } from "zod";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,18 +26,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { generateRandomUUID } from "@/helpers/generate-random-uuid";
 
-import type { Task } from "../utils/schema";
-import { taskFormSchema, type TaskFormSchema } from "../utils/schema";
+import { taskFormSchema, type Task, type TaskFormSchema } from "../utils/schema";
 import { labels, priorities, statuses } from "../utils/task-data";
 
 interface AddTaskModalProps {
-  onAddTask?: (task: Task) => void;
+  onAddTask?: (task: TaskFormSchema) => Promise<Task | void> | Task | void;
   trigger?: React.ReactNode;
 }
 
 export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
   const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState<TaskFormSchema>({
     id: "",
     title: "",
@@ -48,9 +50,19 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const generateTaskId = () => {
-    const prefix = "TASK";
-    const number = Math.floor(Math.random() * 9999) + 1000;
-    return `${prefix}-${number}`;
+    return `TASK-${generateRandomUUID().slice(0, 8).toUpperCase()}`;
+  };
+
+  const resetForm = () => {
+    setFormData({
+      id: "",
+      title: "",
+      description: "",
+      status: "todo",
+      label: "feature",
+      priority: "medium",
+    });
+    setErrors({});
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -70,26 +82,28 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
         priority: validatedData.priority,
       };
 
-      onAddTask?.(newTask);
+      startTransition(() => {
+        void (async () => {
+          try {
+            await onAddTask?.(validatedData);
 
-      // Track task creation event
-      posthog.capture("task_created", {
-        task_id: newTask.id,
-        status: newTask.status,
-        label: newTask.label,
-        priority: newTask.priority,
-      });
+            posthog.capture("task_created", {
+              task_id: newTask.id,
+              status: newTask.status,
+              label: newTask.label,
+              priority: newTask.priority,
+            });
 
-      setFormData({
-        id: "",
-        title: "",
-        description: "",
-        status: "todo",
-        label: "feature",
-        priority: "medium",
+            resetForm();
+            setOpen(false);
+            toast.success("Task created.");
+          } catch (error) {
+            const message =
+              error instanceof Error ? error.message : "Failed to create task.";
+            toast.error(message);
+          }
+        })();
       });
-      setErrors({});
-      setOpen(false);
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
@@ -104,23 +118,20 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
   };
 
   const handleCancel = () => {
-    setFormData({
-      id: "",
-      title: "",
-      description: "",
-      status: "todo",
-      label: "feature",
-      priority: "medium",
-    });
-    setErrors({});
+    resetForm();
     setOpen(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild disabled={isPending}>
         {trigger || (
-          <Button variant="default" size="sm" className="cursor-pointer">
+          <Button
+            variant="default"
+            size="sm"
+            className="cursor-pointer"
+            disabled={isPending}
+          >
             <Plus className="size-4" />
             Add Task
           </Button>
@@ -176,7 +187,10 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
             <Select
               value={formData.status}
               onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, status: value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  status: value as TaskFormSchema["status"],
+                }))
               }
             >
               <SelectTrigger>
@@ -203,7 +217,10 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
             <Select
               value={formData.label}
               onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, label: value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  label: value as TaskFormSchema["label"],
+                }))
               }
             >
               <SelectTrigger>
@@ -227,7 +244,10 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
             <Select
               value={formData.priority}
               onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, priority: value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  priority: value as TaskFormSchema["priority"],
+                }))
               }
             >
               <SelectTrigger>
@@ -255,12 +275,13 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
               variant="outline"
               onClick={handleCancel}
               className="cursor-pointer"
+              disabled={isPending}
             >
               Cancel
             </Button>
-            <Button type="submit" className="cursor-pointer">
+            <Button type="submit" className="cursor-pointer" disabled={isPending}>
               <Plus className="size-4" />
-              Create Task
+              {isPending ? "Creating..." : "Create Task"}
             </Button>
           </div>
         </form>

@@ -8,8 +8,13 @@ import {
   HelpCircle,
   Timer,
 } from "lucide-react";
+import type {
+  TaskLabel,
+  TaskListStatus,
+  TaskPriority,
+} from "@/lib/db/feature-domain";
 
-export const labels = [
+export const labels: Array<{ value: TaskLabel; label: string }> = [
   {
     value: "bug",
     label: "Bug",
@@ -20,7 +25,11 @@ export const labels = [
   },
 ];
 
-export const statuses = [
+export const statuses: Array<{
+  value: TaskListStatus;
+  label: string;
+  icon: typeof HelpCircle;
+}> = [
   {
     value: "backlog",
     label: "Backlog",
@@ -32,7 +41,7 @@ export const statuses = [
     icon: Circle,
   },
   {
-    value: "in progress",
+    value: "in_progress",
     label: "In Progress",
     icon: Timer,
   },
@@ -48,7 +57,11 @@ export const statuses = [
   },
 ];
 
-export const priorities = [
+export const priorities: Array<{
+  label: string;
+  value: TaskPriority;
+  icon: typeof ArrowDown;
+}> = [
   {
     label: "Low",
     value: "low",

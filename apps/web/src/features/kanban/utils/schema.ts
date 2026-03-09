@@ -1,7 +1,11 @@
+import {
+  kanbanStatusValues,
+  taskPriorityValues,
+} from "@/lib/db/feature-domain";
 import { z } from "zod";
 
-export const priorityEnum = z.enum(["low", "medium", "high"]);
-export const columnStatusEnum = z.enum(["ideas", "todo", "in_progress", "done"]);
+export const priorityEnum = z.enum(taskPriorityValues);
+export const columnStatusEnum = z.enum(kanbanStatusValues);
 
 export const kanbanTaskSchema = z.object({
   id: z.string(),
@@ -23,12 +27,30 @@ export const kanbanColumnSchema = z.object({
   tasks: z.array(kanbanTaskSchema),
 });
 
+/**
+ * Describe the supported priority values for kanban tasks.
+ */
 export type Priority = z.infer<typeof priorityEnum>;
+
+/**
+ * Describe the supported kanban column statuses.
+ */
 export type ColumnStatus = z.infer<typeof columnStatusEnum>;
+
+/**
+ * Describe one draggable kanban task card.
+ */
 export type KanbanTask = z.infer<typeof kanbanTaskSchema>;
+
+/**
+ * Describe one kanban column with its nested task list.
+ */
 export type KanbanColumn = z.infer<typeof kanbanColumnSchema>;
 
 export const taskFormSchema = kanbanTaskSchema.omit({ id: true, status: true });
+/**
+ * Describe the validated payload used to create a new kanban task.
+ */
 export type TaskFormData = z.infer<typeof taskFormSchema>;
 
 export const statusConfig: Record<

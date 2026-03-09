@@ -15,6 +15,13 @@
       "when": 1772750637451,
       "tag": "0001_conscious_true_believers",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773045885087,
+      "tag": "0002_flawless_warstar",
+      "breakpoints": true
     }
   ]
 }

@@ -101,7 +101,7 @@ export const columns: ColumnDef<Task>[] = [
             "flex w-fit items-center gap-1.5 font-medium",
             status.value === "done" &&
               "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-            status.value === "in progress" &&
+            status.value === "in_progress" &&
               "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400",
             status.value === "todo" &&
               "border-blue-500/50 bg-blue-500/10 text-blue-600 dark:text-blue-400",

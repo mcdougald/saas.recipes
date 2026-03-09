@@ -7,18 +7,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LearningFavoriteToggle } from "@/features/learn/components/learning-favorite-toggle";
 import type { LearningTopic } from "@/features/learn/data/learning-topics";
 import { ArrowRight, LockKeyhole } from "lucide-react";
 import Link from "next/link";
 
 interface LearningTopicPageProps {
   topic: LearningTopic;
+  isFavorited: boolean;
 }
 
 /**
  * Topic detail screen with free walkthroughs and premium module teasers.
  */
-export function LearningTopicPage({ topic }: LearningTopicPageProps) {
+export function LearningTopicPage({
+  topic,
+  isFavorited,
+}: LearningTopicPageProps) {
   return (
     <>
       <div className="px-4 py-4 lg:px-6">
@@ -38,6 +43,13 @@ export function LearningTopicPage({ topic }: LearningTopicPageProps) {
             </div>
 
             <div className="flex flex-wrap gap-2">
+              <LearningFavoriteToggle
+                slug={topic.slug}
+                title={topic.title}
+                description={topic.description}
+                initialFavorited={isFavorited}
+                className="w-auto px-3"
+              />
               <Button asChild size="sm">
                 <Link href="/pricing">
                   Unlock premium modules

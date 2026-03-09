@@ -25,14 +25,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import type { Task } from "../utils/schema";
+import type { Task, TaskFormSchema } from "../utils/schema";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onAddTask?: (task: Task) => void;
+  onAddTask?: (task: TaskFormSchema) => Promise<Task | void> | Task | void;
 }
 
 export function DataTable<TData, TValue>({
