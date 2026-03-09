@@ -188,7 +188,7 @@ export default function AppSidebar({
             variant="ghost"
             size="icon"
             onClick={() => setCommandSearchOpen(true)}
-            className="size-8 rounded-md border border-sidebar-border/60 bg-sidebar-accent/45"
+            className="size-8 rounded-md border border-sidebar-border/60 bg-white hover:bg-white dark:bg-black dark:hover:bg-black"
             aria-label="Open command search"
           >
             <Search className="size-4" />

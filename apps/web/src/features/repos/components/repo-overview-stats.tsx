@@ -9,6 +9,7 @@ import {
   Star,
   Users,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { RepositoryDashboardSummary } from "@/features/repos/types";
@@ -70,10 +71,51 @@ type StatDetail = {
 type StatCard = {
   label: string;
   value: string;
-  icon: typeof Star;
+  icon: LucideIcon;
   note: string;
   details: StatDetail[];
 };
+
+type RepoOverviewStatCardProps = {
+  card: StatCard;
+};
+
+function RepoOverviewStatCard({ card }: RepoOverviewStatCardProps) {
+  const Icon = card.icon;
+
+  return (
+    <Card className="min-w-0 pt-1 pb-1 border bg-card/95 shadow-xs">
+      <CardHeader className="space-y-2 pt-0 p-3 pb-2">
+        <div className="flex items-start justify-between gap-2">
+          <CardDescription className="text-foreground/85 inline-flex min-w-0 rounded-sm border bg-muted/40 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.08em]">
+            <span className="truncate">{card.label}</span>
+          </CardDescription>
+          <span className="text-muted-foreground shrink-0 rounded-sm border bg-muted/25 p-1">
+            <Icon className="size-3.5" />
+          </span>
+        </div>
+
+        <div className="space-y-1">
+          <CardTitle className="text-lg leading-none font-semibold tabular-nums sm:text-xl">{card.value}</CardTitle>
+          <p className="text-muted-foreground line-clamp-1 text-[10px] leading-4">{card.note}</p>
+        </div>
+      </CardHeader>
+
+      <CardContent className="p-3 pt-0">
+        <dl className="grid grid-cols-2 gap-x-2 gap-y-1.5 border-t border-dashed pt-2">
+          {card.details.map((detail) => (
+            <div key={detail.label} className="min-w-0">
+              <dt className="text-muted-foreground truncate text-[10px] leading-tight">{detail.label}</dt>
+              <dd className="truncate text-xs leading-tight font-semibold tabular-nums sm:text-[13px]">
+                {detail.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </CardContent>
+    </Card>
+  );
+}
 
 /**
  * Render rollup repository metrics for quick dashboard scanning.
@@ -244,39 +286,10 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
   ];
 
   return (
-    <div className="grid gap-2.5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {statCards.map((card) => {
-        const Icon = card.icon;
-
-        return (
-          <Card key={card.label} className="border bg-card">
-            <CardHeader className="gap-1.5 p-3 pb-2">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <CardDescription className="text-foreground/90 inline-flex rounded-sm border bg-muted/50 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em]">
-                    {card.label}
-                  </CardDescription>
-                  <CardTitle className="mt-1 text-xl leading-none sm:text-2xl">{card.value}</CardTitle>
-                </div>
-                <span className="text-muted-foreground rounded-md border bg-muted/30 p-1.5">
-                  <Icon className="size-3.5" />
-                </span>
-              </div>
-              <p className="text-muted-foreground line-clamp-1 text-[11px]">{card.note}</p>
-            </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <dl className="grid grid-cols-2 gap-x-2.5 gap-y-1.5 border-t pt-2">
-                {card.details.map((detail) => (
-                  <div key={detail.label}>
-                    <dt className="text-muted-foreground text-[10px] leading-tight">{detail.label}</dt>
-                    <dd className="text-sm leading-tight font-semibold">{detail.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </CardContent>
-          </Card>
-        );
-      })}
+    <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      {statCards.map((card) => (
+        <RepoOverviewStatCard key={card.label} card={card} />
+      ))}
     </div>
   );
 }

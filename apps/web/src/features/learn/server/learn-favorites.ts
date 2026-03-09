@@ -10,9 +10,13 @@ interface ToggleLearningTopicFavoriteInput {
   description: string;
 }
 
-async function requireCurrentUserId() {
+async function getCurrentUserId(): Promise<string | null> {
   const session = await getServerSession();
-  const userId = session?.user.id;
+  return session?.user.id ?? null;
+}
+
+async function requireCurrentUserId(): Promise<string> {
+  const userId = await getCurrentUserId();
 
   if (!userId) {
     throw new Error("You must be signed in to manage favorites.");
@@ -24,10 +28,16 @@ async function requireCurrentUserId() {
 /**
  * List the learn topic slugs favorited by the current user.
  *
- * @returns Topic slugs that should render as saved in the learn UI.
+ * @returns Topic slugs that should render as saved in the learn UI. Returns an
+ * empty array for anonymous visitors.
  */
 export async function listCurrentUserFavoriteTopicSlugs(): Promise<string[]> {
-  const userId = await requireCurrentUserId();
+  const userId = await getCurrentUserId();
+
+  if (!userId) {
+    return [];
+  }
+
   const rows = await db
     .select({ slug: userFavorite.entitySlug })
     .from(userFavorite)
@@ -51,7 +61,6 @@ export async function toggleCurrentUserLearningTopicFavorite(
   input: ToggleLearningTopicFavoriteInput,
 ): Promise<{ favorited: boolean }> {
   const userId = await requireCurrentUserId();
-
   const existingFavorite = await db
     .select({ id: userFavorite.id })
     .from(userFavorite)

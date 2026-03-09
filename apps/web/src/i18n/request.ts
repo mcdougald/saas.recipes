@@ -77,9 +77,14 @@ export default getRequestConfig(async () => {
   const locale = normalizeToSupportedLanguage(matchSupportedLanguage(cookieLocale) ?? headerLocale);
 
   const flatMessages = (await import(`./messages/${locale}.json`)).default as FlatMessages;
+  const fallbackMessages =
+    locale === fallbackLng
+      ? flatMessages
+      : ((await import(`./messages/${fallbackLng}.json`)).default as FlatMessages);
+  const mergedMessages = { ...fallbackMessages, ...flatMessages };
 
   return {
     locale,
-    messages: toNestedMessages(flatMessages),
+    messages: toNestedMessages(mergedMessages),
   };
 });

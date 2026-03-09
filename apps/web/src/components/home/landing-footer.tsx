@@ -11,6 +11,9 @@ type FooterLink = {
   labelKey: string;
 };
 
+type TranslationParams = Record<string, string | number>;
+type TranslationFn = (key: string, params?: TranslationParams) => string;
+
 const footerLinks: FooterLink[] = [
   { href: "#features", labelKey: "landingFooter.links.features" },
   { href: "/pricing", labelKey: "landingFooter.links.pricing" },
@@ -19,7 +22,7 @@ const footerLinks: FooterLink[] = [
   { href: "/sign-in", labelKey: "landingFooter.links.signIn" },
 ];
 
-function LandingFooterLinks({ t }: { t: (key: string, params?: Record<string, string | number>) => string }) {
+function LandingFooterLinks({ t }: { t: TranslationFn }) {
   return (
     <nav aria-label={t("landingFooter.navLabel")} className="flex flex-wrap items-center gap-2.5">
       {footerLinks.map(({ href, labelKey }) => (
@@ -35,19 +38,19 @@ function LandingFooterLinks({ t }: { t: (key: string, params?: Record<string, st
   );
 }
 
-function FooterEaseSignals() {
+function FooterEaseSignals({ t }: { t: TranslationFn }) {
   const signals = [
-    "Enterprise-grade security",
-    "No credit card required",
-    "Instant access to proven builds",
-  ];
+    "landingFooter.signals.security",
+    "landingFooter.signals.noCard",
+    "landingFooter.signals.instantAccess",
+  ] as const;
 
   return (
     <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground" role="list">
       {signals.map((signal) => (
         <li key={signal} className="inline-flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-foreground/45" aria-hidden />
-          <span>{signal}</span>
+          <span>{t(signal)}</span>
         </li>
       ))}
     </ul>
@@ -70,11 +73,10 @@ export function LandingFooter() {
           <section className="space-y-7 lg:space-y-8">
             <div className="space-y-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                View profitable SaaS setups in seconds
+                {t("landingFooter.eyebrow")}
               </p>
               <h2 className="max-w-2xl text-2xl leading-tight font-semibold tracking-tight text-foreground sm:text-3xl">
-                Sign up fast, explore trusted SaaS recipes, and move your idea from the kitchen to a served
-                product with less friction.
+                {t("landingFooter.heading")}
               </h2>
               <p className="max-w-2xl text-sm leading-6 text-muted-foreground">{t("landingFooter.description")}</p>
             </div>
@@ -84,7 +86,7 @@ export function LandingFooter() {
                 href="/sign-up"
                 className="inline-flex items-center rounded-md bg-foreground px-4 py-2.5 text-sm font-semibold text-background transition-opacity hover:opacity-90"
               >
-                Sign up free
+                {t("landingFooter.cta.signUp")}
               </Link>
               <Link
                 href="/sign-in"
@@ -94,7 +96,7 @@ export function LandingFooter() {
               </Link>
             </div>
 
-            <FooterEaseSignals />
+            <FooterEaseSignals t={t} />
           </section>
 
           <section className="space-y-6 z-10">
@@ -123,7 +125,7 @@ export function LandingFooter() {
           aria-hidden
           width={560}
           height={560}
-          className="!top-[100px] opacity-30 pointer-events-none absolute -bottom-5 right-4 z-0 h-auto w-60 rotate-19 text-foreground/8 dark:text-foreground/14 sm:-bottom-20 sm:right-6 sm:w-72 md:top-70 md:right-8 md:w-80 lg:-bottom-3 lg:right-10 lg:w-88"
+          className="top-[100px]! pointer-events-none absolute -bottom-5 right-4 z-0 h-auto w-60 rotate-19 opacity-30 text-foreground/8 dark:text-foreground/14 sm:-bottom-20 sm:right-6 sm:w-72 md:top-70 md:right-8 md:w-80 lg:-bottom-3 lg:right-10 lg:w-88"
         />
       </div>
     </footer>

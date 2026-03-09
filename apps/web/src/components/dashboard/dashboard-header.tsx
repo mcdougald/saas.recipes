@@ -7,6 +7,7 @@ import { ToggleTheme } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useAuth } from "@/contexts/auth-context";
 import { useI18n } from "@/hooks/use-i18n";
 import { Home, Settings } from "lucide-react";
 import Link from "next/link";
@@ -15,12 +16,13 @@ import * as React from "react";
 import { toast } from "sonner";
 
 /**
- * Render the sticky global dashboard header with primary actions.
+ * Render the sticky global dashboard header with auth-aware actions.
  *
- * @returns The dashboard top bar with search, preferences, and profile controls.
+ * @returns The dashboard top bar with preferences and auth controls.
  */
 export function DashboardHeader() {
   const { t } = useI18n();
+  const { isAuthenticated, isLoading } = useAuth();
   const [themeCustomizerOpen, setThemeCustomizerOpen] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
   const searchParams = useSearchParams();
@@ -74,8 +76,25 @@ export function DashboardHeader() {
             <span className="sr-only">{t("header.openThemeCustomizer")}</span>
           </Button>
         </div>
-        <Separator orientation="vertical" className="h-6 bg-border/60" />
-        <ProfileDropdown />
+        {isLoading ? (
+          <div className="h-9 w-28" aria-hidden />
+        ) : (
+          <>
+            <Separator orientation="vertical" className="h-6 bg-border/60" />
+            {isAuthenticated ? (
+              <ProfileDropdown />
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm" className="rounded-full">
+                  <Link href="/sign-in">{t("common.signIn")}</Link>
+                </Button>
+                <Button asChild size="sm" className="rounded-full">
+                  <Link href="/sign-up">{t("common.getStarted")}</Link>
+                </Button>
+              </div>
+            )}
+          </>
+        )}
       </div>
       <ThemeCustomizer
         open={themeCustomizerOpen}

@@ -154,7 +154,7 @@ export function RecipeCardsPreview() {
 
   return (
     <div className="mx-auto mt-6 w-full max-w-3xl px-2" aria-hidden>
-      <div className="relative mx-auto h-80 w-full max-w-xl">
+      <div className="relative mx-auto h-80 w-full max-w-xl overflow-hidden">
         {cardOrder.map((cardIndex, stackIndex) => {
           const card = recipeCardSkeletons[cardIndex];
           if (!card) return null;
@@ -163,7 +163,7 @@ export function RecipeCardsPreview() {
           return (
             <motion.article
               key={card.id}
-              className="absolute left-1/2 w-full max-w-sm -translate-x-1/2 rounded-md border border-border/75 bg-background/95 p-3 text-[11px] text-left shadow-md shadow-primary/10 backdrop-blur-sm"
+              className="absolute left-1/2 w-[min(calc(100%-0.5rem),24rem)] -translate-x-1/2 rounded-md border border-border/75 bg-background/95 p-3 text-[11px] text-left shadow-md shadow-primary/10 backdrop-blur-sm"
               style={{ zIndex: layer.zIndex }}
               initial={false}
               animate={{

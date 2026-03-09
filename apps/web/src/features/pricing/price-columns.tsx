@@ -227,7 +227,7 @@ export function PriceColumns({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center mb-8">
         <div className="bg-muted inline-flex items-center gap-1 rounded-md p-1">
           <Button
             size="sm"
@@ -264,7 +264,7 @@ export function PriceColumns({
             <Card
               key={plan.id}
               className={cn(
-                "relative flex h-full flex-col overflow-hidden rounded-md border transition-all",
+                "relative pt-1 pb-1 flex h-full flex-col overflow-hidden rounded-md border transition-all",
                 isCurrent
                   ? "cursor-not-allowed"
                   : isBusy
