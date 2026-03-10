@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
+import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
-import { spawn } from "node:child_process";
 
 const envFileCandidates = [
   resolve(process.cwd(), ".env.local"),

@@ -2,16 +2,26 @@ import { defineConfig, devices } from "@playwright/test";
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:4000";
 const shouldStartLocalWebServer = !process.env.PLAYWRIGHT_BASE_URL;
+const isPlaywrightCi =
+  process.env.PLAYWRIGHT_CI === "1" ||
+  process.env.PLAYWRIGHT_CI === "true" ||
+  process.env.CI === "true";
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  timeout: 45_000,
   fullyParallel: true,
-  forbidOnly: Boolean(process.env.CI),
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: process.env.CI ? "line" : "html",
+  forbidOnly: isPlaywrightCi,
+  retries: isPlaywrightCi ? 2 : 0,
+  workers: isPlaywrightCi ? 1 : undefined,
+  reporter: isPlaywrightCi ? "line" : "html",
+  expect: {
+    timeout: 10_000,
+  },
   use: {
     baseURL,
+    actionTimeout: 10_000,
+    navigationTimeout: 15_000,
     trace: "on-first-retry",
   },
   projects: [
@@ -23,9 +33,9 @@ export default defineConfig({
   webServer: shouldStartLocalWebServer
     ? {
         command:
-          "pnpm --filter web build && pnpm --filter web exec next start -p 4000 -H 127.0.0.1",
+          "pnpm --filter web build && pnpm --filter web start -- -p 4000 -H 127.0.0.1",
         url: baseURL,
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: !isPlaywrightCi,
         timeout: 300 * 1000,
       }
     : undefined,

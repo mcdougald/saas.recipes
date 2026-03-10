@@ -2,7 +2,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { env, pipeline } from "@huggingface/transformers";
-import { fallbackLng, supportedLngs, type SupportedLanguage } from "../src/i18n/settings";
+
+import {
+  fallbackLng,
+  type SupportedLanguage,
+  supportedLngs,
+} from "../src/i18n/settings";
 
 type TranslationMap = Record<string, string>;
 type TranslatorDType = "fp32" | "fp16" | "q8" | "q4" | "q4f16";
@@ -90,16 +95,23 @@ const nllbLanguageByLocale: Record<SupportedLanguage, string> = {
   "zh-TW": "zho_Hant",
 };
 const validDTypes = new Set(["fp32", "fp16", "q8", "q4", "q4f16"]);
-const modelId = process.env.I18N_LOCAL_MODEL_ID ?? "Xenova/nllb-200-distilled-600M";
+const modelId =
+  process.env.I18N_LOCAL_MODEL_ID ?? "Xenova/nllb-200-distilled-600M";
 const modelCacheDir =
-  process.env.I18N_MODEL_CACHE_DIR ?? path.join(appRoot, ".cache", "transformers");
+  process.env.I18N_MODEL_CACHE_DIR ??
+  path.join(appRoot, ".cache", "transformers");
 const configuredDType = process.env.I18N_MODEL_DTYPE ?? "q8";
-const modelDType = (validDTypes.has(configuredDType) ? configuredDType : "q8") as TranslatorDType;
+const modelDType = (
+  validDTypes.has(configuredDType) ? configuredDType : "q8"
+) as TranslatorDType;
 const configuredRetryDType = process.env.I18N_RETRY_MODEL_DTYPE ?? "fp32";
 const retryModelDType = (
   validDTypes.has(configuredRetryDType) ? configuredRetryDType : "fp32"
 ) as TranslatorDType;
-const batchSize = parsePositiveInteger(process.env.I18N_TRANSLATION_BATCH_SIZE, 64);
+const batchSize = parsePositiveInteger(
+  process.env.I18N_TRANSLATION_BATCH_SIZE,
+  64,
+);
 const preciseModelThreshold = parsePositiveInteger(
   process.env.I18N_PRECISE_MODEL_MAX_SOURCE_LENGTH,
   32,
@@ -157,7 +169,10 @@ const scriptRegexByFamily: Record<ScriptFamily, RegExp> = {
   katakana: /\p{Script_Extensions=Katakana}/u,
 };
 
-function parsePositiveInteger(value: string | undefined, fallbackValue: number): number {
+function parsePositiveInteger(
+  value: string | undefined,
+  fallbackValue: number,
+): number {
   const parsed = Number(value);
   if (!Number.isInteger(parsed) || parsed <= 0) {
     return fallbackValue;
@@ -220,14 +235,19 @@ async function readJsonFile(filePath: string): Promise<TranslationMap> {
   }
 }
 
-function protectText(text: string): { text: string; tokens: PlaceholderToken[] } {
+function protectText(text: string): {
+  text: string;
+  tokens: PlaceholderToken[];
+} {
   const tokens: PlaceholderToken[] = [];
   const nextToken = (kind: "EDGE" | "TERM" | "PH", value: string): string => {
     const token = `__${kind}_${tokens.length}__`;
     tokens.push({ token, value });
     return token;
   };
-  let workingText = text.replace(/^\s+|\s+$/g, (match) => nextToken("EDGE", match));
+  let workingText = text.replace(/^\s+|\s+$/g, (match) =>
+    nextToken("EDGE", match),
+  );
 
   for (const literal of protectedLiterals) {
     if (!workingText.includes(literal)) {
@@ -236,11 +256,16 @@ function protectText(text: string): { text: string; tokens: PlaceholderToken[] }
     workingText = workingText.split(literal).join(nextToken("TERM", literal));
   }
 
-  workingText = workingText.replace(placeholderReplacePattern, (match) => nextToken("PH", match));
+  workingText = workingText.replace(placeholderReplacePattern, (match) =>
+    nextToken("PH", match),
+  );
   return { text: workingText, tokens };
 }
 
-function restoreProtectedText(text: string, tokens: PlaceholderToken[]): string {
+function restoreProtectedText(
+  text: string,
+  tokens: PlaceholderToken[],
+): string {
   let restored = text;
   for (const { token, value } of tokens) {
     restored = restored.replaceAll(token, value);
@@ -292,18 +317,31 @@ function hasRepeatedWordRun(text: string): boolean {
   return false;
 }
 
-function getUnexpectedScriptFamilies(text: string, locale: SupportedLanguage): ScriptFamily[] {
-  const expectedScripts = new Set<ScriptFamily>(["latin", ...localeScriptFamilies[locale]]);
-  return (Object.keys(scriptRegexByFamily) as ScriptFamily[]).filter((family) => {
-    if (expectedScripts.has(family)) {
-      return false;
-    }
-    return scriptRegexByFamily[family].test(text);
-  });
+function getUnexpectedScriptFamilies(
+  text: string,
+  locale: SupportedLanguage,
+): ScriptFamily[] {
+  const expectedScripts = new Set<ScriptFamily>([
+    "latin",
+    ...localeScriptFamilies[locale],
+  ]);
+  return (Object.keys(scriptRegexByFamily) as ScriptFamily[]).filter(
+    (family) => {
+      if (expectedScripts.has(family)) {
+        return false;
+      }
+      return scriptRegexByFamily[family].test(text);
+    },
+  );
 }
 
-function missingExpectedNonLatinScript(text: string, locale: SupportedLanguage): boolean {
-  const expectedScripts = localeScriptFamilies[locale].filter((family) => family !== "latin");
+function missingExpectedNonLatinScript(
+  text: string,
+  locale: SupportedLanguage,
+): boolean {
+  const expectedScripts = localeScriptFamilies[locale].filter(
+    (family) => family !== "latin",
+  );
   if (expectedScripts.length === 0) {
     return false;
   }
@@ -311,7 +349,9 @@ function missingExpectedNonLatinScript(text: string, locale: SupportedLanguage):
   if (letterCount < 6) {
     return false;
   }
-  return !expectedScripts.some((family) => scriptRegexByFamily[family].test(text));
+  return !expectedScripts.some((family) =>
+    scriptRegexByFamily[family].test(text),
+  );
 }
 
 function assessTranslation(
@@ -329,7 +369,10 @@ function assessTranslation(
   if (tokenRemnantPattern.test(candidate)) {
     reasons.push("token-remnant");
   }
-  if (normalizedCandidate === normalizedSource && getLetterMatches(source).length > 0) {
+  if (
+    normalizedCandidate === normalizedSource &&
+    getLetterMatches(source).length > 0
+  ) {
     reasons.push("unchanged-source");
   }
   if (/^\s*[-•]/u.test(candidate) && !/^\s*[-•]/u.test(source)) {
@@ -440,7 +483,8 @@ function collectKeysToTranslate(
       keys.push(key);
       continue;
     }
-    const isMissing = typeof currentValue !== "string" || currentValue.trim() === "";
+    const isMissing =
+      typeof currentValue !== "string" || currentValue.trim() === "";
     const stillEnglish = currentValue === baseValue;
     if (isMissing || stillEnglish) {
       keys.push(key);
@@ -470,9 +514,20 @@ async function translateBatch(
     let acceptedAssessment: TranslationAssessment | null = null;
 
     for (const [attemptIndex, dtype] of attempts.entries()) {
-      const rawTranslation = await translateWithDType(protectedValue.text, language, dtype);
-      const restoredTranslation = restoreProtectedText(rawTranslation || value, protectedValue.tokens);
-      const assessment = assessTranslation(value, restoredTranslation, language);
+      const rawTranslation = await translateWithDType(
+        protectedValue.text,
+        language,
+        dtype,
+      );
+      const restoredTranslation = restoreProtectedText(
+        rawTranslation || value,
+        protectedValue.tokens,
+      );
+      const assessment = assessTranslation(
+        value,
+        restoredTranslation,
+        language,
+      );
       if (!assessment.suspicious) {
         acceptedTranslation = restoredTranslation;
         acceptedAssessment = assessment;
@@ -525,8 +580,15 @@ async function generateTranslations(
 
   for (let index = 0; index < keysToTranslate.length; index += batchSize) {
     const chunkKeys = keysToTranslate.slice(index, index + batchSize);
-    const chunkSource = Object.fromEntries(chunkKeys.map((key) => [key, baseTranslations[key]]));
-    const translatedChunk = await translateBatch(language, chunkSource, currentTranslations, stats);
+    const chunkSource = Object.fromEntries(
+      chunkKeys.map((key) => [key, baseTranslations[key]]),
+    );
+    const translatedChunk = await translateBatch(
+      language,
+      chunkSource,
+      currentTranslations,
+      stats,
+    );
     Object.assign(generated, translatedChunk);
     if (onChunkTranslated) {
       await onChunkTranslated(generated);
@@ -584,7 +646,11 @@ async function writeLocaleIfChanged(
     return "unchanged";
   }
 
-  await writeFile(languagePath, `${JSON.stringify(nextTranslations, null, 2)}\n`, "utf8");
+  await writeFile(
+    languagePath,
+    `${JSON.stringify(nextTranslations, null, 2)}\n`,
+    "utf8",
+  );
   return wasCreated ? "created" : "updated";
 }
 
@@ -624,7 +690,11 @@ async function syncLocales() {
   for (const language of targetLocales) {
     const languagePath = path.join(localesRoot, `${language}.json`);
     const currentTranslations = await readJsonFile(languagePath);
-    const keysToTranslate = collectKeysToTranslate(language, baseTranslations, currentTranslations);
+    const keysToTranslate = collectKeysToTranslate(
+      language,
+      baseTranslations,
+      currentTranslations,
+    );
 
     console.log(`Processing locale ${language}...`);
 
@@ -650,7 +720,9 @@ async function syncLocales() {
               partialTranslations,
             );
             if (writeResult !== "unchanged") {
-              console.log(`Saved ${language}.json (${writeResult}) with partial progress.`);
+              console.log(
+                `Saved ${language}.json (${writeResult}) with partial progress.`,
+              );
             }
           },
         );
@@ -668,7 +740,11 @@ async function syncLocales() {
       currentTranslations,
       generatedTranslations,
     );
-    const writeResult = await writeLocaleIfChanged(languagePath, currentTranslations, nextTranslations);
+    const writeResult = await writeLocaleIfChanged(
+      languagePath,
+      currentTranslations,
+      nextTranslations,
+    );
     if (writeResult === "created") {
       createdFiles += 1;
     } else if (writeResult === "updated") {
@@ -683,7 +759,9 @@ async function syncLocales() {
     console.warn(`Suspicious translations detected: ${stats.suspicious}.`);
   }
   if (failedLanguages.length > 0) {
-    console.warn(`Locales with translation failures: ${failedLanguages.join(", ")}.`);
+    console.warn(
+      `Locales with translation failures: ${failedLanguages.join(", ")}.`,
+    );
   }
 }
 

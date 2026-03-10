@@ -1,4 +1,8 @@
-import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import {
+  createServer,
+  type IncomingMessage,
+  type ServerResponse,
+} from "node:http";
 
 type EnvConfig = {
   host: string;
@@ -39,7 +43,9 @@ const writeJson = (
   statusCode: number,
   body: Record<string, string | boolean>,
 ): void => {
-  res.writeHead(statusCode, { "content-type": "application/json; charset=utf-8" });
+  res.writeHead(statusCode, {
+    "content-type": "application/json; charset=utf-8",
+  });
   res.end(JSON.stringify(body));
 };
 
@@ -75,7 +81,8 @@ const main = (): void => {
 
       writeJson(res, 200, {
         ok: true,
-        message: "Authorized request received. Replace with your MPC/MCP handlers.",
+        message:
+          "Authorized request received. Replace with your MPC/MCP handlers.",
       });
       return;
     }
@@ -93,7 +100,8 @@ const main = (): void => {
 try {
   main();
 } catch (error) {
-  const message = error instanceof Error ? error.message : "Unknown startup error.";
+  const message =
+    error instanceof Error ? error.message : "Unknown startup error.";
   process.stderr.write(`Failed to start mpc-server: ${message}\n`);
   process.exit(1);
 }

@@ -1,20 +1,21 @@
 /**
  * Seed script to create a test user
  * Run with: pnpm db:seed
- * 
+ *
  * Creates a test user with:
  * - Email: test@test.com
  * - Password: password
- * 
+ *
  * Uses the same password hashing as better-auth (scrypt with @noble/hashes)
  */
 
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import { user, account } from "../src/lib/db/schema";
-import { eq } from "drizzle-orm";
 import { scryptAsync } from "@noble/hashes/scrypt.js";
 import { bytesToHex, randomBytes } from "@noble/hashes/utils.js";
+import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+
+import { account, user } from "../src/lib/db/schema";
 
 // Better-auth scrypt config (must match better-auth's config)
 const config = {
@@ -42,7 +43,7 @@ function generateId(): string {
 
 async function main() {
   const connectionString = process.env.DATABASE_URL;
-  
+
   if (!connectionString) {
     console.error("❌ DATABASE_URL environment variable is not set");
     console.log("Please set DATABASE_URL in your .env file");
@@ -112,7 +113,6 @@ async function main() {
     console.log(`   Password: ${testPassword}`);
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     console.log("");
-
   } catch (error) {
     console.error("❌ Error creating test user:", error);
     process.exit(1);

@@ -1,6 +1,6 @@
-import { defineConfig } from "drizzle-kit";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { defineConfig } from "drizzle-kit";
 
 const envFileCandidates = [
   resolve(process.cwd(), ".env.local"),
