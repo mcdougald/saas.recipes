@@ -1,3 +1,4 @@
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import {
   Card,
   CardContent,
@@ -5,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
 
 export default function ContributorsPage() {
   return (

@@ -1,5 +1,7 @@
 "use client";
 
+import { Download, FileText, Plus, Settings } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Download, FileText, Plus, Settings } from "lucide-react";
 
 export function QuickActions() {
   return (

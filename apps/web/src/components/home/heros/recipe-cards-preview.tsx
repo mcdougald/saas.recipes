@@ -2,10 +2,10 @@
 
 import {
   ListChecks,
+  type LucideIcon,
   Rocket,
   ShieldCheck,
   ShoppingBasket,
-  type LucideIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
@@ -108,7 +108,11 @@ type RecipeCardSectionProps = {
   items: readonly SkeletonItem[];
 };
 
-function RecipeCardSection({ title, icon: Icon, items }: RecipeCardSectionProps) {
+function RecipeCardSection({
+  title,
+  icon: Icon,
+  items,
+}: RecipeCardSectionProps) {
   return (
     <div>
       <p className="mb-1 inline-flex items-center gap-1 font-medium text-muted-foreground/75">
@@ -117,11 +121,16 @@ function RecipeCardSection({ title, icon: Icon, items }: RecipeCardSectionProps)
       </p>
       <ul className="space-y-1">
         {items.map((item, itemIndex) => (
-          <li key={`${title}-${item.label}-${itemIndex}`} className="flex items-center gap-1.5 ml-2">
+          <li
+            key={`${title}-${item.label}-${itemIndex}`}
+            className="ml-2 flex items-center gap-1.5"
+          >
             <span className="w-10 text-[9px] font-medium text-muted-foreground/70">
               {item.label}
             </span>
-            <div className={`h-1.5 rounded-full bg-muted/70 ${item.widthClass}`} />
+            <div
+              className={`h-1.5 rounded-full bg-muted/70 ${item.widthClass}`}
+            />
           </li>
         ))}
       </ul>
@@ -136,7 +145,7 @@ function RecipeCardSection({ title, icon: Icon, items }: RecipeCardSectionProps)
  */
 export function RecipeCardsPreview() {
   const [cardOrder, setCardOrder] = useState(() =>
-    recipeCardSkeletons.map((_, cardIndex) => cardIndex)
+    recipeCardSkeletons.map((_, cardIndex) => cardIndex),
   );
 
   useEffect(() => {
@@ -163,7 +172,7 @@ export function RecipeCardsPreview() {
           return (
             <motion.article
               key={card.id}
-              className="absolute left-1/2 w-[min(calc(100%-0.5rem),24rem)] -translate-x-1/2 rounded-md border border-border/75 bg-background/95 p-3 text-[11px] text-left shadow-md shadow-primary/10 backdrop-blur-sm"
+              className="absolute left-1/2 w-[min(calc(100%-0.5rem),24rem)] -translate-x-1/2 rounded-md border border-border/75 bg-background/95 p-3 text-left text-[11px] shadow-md shadow-primary/10 backdrop-blur-sm"
               style={{ zIndex: layer.zIndex }}
               initial={false}
               animate={{
@@ -180,8 +189,10 @@ export function RecipeCardsPreview() {
             >
               <div className="mb-2 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <p className="text-[10px] font-medium text-muted-foreground/70">Recipe: </p>
-                <div className="h-2 w-18 rounded-full bg-muted/70" />
+                  <p className="text-[10px] font-medium text-muted-foreground/70">
+                    Recipe:{" "}
+                  </p>
+                  <div className="h-2 w-18 rounded-full bg-muted/70" />
                 </div>
                 <div className="h-1.5 w-14 rounded-full bg-muted/55" />
               </div>

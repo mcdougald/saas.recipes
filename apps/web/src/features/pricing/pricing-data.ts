@@ -74,7 +74,8 @@ export const pricingPlans: PricingPlan[] = [
     ],
     buttonText: "Upgrade to Pro",
     variant: "default",
-    supportImpact: "Supports product progress and sustained founder-led output.",
+    supportImpact:
+      "Supports product progress and sustained founder-led output.",
   },
   {
     id: "pro_plus",

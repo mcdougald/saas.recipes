@@ -1,16 +1,17 @@
 "use client";
 
+import { BookOpenText, CreditCard, Settings2, Sparkles } from "lucide-react";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HelpFAQSection } from "@/features/help-center/help-center-data";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpenText, CreditCard, Settings2, Sparkles } from "lucide-react";
 import { getFAQAnswerComponent } from "@/features/help-center/components/faq-answer-components";
+import { type HelpFAQSection } from "@/features/help-center/help-center-data";
 
 const faqSectionIconMap = {
   "getting-started": Sparkles,
@@ -22,7 +23,7 @@ const faqSectionIconMap = {
 /**
  * Props for the FAQ accordion section.
  */
-interface FAQAccordionProps {
+interface FaqAccordionProps {
   faqSections: readonly HelpFAQSection[];
   searchQuery: string;
   activeItemValue?: string | null;
@@ -37,7 +38,7 @@ export function FAQAccordion({
   searchQuery,
   activeItemValue,
   onActiveItemChange,
-}: FAQAccordionProps) {
+}: FaqAccordionProps) {
   const totalFaqQuestions = faqSections.reduce(
     (count, section) => count + section.questions.length,
     0,

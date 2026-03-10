@@ -1,5 +1,10 @@
 "use client";
 
+import { Menu } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -9,10 +14,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useI18n } from "@/hooks/use-i18n";
-import { Menu } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 
 const SECTION_IDS = ["features", "how-it-works", "testimonials"] as const;
 const ACTIVE_ZONE_TOP = 120; // px from top of viewport; section containing this is "active"
@@ -42,7 +43,11 @@ export function LandingHeader() {
       label: t("landingHeader.nav.features"),
       sectionId: "features" as const,
     },
-    { href: "/pricing", label: t("landingHeader.nav.pricing"), sectionId: null },
+    {
+      href: "/pricing",
+      label: t("landingHeader.nav.pricing"),
+      sectionId: null,
+    },
     {
       href: "#how-it-works",
       label: t("landingHeader.nav.howItWorks"),
@@ -141,7 +146,11 @@ export function LandingHeader() {
 
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon" aria-label={t("landingHeader.openMenu")}>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={t("landingHeader.openMenu")}
+            >
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
@@ -150,7 +159,9 @@ export function LandingHeader() {
             className="w-[280px] overflow-y-auto px-6 pb-8 pt-12"
           >
             <SheetHeader>
-              <SheetTitle className="sr-only">{t("landingHeader.menuTitle")}</SheetTitle>
+              <SheetTitle className="sr-only">
+                {t("landingHeader.menuTitle")}
+              </SheetTitle>
             </SheetHeader>
             <nav className="mt-[-20] flex flex-col gap-6">
               {navLinks.map((link) => {

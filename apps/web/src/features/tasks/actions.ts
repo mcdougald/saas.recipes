@@ -1,11 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+
 import {
   createCurrentUserTask,
   listCurrentUserTasks,
 } from "./server/task-service";
-import { taskFormSchema, type Task, type TaskFormSchema } from "./utils/schema";
+import { type Task, type TaskFormSchema, taskFormSchema } from "./utils/schema";
 
 /**
  * Create a new user task from the dashboard modal.

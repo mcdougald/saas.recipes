@@ -1,5 +1,5 @@
-import { accounts, mails } from "@/constants/mail-data";
 import { DashboardPageHeader } from "@/components/dashboard/page-header";
+import { accounts, mails } from "@/constants/mail-data";
 import { Mail } from "@/features/mail/components/mail";
 
 export default function MailPage() {

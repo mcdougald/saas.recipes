@@ -1,9 +1,8 @@
 "use client";
 
-import { motion } from "motion/react";
-import type { Variants, Transition } from "motion/react";
+import { motion, type Transition, type Variants } from "motion/react";
 import { usePathname } from "next/navigation";
-import type { ReactNode, CSSProperties } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 
 type AnimationDirection = "up" | "down" | "left" | "right" | "none";
 
@@ -22,7 +21,7 @@ interface AnimateInProps {
 
 function getInitialPosition(
   from: AnimationDirection,
-  distance: number
+  distance: number,
 ): { x: number; y: number } {
   switch (from) {
     case "up":

@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { Cell, Pie, PieChart } from "recharts";
+
 import {
   Card,
   CardContent,
@@ -20,8 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useState } from "react";
-import { Cell, Pie, PieChart } from "recharts";
 
 const paymentMethodsData = [
   { name: "Credit Card", value: 45.2, amount: 382640, color: "var(--chart-1)" },

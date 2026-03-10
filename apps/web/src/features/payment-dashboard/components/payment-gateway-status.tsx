@@ -1,5 +1,7 @@
 "use client";
 
+import { CheckCircle2, Clock, XCircle } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -10,7 +12,6 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { CheckCircle2, Clock, XCircle } from "lucide-react";
 
 type GatewayStatus = "operational" | "degraded" | "outage";
 

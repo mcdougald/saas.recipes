@@ -25,8 +25,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import userData from "@/constants/user-data.json";
-import type { ColumnStatus, KanbanTask, Priority } from "../utils/schema";
-import { taskFormSchema } from "../utils/schema";
+import {
+  type ColumnStatus,
+  type KanbanTask,
+  type Priority,
+  taskFormSchema,
+} from "../utils/schema";
 
 interface AddTaskDialogProps {
   open: boolean;
@@ -102,7 +106,7 @@ export function AddTaskDialog({
   };
 
   const statusLabels: Record<ColumnStatus, string> = {
-    ideas: 'Ideas',
+    ideas: "Ideas",
     todo: "To Do",
     in_progress: "In Progress",
     done: "Done",

@@ -1,3 +1,6 @@
+import { ArrowRight, CheckCircle2, LockKeyhole, Sparkles } from "lucide-react";
+import Link from "next/link";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,8 +13,6 @@ import {
 import { LearningTopicExplorer } from "@/features/learn/components/learning-topic-explorer";
 import { learningTopics } from "@/features/learn/data/learning-topics";
 import { listCurrentUserFavoriteTopicSlugs } from "@/features/learn/server/learn-favorites";
-import { ArrowRight, CheckCircle2, LockKeyhole, Sparkles } from "lucide-react";
-import Link from "next/link";
 
 /**
  * Render the learn overview page with premium AI notes positioning.
@@ -75,7 +76,9 @@ export async function LearningOverviewPage() {
                 </Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/learn/system-design">Start with system design</Link>
+                <Link href="/learn/system-design">
+                  Start with system design
+                </Link>
               </Button>
             </div>
           </div>

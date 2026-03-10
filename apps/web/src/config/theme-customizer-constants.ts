@@ -1,9 +1,9 @@
-import type {
-  BrandColor,
-  RadiusOption,
-  SidebarCollapsibleOption,
-  SidebarSideOption,
-  SidebarVariant,
+import {
+  type BrandColor,
+  type RadiusOption,
+  type SidebarCollapsibleOption,
+  type SidebarSideOption,
+  type SidebarVariant,
 } from "@/lib/types";
 
 // Radius options

@@ -1,3 +1,8 @@
+import { and, desc, eq } from "drizzle-orm";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import type Stripe from "stripe";
+
 import { ContentSection } from "@/components/content-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,10 +25,6 @@ import { db } from "@/lib/db";
 import { subscription, user } from "@/lib/db/schema";
 import { getServerSession } from "@/lib/session";
 import { stripe } from "@/lib/stripe";
-import { and, desc, eq } from "drizzle-orm";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import type Stripe from "stripe";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +48,10 @@ const statusBadgeVariant: Record<
   incomplete_expired: "destructive",
 };
 
-function formatCurrency(amountInCents: number | null | undefined, currency = "usd") {
+function formatCurrency(
+  amountInCents: number | null | undefined,
+  currency = "usd",
+) {
   const amount = (amountInCents ?? 0) / 100;
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -131,7 +135,9 @@ export default async function BillingSettingsPage() {
 
   const currentUser = userRows[0];
   const currentSubscription = subscriptionRows[0];
-  const normalizedTier = (currentUser?.subscriptionTier ?? "free").toLowerCase();
+  const normalizedTier = (
+    currentUser?.subscriptionTier ?? "free"
+  ).toLowerCase();
   const planName = tierLabels[normalizedTier] ?? normalizedTier;
   const status = (currentSubscription?.status ??
     currentUser?.subscriptionStatus ??
@@ -214,7 +220,9 @@ export default async function BillingSettingsPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <p className="text-sm text-muted-foreground">Next billing date</p>
+                <p className="text-sm text-muted-foreground">
+                  Next billing date
+                </p>
                 <p className="font-medium">
                   {formatDate(
                     currentSubscription?.stripeCurrentPeriodEnd ??
@@ -276,7 +284,9 @@ export default async function BillingSettingsPage() {
                 <TableBody>
                   {invoices.map((invoice) => (
                     <TableRow key={invoice.id}>
-                      <TableCell>{formatDate(invoice.created * 1000)}</TableCell>
+                      <TableCell>
+                        {formatDate(invoice.created * 1000)}
+                      </TableCell>
                       <TableCell>
                         {formatCurrency(
                           invoice.amount_paid || invoice.amount_due,
@@ -298,7 +308,9 @@ export default async function BillingSettingsPage() {
                             </Link>
                           </Button>
                         ) : (
-                          <span className="text-sm text-muted-foreground">N/A</span>
+                          <span className="text-sm text-muted-foreground">
+                            N/A
+                          </span>
                         )}
                       </TableCell>
                     </TableRow>

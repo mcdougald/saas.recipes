@@ -1,5 +1,16 @@
 "use client";
 
+import { useChat } from "@ai-sdk/react";
+import { type UIMessage } from "ai";
+import {
+  CopyIcon,
+  GlobeIcon,
+  MessageSquareIcon,
+  RefreshCcwIcon,
+} from "lucide-react";
+import posthog from "posthog-js";
+import { useState } from "react";
+
 import {
   Conversation,
   ConversationContent,
@@ -19,6 +30,7 @@ import {
   PromptInputBody,
   PromptInputButton,
   PromptInputFooter,
+  type PromptInputMessage,
   PromptInputSelect,
   PromptInputSelectContent,
   PromptInputSelectItem,
@@ -27,7 +39,6 @@ import {
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
-  type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
 import {
   Reasoning,
@@ -41,16 +52,6 @@ import {
   SourcesTrigger,
 } from "@/components/ai-elements/sources";
 import { Card, CardContent } from "@/components/ui/card";
-import { useChat } from "@ai-sdk/react";
-import type { UIMessage } from "ai";
-import {
-  CopyIcon,
-  GlobeIcon,
-  MessageSquareIcon,
-  RefreshCcwIcon,
-} from "lucide-react";
-import posthog from "posthog-js";
-import { useState } from "react";
 
 const models = [
   {
@@ -177,9 +178,12 @@ const AiChefDemo = () => {
                                           message.id && (
                                           <MessageAction
                                             onClick={() => {
-                                              posthog.capture("ai_chat_regenerate_clicked", {
-                                                model,
-                                              });
+                                              posthog.capture(
+                                                "ai_chat_regenerate_clicked",
+                                                {
+                                                  model,
+                                                },
+                                              );
                                               regenerate();
                                             }}
                                             label="Retry"

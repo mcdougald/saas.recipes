@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import {
   Download,
   Eye,
@@ -13,7 +11,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import type { MessageAttachment } from "../utils/types";
+
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { type MessageAttachment } from "../utils/types";
 
 interface MessageAttachmentProps {
   attachment: MessageAttachment;

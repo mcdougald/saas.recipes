@@ -38,7 +38,9 @@ export type SupportedLanguage = (typeof supportedLngs)[number];
 
 export const supportedLngSet = new Set<SupportedLanguage>(supportedLngs);
 
-export function matchSupportedLanguage(language?: string | null): SupportedLanguage | null {
+export function matchSupportedLanguage(
+  language?: string | null,
+): SupportedLanguage | null {
   if (!language) return null;
   if (supportedLngSet.has(language as SupportedLanguage)) {
     return language as SupportedLanguage;
@@ -52,7 +54,9 @@ export function matchSupportedLanguage(language?: string | null): SupportedLangu
   return null;
 }
 
-export function normalizeToSupportedLanguage(language?: string | null): SupportedLanguage {
+export function normalizeToSupportedLanguage(
+  language?: string | null,
+): SupportedLanguage {
   const matchedLanguage = matchSupportedLanguage(language);
   if (matchedLanguage) return matchedLanguage;
   return fallbackLng;

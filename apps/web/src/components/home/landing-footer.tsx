@@ -1,10 +1,10 @@
 "use client";
 
-import { useI18n } from "@/hooks/use-i18n";
 import Link from "next/link";
 
 import { SaasRecipesIcon } from "@/components/common/icons/saas-recipes-icon";
 import { ToggleTheme } from "@/components/theme-toggle";
+import { useI18n } from "@/hooks/use-i18n";
 
 type FooterLink = {
   href: string;
@@ -24,7 +24,10 @@ const footerLinks: FooterLink[] = [
 
 function LandingFooterLinks({ t }: { t: TranslationFn }) {
   return (
-    <nav aria-label={t("landingFooter.navLabel")} className="flex flex-wrap items-center gap-2.5">
+    <nav
+      aria-label={t("landingFooter.navLabel")}
+      className="flex flex-wrap items-center gap-2.5"
+    >
       {footerLinks.map(({ href, labelKey }) => (
         <Link
           key={href}
@@ -46,10 +49,16 @@ function FooterEaseSignals({ t }: { t: TranslationFn }) {
   ] as const;
 
   return (
-    <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground" role="list">
+    <ul
+      className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground"
+      role="list"
+    >
       {signals.map((signal) => (
         <li key={signal} className="inline-flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-foreground/45" aria-hidden />
+          <span
+            className="h-1.5 w-1.5 rounded-full bg-foreground/45"
+            aria-hidden
+          />
           <span>{t(signal)}</span>
         </li>
       ))}
@@ -67,7 +76,10 @@ export function LandingFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden border-t bg-linear-to-b from-background via-background to-muted/25" role="contentinfo">
+    <footer
+      className="relative overflow-hidden border-t bg-linear-to-b from-background via-background to-muted/25"
+      role="contentinfo"
+    >
       <div className="container relative mx-auto px-4 py-14">
         <div className="grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-14">
           <section className="space-y-7 lg:space-y-8">
@@ -78,7 +90,9 @@ export function LandingFooter() {
               <h2 className="max-w-2xl text-2xl leading-tight font-semibold tracking-tight text-foreground sm:text-3xl">
                 {t("landingFooter.heading")}
               </h2>
-              <p className="max-w-2xl text-sm leading-6 text-muted-foreground">{t("landingFooter.description")}</p>
+              <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
+                {t("landingFooter.description")}
+              </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3.5">
@@ -117,7 +131,8 @@ export function LandingFooter() {
             href="https://trev.fyi"
             className="inline-flex items-center gap-1.5 font-medium text-foreground decoration-foreground/35 underline underline-offset-6 transition-[color,text-decoration-color] hover:text-primary hover:decoration-primary/70"
           >
-            {t("landingFooter.builtBy")} <span>{t("authLayoutFooter.creatorHandle")}</span>
+            {t("landingFooter.builtBy")}{" "}
+            <span>{t("authLayoutFooter.creatorHandle")}</span>
           </Link>
         </div>
 

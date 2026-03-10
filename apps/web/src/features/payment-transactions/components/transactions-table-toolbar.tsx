@@ -1,6 +1,6 @@
 "use client";
 
-import type { Table } from "@tanstack/react-table";
+import { type Table } from "@tanstack/react-table";
 import { Download, PlusCircle, Search, X } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";

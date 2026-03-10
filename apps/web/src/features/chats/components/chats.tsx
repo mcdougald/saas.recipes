@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import type { ChatConversation, ChatMessage, ChatUser } from "../utils/types";
+import {
+  type ChatConversation,
+  type ChatMessage,
+  type ChatUser,
+} from "../utils/types";
 import { useChat } from "../utils/use-chat";
 import { ChatConversationList } from "./chat-conversation-list";
 import { ChatHeader } from "./chat-header";

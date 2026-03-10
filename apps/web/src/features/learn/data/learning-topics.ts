@@ -307,8 +307,7 @@ export const learningTopics: LearningTopic[] = [
       {
         kind: "case-studies",
         title: "High-Tempo Team Case Study",
-        teaser:
-          "How a lean team reduced deploy risk while shipping daily.",
+        teaser: "How a lean team reduced deploy risk while shipping daily.",
         outcome:
           "Pick a CI and rollout pattern to support faster but safer releases.",
       },
@@ -368,8 +367,7 @@ export const learningTopics: LearningTopic[] = [
         title: "Defense-in-Depth Guide",
         teaser:
           "Practical layers for validation, rate limiting, auditability, and recovery.",
-        outcome:
-          "Harden one endpoint family with measurable abuse resistance.",
+        outcome: "Harden one endpoint family with measurable abuse resistance.",
       },
       {
         kind: "case-studies",

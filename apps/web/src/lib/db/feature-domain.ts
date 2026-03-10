@@ -46,7 +46,12 @@ export const taskSurfaceValues = ["tasks", "kanban", "your_recipes"] as const;
  */
 export type TaskSurface = (typeof taskSurfaceValues)[number];
 
-export const kanbanStatusValues = ["ideas", "todo", "in_progress", "done"] as const;
+export const kanbanStatusValues = [
+  "ideas",
+  "todo",
+  "in_progress",
+  "done",
+] as const;
 
 /**
  * Describe the subset of task statuses used by the kanban experience.

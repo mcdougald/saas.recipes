@@ -1,32 +1,108 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Bell, Calendar, Clock, MessageSquare, TrendingUp, User } from "lucide-react"
+import {
+  Bell,
+  Calendar,
+  Clock,
+  MessageSquare,
+  TrendingUp,
+  User,
+} from "lucide-react";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 export function RightSidebar() {
   const notifications = [
-    { id: 1, title: "New chef comment", description: "John commented on your recipe", time: "5m ago", icon: MessageSquare, unread: true },
-    { id: 2, title: "Kitchen meeting", description: "Team standup in 30 minutes", time: "25m ago", icon: Calendar, unread: true },
-    { id: 3, title: "Recipe update", description: "New features available", time: "1h ago", icon: Bell, unread: false },
-    { id: 4, title: "Chef joined", description: "Sarah joined your kitchen", time: "2h ago", icon: User, unread: false },
-  ]
+    {
+      id: 1,
+      title: "New chef comment",
+      description: "John commented on your recipe",
+      time: "5m ago",
+      icon: MessageSquare,
+      unread: true,
+    },
+    {
+      id: 2,
+      title: "Kitchen meeting",
+      description: "Team standup in 30 minutes",
+      time: "25m ago",
+      icon: Calendar,
+      unread: true,
+    },
+    {
+      id: 3,
+      title: "Recipe update",
+      description: "New features available",
+      time: "1h ago",
+      icon: Bell,
+      unread: false,
+    },
+    {
+      id: 4,
+      title: "Chef joined",
+      description: "Sarah joined your kitchen",
+      time: "2h ago",
+      icon: User,
+      unread: false,
+    },
+  ];
 
   const recentActivity = [
-    { id: 1, user: "JD", name: "John Doe", action: "perfected a recipe", time: "10m ago" },
-    { id: 2, user: "JS", name: "Jane Smith", action: "started a new dish", time: "45m ago" },
-    { id: 3, user: "BJ", name: "Bob Johnson", action: "finished cooking", time: "1h ago" },
-    { id: 4, user: "AW", name: "Alice Williams", action: "reviewed ingredients", time: "2h ago" },
-  ]
+    {
+      id: 1,
+      user: "JD",
+      name: "John Doe",
+      action: "perfected a recipe",
+      time: "10m ago",
+    },
+    {
+      id: 2,
+      user: "JS",
+      name: "Jane Smith",
+      action: "started a new dish",
+      time: "45m ago",
+    },
+    {
+      id: 3,
+      user: "BJ",
+      name: "Bob Johnson",
+      action: "finished cooking",
+      time: "1h ago",
+    },
+    {
+      id: 4,
+      user: "AW",
+      name: "Alice Williams",
+      action: "reviewed ingredients",
+      time: "2h ago",
+    },
+  ];
 
   const upcomingEvents = [
-    { id: 1, title: "Kitchen Meeting", time: "Today, 2:00 PM", type: "meeting" },
+    {
+      id: 1,
+      title: "Kitchen Meeting",
+      time: "Today, 2:00 PM",
+      type: "meeting",
+    },
     { id: 2, title: "Recipe Deadline", time: "Tomorrow", type: "deadline" },
-    { id: 3, title: "Taste Test Review", time: "Friday, 10:00 AM", type: "review" },
-  ]
+    {
+      id: 3,
+      title: "Taste Test Review",
+      time: "Friday, 10:00 AM",
+      type: "review",
+    },
+  ];
 
   return (
     <div className="flex h-full flex-col gap-4 p-4 lg:p-6">
@@ -36,7 +112,7 @@ export function RightSidebar() {
           <div className="flex items-center justify-between">
             <CardTitle className="text-base">Notifications</CardTitle>
             <Badge variant="secondary" className="text-xs">
-              {notifications.filter(n => n.unread).length} new
+              {notifications.filter((n) => n.unread).length} new
             </Badge>
           </div>
         </CardHeader>
@@ -44,19 +120,25 @@ export function RightSidebar() {
           <ScrollArea className="h-[280px]">
             <div className="space-y-1 px-6 pb-4">
               {notifications.map((notification, index) => {
-                const Icon = notification.icon
+                const Icon = notification.icon;
                 return (
                   <div key={notification.id}>
                     <div className="flex gap-3 py-3">
-                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-                        notification.unread ? 'bg-primary/10' : 'bg-muted'
-                      }`}>
-                        <Icon className={`h-4 w-4 ${notification.unread ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <div
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+                          notification.unread ? "bg-primary/10" : "bg-muted"
+                        }`}
+                      >
+                        <Icon
+                          className={`h-4 w-4 ${notification.unread ? "text-primary" : "text-muted-foreground"}`}
+                        />
                       </div>
                       <div className="flex-1 space-y-1">
                         <p className="text-sm font-medium leading-none">
                           {notification.title}
-                          {notification.unread && <span className="ml-2 inline-block h-2 w-2 rounded-full bg-primary"></span>}
+                          {notification.unread && (
+                            <span className="ml-2 inline-block h-2 w-2 rounded-full bg-primary"></span>
+                          )}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {notification.description}
@@ -69,7 +151,7 @@ export function RightSidebar() {
                     </div>
                     {index < notifications.length - 1 && <Separator />}
                   </div>
-                )
+                );
               })}
             </div>
           </ScrollArea>
@@ -91,7 +173,9 @@ export function RightSidebar() {
                 <div key={activity.id}>
                   <div className="flex items-center gap-3 py-3">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback className="text-xs">{activity.user}</AvatarFallback>
+                      <AvatarFallback className="text-xs">
+                        {activity.user}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 space-y-1">
                       <p className="text-sm font-medium leading-none">
@@ -146,9 +230,7 @@ export function RightSidebar() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base">Quick Stats</CardTitle>
-          <CardDescription className="text-xs">
-            Kitchen metrics
-          </CardDescription>
+          <CardDescription className="text-xs">Kitchen metrics</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
@@ -166,10 +248,12 @@ export function RightSidebar() {
           <Separator />
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">Performance</span>
-            <Badge variant="secondary" className="text-xs">95%</Badge>
+            <Badge variant="secondary" className="text-xs">
+              95%
+            </Badge>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

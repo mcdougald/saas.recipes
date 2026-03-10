@@ -1,8 +1,9 @@
 "use client";
 
+import { type JSX } from "react";
+
 import { Badge } from "@/components/ui/badge";
-import type { HelpFAQItemId } from "@/features/help-center/help-center-data";
-import type { JSX } from "react";
+import { type HelpFAQItemId } from "@/features/help-center/help-center-data";
 
 /**
  * Props passed to FAQ answer renderer components.
@@ -11,16 +12,16 @@ export interface FAQAnswerComponentProps {
   answer: string;
 }
 
-type FAQAnswerComponent = (props: FAQAnswerComponentProps) => JSX.Element;
+type FaqAnswerComponent = (props: FAQAnswerComponentProps) => JSX.Element;
 
-const PlainAnswer: FAQAnswerComponent = ({ answer }) => <p>{answer}</p>;
+const PlainAnswer: FaqAnswerComponent = ({ answer }) => <p>{answer}</p>;
 
 function SimilarProjectsLandscapeAnswer() {
   return (
     <div className="space-y-4">
       <p>
-        These tools overlap with saas.recipes in repository analysis, but each one
-        is optimized for a different workflow.
+        These tools overlap with saas.recipes in repository analysis, but each
+        one is optimized for a different workflow.
       </p>
 
       <div className="grid gap-2">
@@ -32,8 +33,8 @@ function SimilarProjectsLandscapeAnswer() {
             </Badge>
           </div>
           <p className="text-muted-foreground text-sm">
-            Strong at repository technology detection and visualization, with broad
-            language and package scanning coverage.
+            Strong at repository technology detection and visualization, with
+            broad language and package scanning coverage.
           </p>
           <a
             href="https://getstack.dev/licenses"
@@ -53,8 +54,8 @@ function SimilarProjectsLandscapeAnswer() {
             </Badge>
           </div>
           <p className="text-muted-foreground text-sm">
-            A Copilot SDK repository assistant that is ideal when you want control
-            of analysis in your own environment.
+            A Copilot SDK repository assistant that is ideal when you want
+            control of analysis in your own environment.
           </p>
           <a
             href="https://github.com/glaucia86/repo-doctor"
@@ -74,8 +75,8 @@ function SimilarProjectsLandscapeAnswer() {
             </Badge>
           </div>
           <p className="text-muted-foreground text-sm">
-            Presentation-first tooling that turns JSON data into portfolio websites
-            rendered in iframe layouts.
+            Presentation-first tooling that turns JSON data into portfolio
+            websites rendered in iframe layouts.
           </p>
           <a
             href="https://github.com/NotStark/Devfolios"
@@ -110,8 +111,8 @@ function SimilarProjectsLandscapeAnswer() {
       </div>
 
       <p className="text-muted-foreground text-sm">
-        Use these tools for detection or local analysis, then use saas.recipes to
-        understand how product features map to architecture choices and which
+        Use these tools for detection or local analysis, then use saas.recipes
+        to understand how product features map to architecture choices and which
         implementation patterns are easiest to reuse.
       </p>
     </div>
@@ -124,24 +125,25 @@ function SimilarProjectsLandscapeAnswer() {
  * Keeping this record exhaustive ensures answer-rendering components stay in sync
  * with ids defined in `help-center-data.ts`.
  */
-export const FAQ_ANSWER_COMPONENTS: Record<HelpFAQItemId, FAQAnswerComponent> = {
-  "create-account": PlainAnswer,
-  "included-in-each-plan": PlainAnswer,
-  "how-to-get-started": PlainAnswer,
-  "where-to-learn-platform": PlainAnswer,
-  "similar-projects-landscape": SimilarProjectsLandscapeAnswer,
-  "what-are-recipes": PlainAnswer,
-  "reuse-recipe-code": PlainAnswer,
-  "how-projects-selected": PlainAnswer,
-  "change-password": PlainAnswer,
-  "change-email-address": PlainAnswer,
-  "enable-2fa": PlainAnswer,
-  "team-account-sharing": PlainAnswer,
-  "accepted-payment-methods": PlainAnswer,
-  "cancel-anytime": PlainAnswer,
-  "refund-policy": PlainAnswer,
-  "upgrade-downgrade-workflow": PlainAnswer,
-};
+export const FAQ_ANSWER_COMPONENTS: Record<HelpFAQItemId, FaqAnswerComponent> =
+  {
+    "create-account": PlainAnswer,
+    "included-in-each-plan": PlainAnswer,
+    "how-to-get-started": PlainAnswer,
+    "where-to-learn-platform": PlainAnswer,
+    "similar-projects-landscape": SimilarProjectsLandscapeAnswer,
+    "what-are-recipes": PlainAnswer,
+    "reuse-recipe-code": PlainAnswer,
+    "how-projects-selected": PlainAnswer,
+    "change-password": PlainAnswer,
+    "change-email-address": PlainAnswer,
+    "enable-2fa": PlainAnswer,
+    "team-account-sharing": PlainAnswer,
+    "accepted-payment-methods": PlainAnswer,
+    "cancel-anytime": PlainAnswer,
+    "refund-policy": PlainAnswer,
+    "upgrade-downgrade-workflow": PlainAnswer,
+  };
 
 /**
  * Resolve the renderer component for a given FAQ item id.
@@ -149,6 +151,6 @@ export const FAQ_ANSWER_COMPONENTS: Record<HelpFAQItemId, FAQAnswerComponent> = 
  * @param faqId - FAQ item identifier from help-center data.
  * @returns A component that renders the FAQ answer content.
  */
-export function getFAQAnswerComponent(faqId: string): FAQAnswerComponent {
+export function getFAQAnswerComponent(faqId: string): FaqAnswerComponent {
   return FAQ_ANSWER_COMPONENTS[faqId as HelpFAQItemId] ?? PlainAnswer;
 }

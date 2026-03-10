@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/badge";
 import { DashboardPageHeader } from "@/components/dashboard/page-header";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -15,7 +15,11 @@ const caseStudies = [
       "A team needed faster feature delivery but could not absorb microservice overhead.",
     outcome:
       "They introduced domain boundaries and internal APIs, cutting change lead-time by 35%.",
-    takeaways: ["Feature ownership", "Boundary contracts", "Incremental migration"],
+    takeaways: [
+      "Feature ownership",
+      "Boundary contracts",
+      "Incremental migration",
+    ],
   },
   {
     title: "Stabilizing Billing Workflows",
@@ -23,7 +27,11 @@ const caseStudies = [
       "Payment retries and webhooks caused duplicate state changes during peak periods.",
     outcome:
       "Idempotent handlers and queue-backed processing reduced billing incidents by 60%.",
-    takeaways: ["Idempotency keys", "Async processing", "Operational dashboards"],
+    takeaways: [
+      "Idempotency keys",
+      "Async processing",
+      "Operational dashboards",
+    ],
   },
   {
     title: "Hardening Multi-tenant Security",

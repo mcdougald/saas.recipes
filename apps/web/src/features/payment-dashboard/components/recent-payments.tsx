@@ -1,5 +1,17 @@
 "use client";
 
+import {
+  ArrowUpRight,
+  Building2,
+  Copy,
+  CreditCard,
+  Eye,
+  MoreHorizontal,
+  RefreshCcw,
+  Smartphone,
+  Wallet,
+} from "lucide-react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,17 +30,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import {
-  ArrowUpRight,
-  Building2,
-  Copy,
-  CreditCard,
-  Eye,
-  MoreHorizontal,
-  RefreshCcw,
-  Smartphone,
-  Wallet,
-} from "lucide-react";
 
 type PaymentStatus =
   | "completed"

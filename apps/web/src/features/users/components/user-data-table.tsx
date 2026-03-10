@@ -1,16 +1,16 @@
 "use client";
 
 import {
+  type ColumnDef,
+  type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
-  type ColumnDef,
-  type ColumnFiltersState,
   type Row,
   type SortingState,
+  useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
 import {
@@ -55,7 +55,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { User, UserFormValues } from "../utils/schema";
+import { type User, type UserFormValues } from "../utils/schema";
 import { UserFormDialog } from "./user-form-modal";
 
 interface DataTableProps {

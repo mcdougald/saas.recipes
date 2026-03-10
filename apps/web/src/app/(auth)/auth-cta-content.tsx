@@ -1,7 +1,15 @@
 "use client";
 
+import {
+  BookOpen,
+  ChefHat,
+  Clock3,
+  KeyRound,
+  Mail,
+  Shield,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
-import { BookOpen, ChefHat, Shield, Mail, KeyRound, Clock3 } from "lucide-react";
+
 import { useI18n } from "@/hooks/use-i18n";
 
 type CtaItem = {
@@ -20,7 +28,10 @@ type CtaVariant = {
 };
 
 const DEFAULT_CTA: CtaVariant = {
-  headingKeys: ["authCta.default.heading.line1", "authCta.default.heading.line2"],
+  headingKeys: [
+    "authCta.default.heading.line1",
+    "authCta.default.heading.line2",
+  ],
   badgeKey: "authCta.default.badge",
   descriptionKey: "authCta.default.description",
   items: [
@@ -131,7 +142,10 @@ export function AuthCtaContent() {
         </h2>
 
         <p className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-black/15 bg-white px-3 py-1 text-xs font-medium tracking-wide text-black/80 dark:border-white/20 dark:bg-zinc-900 dark:text-white/80 max-md:mx-auto">
-          <span className="h-1.5 w-1.5 rounded-full bg-black/70 dark:bg-white/70" aria-hidden />
+          <span
+            className="h-1.5 w-1.5 rounded-full bg-black/70 dark:bg-white/70"
+            aria-hidden
+          />
           {t(cta.badgeKey)}
         </p>
 
@@ -154,7 +168,9 @@ export function AuthCtaContent() {
                   <Icon className="h-4 w-4" aria-hidden />
                 </span>
                 <span>
-                  <span className="font-medium text-black dark:text-white">{t(item.titleKey)}</span>
+                  <span className="font-medium text-black dark:text-white">
+                    {t(item.titleKey)}
+                  </span>
                   <br />
                   {t(item.descriptionKey)}
                 </span>
@@ -164,7 +180,9 @@ export function AuthCtaContent() {
         </ul>
 
         <div className="mt-7 w-fit max-w-[400px] rounded-xl border border-black/15 bg-[#f5f5f5ef] p-4 text-sm text-black/70 shadow-sm dark:border-white/10 dark:bg-neutral-950 dark:text-white/70 max-md:mx-auto">
-          <p className="font-medium text-black dark:text-white">{t(cta.footerTitleKey)}</p>
+          <p className="font-medium text-black dark:text-white">
+            {t(cta.footerTitleKey)}
+          </p>
           <p className="mt-1 max-w-[440px]">{t(cta.footerCopyKey)}</p>
         </div>
       </div>

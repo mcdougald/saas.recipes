@@ -1,9 +1,10 @@
+import { z } from "zod";
+
 import {
   taskLabelValues,
   taskListStatusValues,
   taskPriorityValues,
 } from "@/lib/db/feature-domain";
-import { z } from "zod";
 
 export const taskStatusSchema = z.enum(taskListStatusValues);
 export const taskLabelSchema = z.enum(taskLabelValues);

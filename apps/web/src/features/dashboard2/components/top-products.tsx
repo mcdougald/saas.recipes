@@ -1,5 +1,7 @@
 "use client";
 
+import { Eye, Star, TrendingUp } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Eye, Star, TrendingUp } from "lucide-react";
 
 const products = [
   {

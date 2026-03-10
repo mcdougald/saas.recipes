@@ -10,6 +10,7 @@ import {
   timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
+
 import {
   favoriteEntityTypeValues,
   favoriteReadinessValues,
@@ -171,7 +172,9 @@ export const pricingPlan = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date()),
   },
-  (table) => [index("pricingPlan_stripeProductId_idx").on(table.stripeProductId)],
+  (table) => [
+    index("pricingPlan_stripeProductId_idx").on(table.stripeProductId),
+  ],
 );
 
 export const userPreference = pgTable("userPreference", {
@@ -251,9 +254,7 @@ export const userFavorite = pgTable(
     entityTitle: text("entityTitle").notNull(),
     entitySummary: text("entitySummary"),
     collection: text("collection"),
-    readiness: favoriteReadinessEnum("readiness")
-      .notNull()
-      .default("watching"),
+    readiness: favoriteReadinessEnum("readiness").notNull().default("watching"),
     linkedTaskCount: integer("linkedTaskCount").notNull().default(0),
     priorityScore: integer("priorityScore").notNull().default(0),
     notes: text("notes"),

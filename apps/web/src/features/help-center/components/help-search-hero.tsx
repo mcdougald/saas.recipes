@@ -1,9 +1,10 @@
 "use client";
 
+import { SearchIcon, XIcon } from "lucide-react";
+import { type FormEvent } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SearchIcon, XIcon } from "lucide-react";
-import { FormEvent } from "react";
 
 /**
  * Props for the help center search hero.
@@ -89,15 +90,15 @@ export function HelpSearchHero({
         <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
           <span>Popular:</span>
           {suggestedTopics.map((topic) => (
-              <button
-                key={topic}
-                type="button"
-                onClick={() => onSearchSubmit(topic)}
-                className="hover:text-foreground rounded-md border bg-background px-2 py-1 transition-colors"
-              >
-                {topic}
-              </button>
-            ))}
+            <button
+              key={topic}
+              type="button"
+              onClick={() => onSearchSubmit(topic)}
+              className="hover:text-foreground rounded-md border bg-background px-2 py-1 transition-colors"
+            >
+              {topic}
+            </button>
+          ))}
         </div>
       </div>
     </div>

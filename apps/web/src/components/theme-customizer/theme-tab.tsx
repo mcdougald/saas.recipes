@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  Check,
+  Dices,
+  ExternalLink,
+  Moon,
+  Palette,
+  Sun,
+  Upload,
+} from "lucide-react";
+import type React from "react";
+
 import { ColorPicker } from "@/components/color-picker";
 import {
   Accordion,
@@ -21,17 +32,7 @@ import { baseColors, radiusOptions } from "@/config/theme-customizer-constants";
 import { colorThemes, tweakcnThemes } from "@/config/theme-data";
 import { useCircularTransition } from "@/hooks/use-circular-transitions";
 import { useThemeManager } from "@/hooks/use-theme-manager";
-import type { ImportedTheme } from "@/lib/types";
-import {
-  Check,
-  Dices,
-  ExternalLink,
-  Moon,
-  Palette,
-  Sun,
-  Upload,
-} from "lucide-react";
-import React from "react";
+import { type ImportedTheme } from "@/lib/types";
 import "./circular-transition.css";
 
 interface ThemeTabProps {

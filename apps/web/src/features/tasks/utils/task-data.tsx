@@ -8,10 +8,11 @@ import {
   HelpCircle,
   Timer,
 } from "lucide-react";
-import type {
-  TaskLabel,
-  TaskListStatus,
-  TaskPriority,
+
+import {
+  type TaskLabel,
+  type TaskListStatus,
+  type TaskPriority,
 } from "@/lib/db/feature-domain";
 
 export const labels: Array<{ value: TaskLabel; label: string }> = [

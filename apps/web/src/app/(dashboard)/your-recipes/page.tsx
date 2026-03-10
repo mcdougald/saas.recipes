@@ -1,3 +1,7 @@
+import { Heart, Import, ListChecks, Sparkles } from "lucide-react";
+
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -5,9 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
-import { Heart, Import, ListChecks, Sparkles } from "lucide-react";
 
 const implementationTracks = [
   {
@@ -49,7 +50,8 @@ const importFlow = [
   {
     step: "Step 3",
     title: "Create recipe workspace",
-    detail: "Generate a recipe card, suggested tasks, and AI Chef starter prompts.",
+    detail:
+      "Generate a recipe card, suggested tasks, and AI Chef starter prompts.",
   },
 ] as const;
 
@@ -90,7 +92,10 @@ export default function YourRecipesPage() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {track.bullets.map((item) => (
-                    <p key={item} className="text-muted-foreground text-sm leading-relaxed">
+                    <p
+                      key={item}
+                      className="text-muted-foreground text-sm leading-relaxed"
+                    >
                       - {item}
                     </p>
                   ))}
@@ -107,16 +112,23 @@ export default function YourRecipesPage() {
               Planned repository import flow
             </CardTitle>
             <CardDescription>
-              A short, guided workflow for turning any OSS codebase into a recipe you can act
-              on.
+              A short, guided workflow for turning any OSS codebase into a
+              recipe you can act on.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-3 md:grid-cols-3">
             {importFlow.map((item) => (
-              <div key={item.step} className="bg-muted/40 rounded-lg border p-3">
-                <p className="text-xs font-medium tracking-wide uppercase">{item.step}</p>
+              <div
+                key={item.step}
+                className="bg-muted/40 rounded-lg border p-3"
+              >
+                <p className="text-xs font-medium tracking-wide uppercase">
+                  {item.step}
+                </p>
                 <p className="mt-1 text-sm font-semibold">{item.title}</p>
-                <p className="text-muted-foreground mt-1 text-sm">{item.detail}</p>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  {item.detail}
+                </p>
               </div>
             ))}
           </CardContent>
@@ -129,8 +141,8 @@ export default function YourRecipesPage() {
               Favorites data model preview
             </CardTitle>
             <CardDescription>
-              These are the signals we plan to show so favorites can move from inspiration to
-              implementation.
+              These are the signals we plan to show so favorites can move from
+              inspiration to implementation.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2">

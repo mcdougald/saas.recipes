@@ -1,5 +1,19 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  KeyRound,
+  Lock,
+  ShieldCheck,
+} from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,25 +31,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  CheckCircle2,
-  Eye,
-  EyeOff,
-  KeyRound,
-  Lock,
-  ShieldCheck,
-} from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import {
-  IdentifySchema,
-  NewPasswordSchema,
-  SecurityQuestionSchema,
+  type IdentifySchema,
   identifySchema,
+  type NewPasswordSchema,
   newPasswordSchema,
+  type SecurityQuestionSchema,
   securityQuestionSchema,
 } from "../utils/reset-password-2-schema";
 

@@ -1,6 +1,6 @@
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { CustomerInsights } from "@/features/dashboard2/components/customer-insights";
 import { MetricsOverview } from "@/features/dashboard2/components/matrics-overview";
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { QuickActions } from "@/features/dashboard2/components/quick-actions";
 import { RecentTransactions } from "@/features/dashboard2/components/recent-transactions";
 import { RevenueBreakdown } from "@/features/dashboard2/components/revenue-breakdown";

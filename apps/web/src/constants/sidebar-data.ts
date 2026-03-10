@@ -1,4 +1,3 @@
-import type { SidebarData } from "@/lib/types";
 import {
   IconBarrierBlock,
   IconBrain,
@@ -34,6 +33,8 @@ import {
   ShieldCheck,
   Workflow,
 } from "lucide-react";
+
+import { type SidebarData } from "@/lib/types";
 
 export const sidebarData: SidebarData = {
   teams: [
@@ -133,7 +134,6 @@ export const sidebarData: SidebarData = {
           icon: IconChecklist,
           badge: "Beta",
         },
-        
       ],
     },
     {
@@ -158,7 +158,7 @@ export const sidebarData: SidebarData = {
           icon: IconBrain,
           badge: "Beta",
         },
-        
+
         {
           title: "Settings",
           icon: IconSettings,
@@ -195,8 +195,8 @@ export const sidebarData: SidebarData = {
               icon: IconBrowserCheck,
             },
           ],
-        }
-         
+        },
+
         // {
         //   title: "Users",
         //   url: "/users",
@@ -289,6 +289,6 @@ export const sidebarData: SidebarData = {
           icon: IconCreditCard,
         },
       ],
-    }
+    },
   ],
 };

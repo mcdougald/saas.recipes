@@ -1,10 +1,11 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { HelpArticle } from "@/features/help-center/help-center-data";
 import { ArrowRight, BookOpen, Clock, TrendingUp } from "lucide-react";
 import Link from "next/link";
+
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { type HelpArticle } from "@/features/help-center/help-center-data";
 
 /**
  * Props for the popular article section.
@@ -17,12 +18,17 @@ interface PopularArticlesProps {
 /**
  * Renders popular article cards, filtered by current query.
  */
-export function PopularArticles({ articles, searchQuery }: PopularArticlesProps) {
+export function PopularArticles({
+  articles,
+  searchQuery,
+}: PopularArticlesProps) {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight">Popular Articles</h2>
+          <h2 className="text-2xl font-bold tracking-tight">
+            Popular Articles
+          </h2>
           <p className="text-muted-foreground text-sm">
             High-signal guides most builders read first.
             {searchQuery

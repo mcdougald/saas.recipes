@@ -1,12 +1,12 @@
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import chatConversations from "@/constants/chat-conversation.json";
 import chatMessages from "@/constants/chat-messages.json";
 import chatUsers from "@/constants/chat-users.json";
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { Chat } from "@/features/chats/components/chats";
 import {
-  ChatConversation,
-  ChatMessage,
-  ChatUser,
+  type ChatConversation,
+  type ChatMessage,
+  type ChatUser,
 } from "@/features/chats/utils/types";
 
 export default function ChatsPage() {

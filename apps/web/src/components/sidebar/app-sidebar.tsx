@@ -1,5 +1,9 @@
 "use client";
 
+import { LogIn, Search, UserPlus } from "lucide-react";
+import Link from "next/link";
+import React from "react";
+
 import { CommandSearch, SearchTrigger } from "@/components/command-search";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,21 +11,18 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-  Sidebar as UISidebar,
+  Sidebar as UiSidebar,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { sidebarData } from "@/constants/sidebar-data";
 import { useAuth } from "@/contexts/auth-context";
 import { useSidebarConfig } from "@/contexts/sidebar-context";
 import { hasAdminAccess } from "@/lib/auth-access";
-import { LogIn, Search, UserPlus } from "lucide-react";
-import Link from "next/link";
-import React from "react";
 import { NavGroup } from "./nav-group";
 import { NavUser } from "./nav-user";
 import { TeamSwitcher } from "./team-switcher";
 
-interface AppSidebarProps extends React.ComponentProps<typeof UISidebar> {
+interface AppSidebarProps extends React.ComponentProps<typeof UiSidebar> {
   initialAdminAccess?: boolean;
 }
 
@@ -49,7 +50,7 @@ export default function AppSidebar({
   initialAdminAccess = false,
   ...props
 }: AppSidebarProps) {
-  const COLLAPSE_DRAG_THRESHOLD_PX = 24;
+  const CollapseDragThresholdPx = 24;
   const { onDoubleClick, ...sidebarProps } = props;
   const [commandSearchOpen, setCommandSearchOpen] = React.useState(false);
   const { user, isLoading } = useAuth();
@@ -58,7 +59,7 @@ export default function AppSidebar({
   const { config, data, startResizing } = useSidebarConfig();
   const isAdminNavEnabled = initialAdminAccess || hasAdminAccess(user);
   const navGroups = sidebarData.navGroups.filter(
-    (nav) => nav.title !== "Admin" || isAdminNavEnabled
+    (nav) => nav.title !== "Admin" || isAdminNavEnabled,
   );
 
   React.useEffect(() => {
@@ -74,7 +75,7 @@ export default function AppSidebar({
   }, []);
 
   const handleSidebarDoubleClick: React.MouseEventHandler<HTMLDivElement> = (
-    event
+    event,
   ) => {
     onDoubleClick?.(event);
     if (event.defaultPrevented) {
@@ -89,7 +90,7 @@ export default function AppSidebar({
     setOpen(!open);
   };
   const handleRailPointerDown: React.PointerEventHandler<HTMLButtonElement> = (
-    event
+    event,
   ) => {
     if (!isMobile && !open && event.button === 0) {
       const pointerId = event.pointerId;
@@ -135,8 +136,9 @@ export default function AppSidebar({
         }
 
         const deltaX = pointerEvent.clientX - startX;
-        const isDraggingInward = config.side === "left" ? deltaX < 0 : deltaX > 0;
-        if (!isDraggingInward || Math.abs(deltaX) < COLLAPSE_DRAG_THRESHOLD_PX) {
+        const isDraggingInward =
+          config.side === "left" ? deltaX < 0 : deltaX > 0;
+        if (!isDraggingInward || Math.abs(deltaX) < CollapseDragThresholdPx) {
           return;
         }
 
@@ -163,7 +165,7 @@ export default function AppSidebar({
   };
 
   return (
-    <UISidebar
+    <UiSidebar
       variant={config.variant}
       collapsible={config.collapsible}
       side={config.side}
@@ -200,8 +202,13 @@ export default function AppSidebar({
         />
       </SidebarHeader>
       <SidebarContent>
-        {navGroups.map((nav) => (
-          <NavGroup key={nav.title} {...nav} isAuthenticated={isAuthenticated} />
+        {navGroups.map((nav, index) => (
+          <NavGroup
+            key={nav.title}
+            {...nav}
+            isAuthenticated={isAuthenticated}
+            groupIndex={index}
+          />
         ))}
       </SidebarContent>
       <SidebarFooter>
@@ -222,13 +229,19 @@ export default function AppSidebar({
                   Welcome back
                 </p>
                 <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
-                  Sign-in to unlock your personalized dashboard and saved recipes.
+                  Sign-in to unlock your personalized dashboard and saved
+                  recipes.
                 </p>
                 <div className="mt-3 grid gap-2">
                   <Button asChild size="sm" className="w-full shadow-sm">
                     <Link href="/sign-in">Sign-in</Link>
                   </Button>
-                  <Button asChild variant="outline" size="sm" className="w-full bg-background/70">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="w-full bg-background/70"
+                  >
                     <Link href="/sign-up">Create account</Link>
                   </Button>
                 </div>
@@ -264,6 +277,6 @@ export default function AppSidebar({
         className={data.isResizing ? "after:bg-sidebar-border" : undefined}
         onPointerDown={handleRailPointerDown}
       />
-    </UISidebar>
+    </UiSidebar>
   );
 }

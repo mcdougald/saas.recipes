@@ -1,11 +1,12 @@
+import { type Metadata } from "next";
+import { notFound } from "next/navigation";
+
 import { LearningTopicPage } from "@/features/learn/components/learning-topic-page";
 import {
   getLearningTopicBySlug,
   learningTopics,
 } from "@/features/learn/data/learning-topics";
 import { listCurrentUserFavoriteTopicSlugs } from "@/features/learn/server/learn-favorites";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 /**
  * Dynamic route parameters for a learning topic page.

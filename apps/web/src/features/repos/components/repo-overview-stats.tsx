@@ -5,14 +5,20 @@ import {
   FileCode2,
   FolderGit2,
   HardDrive,
+  type LucideIcon,
   ShieldAlert,
   Star,
   Users,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { RepositoryDashboardSummary } from "@/features/repos/types";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { type RepositoryDashboardSummary } from "@/features/repos/types";
 
 const numberFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
@@ -96,8 +102,12 @@ function RepoOverviewStatCard({ card }: RepoOverviewStatCardProps) {
         </div>
 
         <div className="space-y-1">
-          <CardTitle className="text-lg leading-none font-semibold tabular-nums sm:text-xl">{card.value}</CardTitle>
-          <p className="text-muted-foreground line-clamp-1 text-[10px] leading-4">{card.note}</p>
+          <CardTitle className="text-lg leading-none font-semibold tabular-nums sm:text-xl">
+            {card.value}
+          </CardTitle>
+          <p className="text-muted-foreground line-clamp-1 text-[10px] leading-4">
+            {card.note}
+          </p>
         </div>
       </CardHeader>
 
@@ -105,7 +115,9 @@ function RepoOverviewStatCard({ card }: RepoOverviewStatCardProps) {
         <dl className="grid grid-cols-2 gap-x-2 gap-y-1.5 border-t border-dashed pt-2">
           {card.details.map((detail) => (
             <div key={detail.label} className="min-w-0">
-              <dt className="text-muted-foreground truncate text-[10px] leading-tight">{detail.label}</dt>
+              <dt className="text-muted-foreground truncate text-[10px] leading-tight">
+                {detail.label}
+              </dt>
               <dd className="truncate text-xs leading-tight font-semibold tabular-nums sm:text-[13px]">
                 {detail.value}
               </dd>
@@ -124,32 +136,58 @@ function RepoOverviewStatCard({ card }: RepoOverviewStatCardProps) {
  * @returns A responsive grid of high-signal stat cards.
  */
 export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
-  const staleRepositories = Math.max(0, summary.totalRepositories - summary.recentlyPushedLast30Days);
+  const staleRepositories = Math.max(
+    0,
+    summary.totalRepositories - summary.recentlyPushedLast30Days,
+  );
   const activeRepositoryRate =
     summary.totalRepositories > 0
       ? (summary.recentlyPushedLast30Days / summary.totalRepositories) * 100
       : 0;
   const averageContributorsPerRepo =
-    summary.totalRepositories > 0 ? summary.totalContributors / summary.totalRepositories : 0;
+    summary.totalRepositories > 0
+      ? summary.totalContributors / summary.totalRepositories
+      : 0;
   const averageOpenIssuesPerRepo =
-    summary.totalRepositories > 0 ? summary.totalOpenIssues / summary.totalRepositories : 0;
+    summary.totalRepositories > 0
+      ? summary.totalOpenIssues / summary.totalRepositories
+      : 0;
   const averageOpenPrsPerRepo =
-    summary.totalRepositories > 0 ? summary.totalOpenPullRequests / summary.totalRepositories : 0;
-  const averageStarsPerRepo = summary.totalRepositories > 0 ? summary.totalStars / summary.totalRepositories : 0;
+    summary.totalRepositories > 0
+      ? summary.totalOpenPullRequests / summary.totalRepositories
+      : 0;
+  const averageStarsPerRepo =
+    summary.totalRepositories > 0
+      ? summary.totalStars / summary.totalRepositories
+      : 0;
   const averageStarsPerContributor =
-    summary.totalContributors > 0 ? summary.totalStars / summary.totalContributors : 0;
-  const forkToStarRate = summary.totalStars > 0 ? (summary.totalForks / summary.totalStars) * 100 : 0;
-  const averageCommitsPerRepo = summary.totalRepositories > 0 ? summary.totalCommits / summary.totalRepositories : 0;
+    summary.totalContributors > 0
+      ? summary.totalStars / summary.totalContributors
+      : 0;
+  const forkToStarRate =
+    summary.totalStars > 0
+      ? (summary.totalForks / summary.totalStars) * 100
+      : 0;
+  const averageCommitsPerRepo =
+    summary.totalRepositories > 0
+      ? summary.totalCommits / summary.totalRepositories
+      : 0;
   const averageDependenciesPerRepo =
-    summary.totalRepositories > 0 ? summary.totalDependencies / summary.totalRepositories : 0;
+    summary.totalRepositories > 0
+      ? summary.totalDependencies / summary.totalRepositories
+      : 0;
   const averageWorkspacePackagesPerRepo =
     summary.totalRepositories > 0
       ? summary.totalWorkspacePackages / summary.totalRepositories
       : 0;
   const averageFilesTouchedPerRepo =
-    summary.totalRepositories > 0 ? summary.totalFilesTouched / summary.totalRepositories : 0;
+    summary.totalRepositories > 0
+      ? summary.totalFilesTouched / summary.totalRepositories
+      : 0;
   const averageRepoSizeKb =
-    summary.totalRepositories > 0 ? summary.totalRepoSizeKb / summary.totalRepositories : 0;
+    summary.totalRepositories > 0
+      ? summary.totalRepoSizeKb / summary.totalRepositories
+      : 0;
 
   const statCards: StatCard[] = [
     {
@@ -158,10 +196,16 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
       icon: FolderGit2,
       note: "Current repository coverage and activity freshness.",
       details: [
-        { label: "Active (30d)", value: formatNumber(summary.recentlyPushedLast30Days) },
+        {
+          label: "Active (30d)",
+          value: formatNumber(summary.recentlyPushedLast30Days),
+        },
         { label: "Stale (>30d)", value: formatNumber(staleRepositories) },
         { label: "Active rate", value: formatPercent(activeRepositoryRate) },
-        { label: "Open PRs", value: formatNumber(summary.totalOpenPullRequests) },
+        {
+          label: "Open PRs",
+          value: formatNumber(summary.totalOpenPullRequests),
+        },
       ],
     },
     {
@@ -173,7 +217,10 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
         { label: "Forks", value: formatCompactNumber(summary.totalForks) },
         { label: "Stars / repo", value: formatAverage(averageStarsPerRepo) },
         { label: "Fork-to-star", value: formatPercent(forkToStarRate) },
-        { label: "Stars / contributor", value: formatAverage(averageStarsPerContributor) },
+        {
+          label: "Stars / contributor",
+          value: formatAverage(averageStarsPerContributor),
+        },
       ],
     },
     {
@@ -182,13 +229,21 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
       icon: Users,
       note: "Maintainer and contributor capacity across repositories.",
       details: [
-        { label: "Avg / repo", value: formatAverage(averageContributorsPerRepo) },
-        { label: "Open PRs / repo", value: formatAverage(averageOpenPrsPerRepo) },
+        {
+          label: "Avg / repo",
+          value: formatAverage(averageContributorsPerRepo),
+        },
+        {
+          label: "Open PRs / repo",
+          value: formatAverage(averageOpenPrsPerRepo),
+        },
         {
           label: "Open PRs / contributor",
           value:
             summary.totalContributors > 0
-              ? formatAverage(summary.totalOpenPullRequests / summary.totalContributors)
+              ? formatAverage(
+                  summary.totalOpenPullRequests / summary.totalContributors,
+                )
               : "0.0",
         },
         { label: "Merge rate", value: formatPercent(summary.averageMergeRate) },
@@ -200,10 +255,22 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
       icon: CheckCheck,
       note: "Pull request flow and review throughput quality.",
       details: [
-        { label: "Open PRs", value: formatNumber(summary.totalOpenPullRequests) },
+        {
+          label: "Open PRs",
+          value: formatNumber(summary.totalOpenPullRequests),
+        },
         { label: "PRs / repo", value: formatAverage(averageOpenPrsPerRepo) },
-        { label: "Issues / PR", value: formatRatio(summary.totalOpenIssues, summary.totalOpenPullRequests) },
-        { label: "Active repos", value: formatNumber(summary.recentlyPushedLast30Days) },
+        {
+          label: "Issues / PR",
+          value: formatRatio(
+            summary.totalOpenIssues,
+            summary.totalOpenPullRequests,
+          ),
+        },
+        {
+          label: "Active repos",
+          value: formatNumber(summary.recentlyPushedLast30Days),
+        },
       ],
     },
     {
@@ -212,9 +279,21 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
       icon: ShieldAlert,
       note: "Open issue load and maintenance pressure indicators.",
       details: [
-        { label: "Issues / repo", value: formatAverage(averageOpenIssuesPerRepo) },
-        { label: "Open PRs", value: formatNumber(summary.totalOpenPullRequests) },
-        { label: "Issue-to-PR", value: formatRatio(summary.totalOpenIssues, summary.totalOpenPullRequests) },
+        {
+          label: "Issues / repo",
+          value: formatAverage(averageOpenIssuesPerRepo),
+        },
+        {
+          label: "Open PRs",
+          value: formatNumber(summary.totalOpenPullRequests),
+        },
+        {
+          label: "Issue-to-PR",
+          value: formatRatio(
+            summary.totalOpenIssues,
+            summary.totalOpenPullRequests,
+          ),
+        },
         { label: "Merge rate", value: formatPercent(summary.averageMergeRate) },
       ],
     },
@@ -233,18 +312,38 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
         summary.averageDeploymentSuccessRate === null
           ? [
               { label: "Telemetry", value: "Missing" },
-              { label: "Active repos", value: formatNumber(summary.recentlyPushedLast30Days) },
-              { label: "Open PRs", value: formatNumber(summary.totalOpenPullRequests) },
-              { label: "Open issues", value: formatNumber(summary.totalOpenIssues) },
+              {
+                label: "Active repos",
+                value: formatNumber(summary.recentlyPushedLast30Days),
+              },
+              {
+                label: "Open PRs",
+                value: formatNumber(summary.totalOpenPullRequests),
+              },
+              {
+                label: "Open issues",
+                value: formatNumber(summary.totalOpenIssues),
+              },
             ]
           : [
               {
                 label: "Failure rate",
-                value: formatPercent(Math.max(0, 100 - summary.averageDeploymentSuccessRate)),
+                value: formatPercent(
+                  Math.max(0, 100 - summary.averageDeploymentSuccessRate),
+                ),
               },
-              { label: "Merge rate", value: formatPercent(summary.averageMergeRate) },
-              { label: "Open PRs", value: formatNumber(summary.totalOpenPullRequests) },
-              { label: "Open issues", value: formatNumber(summary.totalOpenIssues) },
+              {
+                label: "Merge rate",
+                value: formatPercent(summary.averageMergeRate),
+              },
+              {
+                label: "Open PRs",
+                value: formatNumber(summary.totalOpenPullRequests),
+              },
+              {
+                label: "Open issues",
+                value: formatNumber(summary.totalOpenIssues),
+              },
             ],
     },
     {
@@ -253,9 +352,18 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
       icon: FileCode2,
       note: "Total files touched across the tracked commit history.",
       details: [
-        { label: "Total commits", value: formatCompactNumber(summary.totalCommits) },
-        { label: "Files / repo", value: formatAverage(averageFilesTouchedPerRepo) },
-        { label: "Commits / repo", value: formatAverage(averageCommitsPerRepo) },
+        {
+          label: "Total commits",
+          value: formatCompactNumber(summary.totalCommits),
+        },
+        {
+          label: "Files / repo",
+          value: formatAverage(averageFilesTouchedPerRepo),
+        },
+        {
+          label: "Commits / repo",
+          value: formatAverage(averageCommitsPerRepo),
+        },
         { label: "Active rate", value: formatPercent(activeRepositoryRate) },
       ],
     },
@@ -265,10 +373,22 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
       icon: Boxes,
       note: "Dependency and package complexity across repositories.",
       details: [
-        { label: "Workspace packages", value: formatNumber(summary.totalWorkspacePackages) },
-        { label: "Deps / repo", value: formatAverage(averageDependenciesPerRepo) },
-        { label: "Packages / repo", value: formatAverage(averageWorkspacePackagesPerRepo) },
-        { label: "Open issues", value: formatCompactNumber(summary.totalOpenIssues) },
+        {
+          label: "Workspace packages",
+          value: formatNumber(summary.totalWorkspacePackages),
+        },
+        {
+          label: "Deps / repo",
+          value: formatAverage(averageDependenciesPerRepo),
+        },
+        {
+          label: "Packages / repo",
+          value: formatAverage(averageWorkspacePackagesPerRepo),
+        },
+        {
+          label: "Open issues",
+          value: formatCompactNumber(summary.totalOpenIssues),
+        },
       ],
     },
     {
@@ -278,9 +398,18 @@ export function RepoOverviewStats({ summary }: RepoOverviewStatsProps) {
       note: "Stored repository footprint using indexed metadata size.",
       details: [
         { label: "Avg size / repo", value: formatStorage(averageRepoSizeKb) },
-        { label: "Total repos", value: formatNumber(summary.totalRepositories) },
-        { label: "Total files touched", value: formatCompactNumber(summary.totalFilesTouched) },
-        { label: "Total commits", value: formatCompactNumber(summary.totalCommits) },
+        {
+          label: "Total repos",
+          value: formatNumber(summary.totalRepositories),
+        },
+        {
+          label: "Total files touched",
+          value: formatCompactNumber(summary.totalFilesTouched),
+        },
+        {
+          label: "Total commits",
+          value: formatCompactNumber(summary.totalCommits),
+        },
       ],
     },
   ];

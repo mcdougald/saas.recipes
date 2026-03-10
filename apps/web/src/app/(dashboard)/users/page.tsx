@@ -1,12 +1,12 @@
 "use client";
 
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
-import { DataTable } from "@/features/users/components/user-data-table";
-import { UserStateCards } from "@/features/users/components/user-state-cards";
-import type { User, UserFormValues } from "@/features/users/utils/schema";
 import { useState } from "react";
 
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import initialUsersData from "@/constants/user-data.json";
+import { DataTable } from "@/features/users/components/user-data-table";
+import { UserStateCards } from "@/features/users/components/user-state-cards";
+import { type User, type UserFormValues } from "@/features/users/utils/schema";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>(initialUsersData as User[]);
@@ -45,7 +45,10 @@ export default function UsersPage() {
 
   return (
     <>
-      <DashboardPageHeader title="Users" description="Manage users and permissions" />
+      <DashboardPageHeader
+        title="Users"
+        description="Manage users and permissions"
+      />
 
       <div className="@container/main px-4 lg:px-6 space-y-6">
         <UserStateCards />

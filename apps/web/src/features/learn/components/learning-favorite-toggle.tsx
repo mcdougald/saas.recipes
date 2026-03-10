@@ -1,11 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { toggleLearningTopicFavoriteAction } from "@/features/learn/actions";
-import { cn } from "@/lib/utils";
 import { Heart } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import { toggleLearningTopicFavoriteAction } from "@/features/learn/actions";
+import { cn } from "@/lib/utils";
 
 interface LearningFavoriteToggleProps {
   slug: string;
@@ -57,7 +58,9 @@ export function LearningFavoriteToggle({
         } catch (error) {
           setIsFavorited(!optimisticValue);
           const message =
-            error instanceof Error ? error.message : "Failed to update favorite.";
+            error instanceof Error
+              ? error.message
+              : "Failed to update favorite.";
           toast.error(message);
         }
       })();
@@ -72,7 +75,9 @@ export function LearningFavoriteToggle({
       className={cn("relative z-10 cursor-pointer", className)}
       aria-pressed={isFavorited}
       aria-label={
-        isFavorited ? `Remove ${title} from favorites` : `Save ${title} to favorites`
+        isFavorited
+          ? `Remove ${title} from favorites`
+          : `Save ${title} to favorites`
       }
       disabled={isPending}
       onClick={handleClick}

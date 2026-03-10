@@ -1,5 +1,6 @@
 import { cookies, headers } from "next/headers";
 import { getRequestConfig } from "next-intl/server";
+
 import {
   fallbackLng,
   localeCookieName,
@@ -18,7 +19,11 @@ function toIcuInterpolation(message: string): string {
   return message.replace(/\{\{\s*([^}]+?)\s*\}\}/g, "{$1}");
 }
 
-function setNestedValue(target: NestedMessages, keyPath: string[], value: string): void {
+function setNestedValue(
+  target: NestedMessages,
+  keyPath: string[],
+  value: string,
+): void {
   let current = target;
 
   for (let index = 0; index < keyPath.length - 1; index += 1) {
@@ -43,14 +48,18 @@ function toNestedMessages(flatMessages: FlatMessages): NestedMessages {
     setNestedValue(
       nestedMessages,
       flatKey.split("."),
-      typeof message === "string" ? toIcuInterpolation(message) : String(message),
+      typeof message === "string"
+        ? toIcuInterpolation(message)
+        : String(message),
     );
   }
 
   return nestedMessages;
 }
 
-function localeFromAcceptLanguage(headerValue: string | null): SupportedLanguage | null {
+function localeFromAcceptLanguage(
+  headerValue: string | null,
+): SupportedLanguage | null {
   if (!headerValue) {
     return null;
   }
@@ -71,16 +80,25 @@ function localeFromAcceptLanguage(headerValue: string | null): SupportedLanguage
 }
 
 export default getRequestConfig(async () => {
-  const [cookieStore, requestHeaders] = await Promise.all([cookies(), headers()]);
+  const [cookieStore, requestHeaders] = await Promise.all([
+    cookies(),
+    headers(),
+  ]);
   const cookieLocale = cookieStore.get(localeCookieName)?.value;
-  const headerLocale = localeFromAcceptLanguage(requestHeaders.get("accept-language"));
-  const locale = normalizeToSupportedLanguage(matchSupportedLanguage(cookieLocale) ?? headerLocale);
+  const headerLocale = localeFromAcceptLanguage(
+    requestHeaders.get("accept-language"),
+  );
+  const locale = normalizeToSupportedLanguage(
+    matchSupportedLanguage(cookieLocale) ?? headerLocale,
+  );
 
-  const flatMessages = (await import(`./messages/${locale}.json`)).default as FlatMessages;
+  const flatMessages = (await import(`./messages/${locale}.json`))
+    .default as FlatMessages;
   const fallbackMessages =
     locale === fallbackLng
       ? flatMessages
-      : ((await import(`./messages/${fallbackLng}.json`)).default as FlatMessages);
+      : ((await import(`./messages/${fallbackLng}.json`))
+          .default as FlatMessages);
   const mergedMessages = { ...fallbackMessages, ...flatMessages };
 
   return {

@@ -1,8 +1,9 @@
+import { z } from "zod";
+
 import {
   kanbanStatusValues,
   taskPriorityValues,
 } from "@/lib/db/feature-domain";
-import { z } from "zod";
 
 export const priorityEnum = z.enum(taskPriorityValues);
 export const columnStatusEnum = z.enum(kanbanStatusValues);

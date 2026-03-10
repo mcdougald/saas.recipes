@@ -2,7 +2,9 @@
 
 import { ChevronsUpDown, Plus } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
+
 import { SaasRecipesIcon } from "@/components/common/icons/saas-recipes-icon";
 import {
   DropdownMenu,

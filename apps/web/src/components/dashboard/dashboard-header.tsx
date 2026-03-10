@@ -1,5 +1,11 @@
 "use client";
 
+import { Home, Settings } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import { toast } from "sonner";
+
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import { ThemeCustomizer } from "@/components/theme-customizer";
@@ -9,11 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/auth-context";
 import { useI18n } from "@/hooks/use-i18n";
-import { Home, Settings } from "lucide-react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import * as React from "react";
-import { toast } from "sonner";
 
 /**
  * Render the sticky global dashboard header with auth-aware actions.
@@ -85,7 +86,12 @@ export function DashboardHeader() {
               <ProfileDropdown />
             ) : (
               <div className="flex items-center gap-2">
-                <Button asChild variant="ghost" size="sm" className="rounded-full">
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-full"
+                >
                   <Link href="/sign-in">{t("common.signIn")}</Link>
                 </Button>
                 <Button asChild size="sm" className="rounded-full">

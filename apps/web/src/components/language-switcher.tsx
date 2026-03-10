@@ -1,5 +1,8 @@
 "use client";
 
+import { Globe } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { useI18n } from "@/hooks/use-i18n";
-import { fallbackLng, supportedLngs, type SupportedLanguage } from "@/i18n/settings";
+import {
+  fallbackLng,
+  type SupportedLanguage,
+  supportedLngs,
+} from "@/i18n/settings";
 import { cn } from "@/lib/utils";
-import { Globe } from "lucide-react";
 
 const languageLabels: Record<SupportedLanguage, string> = {
   en: "English",

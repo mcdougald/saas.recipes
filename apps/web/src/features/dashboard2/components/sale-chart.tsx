@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,8 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 const salesData = [
   { month: "Jan", sales: 12500, target: 15000 },

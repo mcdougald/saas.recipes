@@ -1,8 +1,9 @@
+import { desc, eq } from "drizzle-orm";
+
 import { db } from "@/lib/db";
 import { userTask } from "@/lib/db/schema";
 import { getServerSession } from "@/lib/session";
-import { desc, eq } from "drizzle-orm";
-import { taskSchema, type Task, type TaskFormSchema } from "../utils/schema";
+import { type Task, type TaskFormSchema, taskSchema } from "../utils/schema";
 
 async function requireCurrentUserId() {
   const session = await getServerSession();

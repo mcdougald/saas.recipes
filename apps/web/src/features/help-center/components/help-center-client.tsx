@@ -1,29 +1,36 @@
 "use client";
 
-import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
+import {
+  ArrowUpRight,
+  BookOpenText,
+  CreditCard,
+  LifeBuoy,
+  type LucideIcon,
+  MessageCircleQuestion,
+  Rocket,
+  Sparkles,
+} from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CategoryCards } from "@/features/help-center/components/category-cards";
 import { FAQAccordion } from "@/features/help-center/components/faq-accordion";
+import { HelpSearchHero } from "@/features/help-center/components/help-search-hero";
+import { PopularArticles } from "@/features/help-center/components/popular-articles";
 import {
   HELP_CENTER_CATEGORIES,
   HELP_CENTER_FAQ_SECTIONS,
   HELP_CENTER_POPULAR_ARTICLES,
   HELP_CENTER_SUGGESTED_TOPICS,
 } from "@/features/help-center/help-center-data";
-import { HelpSearchHero } from "@/features/help-center/components/help-search-hero";
-import { PopularArticles } from "@/features/help-center/components/popular-articles";
-import {
-  ArrowUpRight,
-  BookOpenText,
-  CreditCard,
-  LifeBuoy,
-  MessageCircleQuestion,
-  Rocket,
-  Sparkles,
-  type LucideIcon,
-} from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type HelpCenterSection = "categories" | "articles" | "faq";
 
@@ -102,8 +109,7 @@ const HELP_CENTER_QUICK_LINKS: readonly HelpCenterQuickLink[] = [
  */
 function isHelpCenterSection(value: string | null): value is HelpCenterSection {
   return (
-    value !== null &&
-    HELP_CENTER_SECTIONS.includes(value as HelpCenterSection)
+    value !== null && HELP_CENTER_SECTIONS.includes(value as HelpCenterSection)
   );
 }
 
@@ -259,7 +265,12 @@ export function HelpCenterClient() {
         0,
       )
     );
-  }, [deferredQuery, filteredArticles, filteredCategories, filteredFaqSections]);
+  }, [
+    deferredQuery,
+    filteredArticles,
+    filteredCategories,
+    filteredFaqSections,
+  ]);
 
   const activeFaqItem = useMemo(() => {
     if (!faqItemFromUrl) {
@@ -267,7 +278,9 @@ export function HelpCenterClient() {
     }
 
     const hasFaqItem = HELP_CENTER_FAQ_SECTIONS.some((section) =>
-      section.questions.some((faq) => `${section.id}-${faq.id}` === faqItemFromUrl),
+      section.questions.some(
+        (faq) => `${section.id}-${faq.id}` === faqItemFromUrl,
+      ),
     );
 
     return hasFaqItem ? faqItemFromUrl : null;
@@ -308,7 +321,7 @@ export function HelpCenterClient() {
     syncUrlState({
       section,
       query,
-      faq: section === "faq" ? faqItemValue ?? activeFaqItem : null,
+      faq: section === "faq" ? (faqItemValue ?? activeFaqItem) : null,
     });
   }
 
@@ -351,8 +364,9 @@ export function HelpCenterClient() {
                 Turn open-source patterns into production-ready SaaS decisions
               </h3>
               <p className="text-muted-foreground max-w-2xl text-sm leading-relaxed">
-                Discover proven implementation paths, compare architecture choices,
-                and jump from discovery to execution without losing momentum.
+                Discover proven implementation paths, compare architecture
+                choices, and jump from discovery to execution without losing
+                momentum.
               </p>
             </div>
             <div className="grid gap-3 md:grid-cols-3">
@@ -361,7 +375,9 @@ export function HelpCenterClient() {
                   <span className="inline-flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
                     <BookOpenText className="size-4" />
                   </span>
-                  <p className="text-xl font-semibold">{filteredCategories.length}</p>
+                  <p className="text-xl font-semibold">
+                    {filteredCategories.length}
+                  </p>
                 </div>
                 <p className="mt-2 text-sm font-medium">Focused categories</p>
                 <p className="text-muted-foreground mt-1 text-xs">
@@ -373,7 +389,9 @@ export function HelpCenterClient() {
                   <span className="inline-flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
                     <LifeBuoy className="size-4" />
                   </span>
-                  <p className="text-xl font-semibold">{filteredArticles.length}</p>
+                  <p className="text-xl font-semibold">
+                    {filteredArticles.length}
+                  </p>
                 </div>
                 <p className="mt-2 text-sm font-medium">Popular walkthroughs</p>
                 <p className="text-muted-foreground mt-1 text-xs">
@@ -387,7 +405,9 @@ export function HelpCenterClient() {
                   </span>
                   <p className="text-xl font-semibold">{faqEntryCount}</p>
                 </div>
-                <p className="mt-2 text-sm font-medium">Actionable FAQ answers</p>
+                <p className="mt-2 text-sm font-medium">
+                  Actionable FAQ answers
+                </p>
                 <p className="text-muted-foreground mt-1 text-xs">
                   Get direct answers with implementation context.
                 </p>
@@ -491,7 +511,9 @@ export function HelpCenterClient() {
                 const LinkIcon = link.icon;
                 const isLinkActive =
                   selectedSection === link.section &&
-                  (link.faqItemValue ? activeFaqItem === link.faqItemValue : true);
+                  (link.faqItemValue
+                    ? activeFaqItem === link.faqItemValue
+                    : true);
 
                 return (
                   <button
@@ -514,7 +536,9 @@ export function HelpCenterClient() {
                       <LinkIcon className="text-muted-foreground size-3.5" />
                     </span>
                     <span className="flex-1 space-y-0.5">
-                      <span className="block text-xs font-medium">{link.label}</span>
+                      <span className="block text-xs font-medium">
+                        {link.label}
+                      </span>
                       <span className="text-muted-foreground block text-[11px] leading-snug">
                         {link.description}
                       </span>
@@ -536,7 +560,10 @@ export function HelpCenterClient() {
         />
 
         <div id="articles">
-          <PopularArticles articles={filteredArticles} searchQuery={deferredQuery} />
+          <PopularArticles
+            articles={filteredArticles}
+            searchQuery={deferredQuery}
+          />
         </div>
       </section>
 

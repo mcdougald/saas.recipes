@@ -1,7 +1,7 @@
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { TransactionsStats } from "@/features/payment-transactions/components/transactions-stats";
 import { TransactionsTable } from "@/features/payment-transactions/components/transactions-table";
 import { transactions } from "@/features/payment-transactions/utils/transaction-data";
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
 
 export default function PaymentTransactionsPage() {
   return (

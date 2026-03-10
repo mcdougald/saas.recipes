@@ -1,8 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ShieldX } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
 
 export function ForbiddenError() {
   const router = useRouter();
@@ -20,16 +21,14 @@ export function ForbiddenError() {
             Your current access level does not include this page yet.
           </p>
           <p className="text-muted-foreground">
-            Upgrade your workspace to unlock premium recipe workflows, automation,
-            and faster publishing.
+            Upgrade your workspace to unlock premium recipe workflows,
+            automation, and faster publishing.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button variant="outline" onClick={() => router.back()}>
               Go Back
             </Button>
-            <Button onClick={() => router.push("/pricing")}>
-              View Plans
-            </Button>
+            <Button onClick={() => router.push("/pricing")}>View Plans</Button>
           </div>
         </div>
       </div>

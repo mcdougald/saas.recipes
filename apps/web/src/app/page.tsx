@@ -1,3 +1,5 @@
+import { type Metadata } from "next";
+
 import {
   CtaSection,
   FeaturesSection,
@@ -7,7 +9,6 @@ import {
   LandingHeader,
   TestimonialsSection,
 } from "@/components/home";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "SaaS Recipes — Ship your SaaS faster with proven patterns",

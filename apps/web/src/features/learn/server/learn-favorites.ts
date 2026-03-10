@@ -1,8 +1,9 @@
+import { and, eq } from "drizzle-orm";
+
 import { generateRandomUUID } from "@/helpers/generate-random-uuid";
 import { db } from "@/lib/db";
 import { userFavorite } from "@/lib/db/schema";
 import { getServerSession } from "@/lib/session";
-import { and, eq } from "drizzle-orm";
 
 interface ToggleLearningTopicFavoriteInput {
   slug: string;

@@ -1,6 +1,7 @@
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { pricingPageCopy } from "@/features/pricing/pricing-data";
-import Link from "next/link";
 
 /**
  * Describe props used to render the pricing page marketing header.
@@ -45,7 +46,9 @@ export function PricingPageHeader({
 
             <div className="space-y-4">
               <div className="bg-background/80 rounded-md border p-6 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80">Next step</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/80">
+                  Next step
+                </p>
                 <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
                   {isSignedIn
                     ? `You're on ${hasPaidPlan ? currentTier : "the free tier"}. Choose the plan that matches your roadmap.`
@@ -60,10 +63,14 @@ export function PricingPageHeader({
                   ) : (
                     <>
                       <Button asChild className="w-full">
-                        <Link href="/sign-in?redirect=%2Fpricing">Sign in to continue</Link>
+                        <Link href="/sign-in?redirect=%2Fpricing">
+                          Sign in to continue
+                        </Link>
                       </Button>
                       <Button asChild variant="outline" className="w-full">
-                        <Link href="/sign-up?redirect=%2Fpricing">Create free account</Link>
+                        <Link href="/sign-up?redirect=%2Fpricing">
+                          Create free account
+                        </Link>
                       </Button>
                     </>
                   )}
@@ -71,9 +78,12 @@ export function PricingPageHeader({
               </div>
 
               <div className="bg-primary/5 rounded-md border p-4">
-                <p className="text-sm font-medium">Your unfair shipping advantage</p>
+                <p className="text-sm font-medium">
+                  Your unfair shipping advantage
+                </p>
                 <p className="text-muted-foreground mt-1.5 text-xs leading-relaxed">
-                  Use battle-tested repo analysis and AI Chef guidance to ship faster with fewer costly missteps.
+                  Use battle-tested repo analysis and AI Chef guidance to ship
+                  faster with fewer costly missteps.
                 </p>
               </div>
             </div>

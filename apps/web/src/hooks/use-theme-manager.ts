@@ -1,10 +1,11 @@
 "use client";
 
+import React from "react";
+
 import { baseColors } from "@/config/theme-customizer-constants";
 import { colorThemes } from "@/config/theme-data";
 import { useTheme } from "@/hooks/use-theme";
-import type { ImportedTheme, ThemePreset } from "@/lib/types";
-import React from "react";
+import { type ImportedTheme, type ThemePreset } from "@/lib/types";
 
 export function useThemeManager() {
   const { theme, setTheme } = useTheme();

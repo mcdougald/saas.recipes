@@ -1,10 +1,11 @@
+import { eq } from "drizzle-orm";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
+
 import { auth } from "@/lib/auth";
 import { hasAdminAccess } from "@/lib/auth-access";
 import { db } from "@/lib/db";
 import { user as userTable } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 type Session = Awaited<ReturnType<typeof auth.api.getSession>>;
 
@@ -19,9 +20,12 @@ async function shouldBypassAuthGuards(): Promise<boolean> {
   }
 
   const headersList = await headers();
-  const host = headersList.get("x-forwarded-host") ?? headersList.get("host") ?? "";
+  const host =
+    headersList.get("x-forwarded-host") ?? headersList.get("host") ?? "";
   const hostname = host.split(":")[0].toLowerCase();
-  return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+  return (
+    hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1"
+  );
 }
 
 /**
@@ -60,7 +64,9 @@ export interface AppSessionUser {
  * @param session - Raw Better Auth session payload.
  * @returns Session user with safe defaults, or null when unauthenticated.
  */
-export function getAppSessionUser(session: Session | null): AppSessionUser | null {
+export function getAppSessionUser(
+  session: Session | null,
+): AppSessionUser | null {
   if (!session?.user?.id || !session.user.email || !session.user.name) {
     return null;
   }
@@ -192,7 +198,8 @@ export async function requireAdminUser(): Promise<AppSessionUser> {
     redirect("/sign-in");
   }
 
-  const hasAdminPrivileges = user.admin || (await getPersistedAdminStatus(user.id));
+  const hasAdminPrivileges =
+    user.admin || (await getPersistedAdminStatus(user.id));
 
   if (!hasAdminPrivileges) {
     redirect("/forbidden");

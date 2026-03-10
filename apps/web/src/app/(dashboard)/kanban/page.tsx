@@ -1,5 +1,5 @@
-import { KanbanBoard } from "@/features/kanban/components/kanban-board";
 import { DashboardPageHeader } from "@/components/dashboard/page-header";
+import { KanbanBoard } from "@/features/kanban/components/kanban-board";
 
 export default function KanbanPage() {
   return (

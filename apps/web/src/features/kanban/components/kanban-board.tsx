@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  DndContext,
-  DragEndEvent,
-  DragOverEvent,
-  DragOverlay,
-  DragStartEvent,
-  PointerSensor,
   closestCorners,
+  DndContext,
+  type DragEndEvent,
+  type DragOverEvent,
+  DragOverlay,
+  type DragStartEvent,
+  PointerSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -15,7 +15,7 @@ import { arrayMove } from "@dnd-kit/sortable";
 import { useCallback, useState } from "react";
 
 import { initialTasks } from "../utils/data";
-import type { ColumnStatus, KanbanTask } from "../utils/schema";
+import { type ColumnStatus, type KanbanTask } from "../utils/schema";
 import { AddTaskDialog } from "./add-task-dialog";
 import { KanbanCard } from "./kanban-card";
 import { KanbanColumn } from "./kanban-column";

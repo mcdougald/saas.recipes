@@ -16,7 +16,8 @@ import {
   Video,
 } from "lucide-react";
 import Image from "next/image";
-import { PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
+
 import { Icons } from "./icons";
 
 const MockDiscordUI = ({ children }: PropsWithChildren) => {

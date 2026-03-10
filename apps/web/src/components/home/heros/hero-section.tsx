@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { HighlightText } from "@/components/ui/highlight-text";
-import { useI18n } from "@/hooks/use-i18n";
 import Link from "next/link";
 import { HiSparkles } from "react-icons/hi2";
 
+import { Button } from "@/components/ui/button";
+import { useI18n } from "@/hooks/use-i18n";
+import { HandDrawnArrowNote } from "./hand-drawn-arrow-note";
 import { HeroDescription } from "./hero-description";
 import { RecipeCardsPreview } from "./recipe-cards-preview";
 
@@ -27,36 +27,30 @@ export function HeroSection() {
 
       <div className="container relative mx-auto max-w-5xl text-center">
         <div className="mx-auto mb-6 max-w-5xl space-y-4 text-center">
-          <h1
-            id="hero-heading"
-            className="mx-auto max-w-4xl text-balance pb-1 text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
-          >
-            <span className="block">{t("hero.headingPrefix")}</span>
-            <span className="mt-3 block text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
-              <HighlightText
-                variant="underline"
-                color="hsl(var(--primary))"
-                strokeWidth={2}
-                animationDuration={700}
-                className="px-1.5 py-1 align-middle text-primary"
-              >
-                {t("hero.rotate.better")}
-              </HighlightText>{" "}
-              <span className="text-gradient-primary">
+          <div className="relative inline-block">
+            <h1
+              id="hero-heading"
+              className="mx-auto inline-flex flex-col items-center pb-1 text-3xl font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+            >
+              <span className="block whitespace-nowrap">
+                {t("hero.headingPrefix")}{" "}
+                <span
+                  id="hero-flavors"
+                  className="relative inline-block pb-1.5 text-primary"
+                >
+                  {t("hero.rotate.better")}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 -bottom-0.5 h-[3px] rounded-full bg-primary/90"
+                  />
+                  <HandDrawnArrowNote />
+                </span>
+              </span>
+              <span className="mt-1 block whitespace-nowrap text-gradient-primary">
                 {t("hero.headingSuffix")}
               </span>
-            </span>
-          </h1>
-
-          <p className="mx-auto flex max-w-2xl items-center justify-center gap-2 text-sm font-medium text-muted-foreground sm:text-base">
-            <span aria-hidden className="text-primary/70">
-              ↖
-            </span>
-            <span>{t("hero.description.secondary")}</span>
-            <span aria-hidden className="text-primary/70">
-              ↗
-            </span>
-          </p>
+            </h1>
+          </div>
         </div>
 
         <HeroDescription />

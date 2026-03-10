@@ -1,16 +1,15 @@
 "use client";
 
-import type { Table } from "@tanstack/react-table";
+import { type Table } from "@tanstack/react-table";
 import { Search, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AddTaskModal } from "./add-task-modal";
-import { DataTableViewOptions } from "./data-table-view-options";
-
-import type { Task, TaskFormSchema } from "../utils/schema";
+import { type Task, type TaskFormSchema } from "../utils/schema";
 import { priorities, statuses } from "../utils/task-data";
+import { AddTaskModal } from "./add-task-modal";
 import { DataTableFacetedFilter } from "./data-table-filtered";
+import { DataTableViewOptions } from "./data-table-view-options";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;

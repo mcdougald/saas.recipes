@@ -1,7 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   ArrowRight,
   BookOpen,
@@ -12,7 +10,10 @@ import {
   Shield,
   Sparkles,
 } from "lucide-react";
-import { HelpCategory } from "@/features/help-center/help-center-data";
+
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { type HelpCategory } from "@/features/help-center/help-center-data";
 
 const categoryIconMap = {
   sparkles: Sparkles,
@@ -56,7 +57,9 @@ export function CategoryCards({
   return (
     <div className="space-y-5">
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight">Browse by Category</h2>
+        <h2 className="text-2xl font-bold tracking-tight">
+          Browse by Category
+        </h2>
         <p className="text-muted-foreground text-sm">
           Pick a lane and jump to practical guides used to ship real SaaS
           products faster.

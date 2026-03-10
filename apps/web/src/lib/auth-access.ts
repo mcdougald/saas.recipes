@@ -70,7 +70,9 @@ function hasAdminRoleClaim(value: unknown): boolean {
  * hasAdminAccess({ roles: ["member", "owner"] }); // true
  * ```
  */
-export function hasAdminAccess(user: AdminClaimUserLike | null | undefined): boolean {
+export function hasAdminAccess(
+  user: AdminClaimUserLike | null | undefined,
+): boolean {
   if (!user) {
     return false;
   }
@@ -82,4 +84,3 @@ export function hasAdminAccess(user: AdminClaimUserLike | null | undefined): boo
     hasAdminRoleClaim(user.roles)
   );
 }
-

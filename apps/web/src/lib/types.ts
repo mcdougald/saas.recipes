@@ -1,4 +1,4 @@
-import { LinkProps } from "next/link";
+import { type LinkProps } from "next/link";
 
 interface User {
   id: string;

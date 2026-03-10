@@ -1,10 +1,11 @@
-import AppSidebar from "@/components/sidebar/app-sidebar";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
+
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import AppSidebar from "@/components/sidebar/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarConfigProvider } from "@/contexts/sidebar-context";
 import { isAdmin, isAuthenticated } from "@/lib/session";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 

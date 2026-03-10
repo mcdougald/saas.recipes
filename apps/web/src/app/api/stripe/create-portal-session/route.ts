@@ -1,11 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
-import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
+import { type NextRequest, NextResponse } from "next/server";
+
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 import { getPostHogClient, shutdownPostHog } from "@/lib/posthog-server";
+import { stripe } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {

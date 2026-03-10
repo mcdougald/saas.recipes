@@ -1,6 +1,15 @@
+import {
+  ArrowRight,
+  CheckCircle2,
+  Code2,
+  LockKeyhole,
+  Sparkles,
+} from "lucide-react";
+import Link from "next/link";
+
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import {
   Card,
   CardContent,
@@ -8,8 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowRight, CheckCircle2, Code2, LockKeyhole, Sparkles } from "lucide-react";
-import Link from "next/link";
 
 type Snippet = {
   title: string;
@@ -30,7 +37,8 @@ const snippets: Snippet[] = [
     level: "Intermediate",
     scenario:
       "Ship risky features to small cohorts first, with a fast rollback path.",
-    focus: "Server-side gating + deterministic bucketing to avoid hydration drift.",
+    focus:
+      "Server-side gating + deterministic bucketing to avoid hydration drift.",
     code: `export async function isEnabled(userId: string) {
   const flag = await posthog.isFeatureEnabled("new-editor", userId);
   if (!flag) return false;
@@ -100,7 +108,8 @@ const roadmap = [
 ];
 
 export default function LearnPlaybooksPage() {
-  const categoryCount = new Set(snippets.map((snippet) => snippet.category)).size;
+  const categoryCount = new Set(snippets.map((snippet) => snippet.category))
+    .size;
 
   return (
     <>
@@ -130,7 +139,9 @@ export default function LearnPlaybooksPage() {
             }
           >
             <div className="flex flex-wrap items-center gap-3">
-              <Badge variant="secondary">{snippets.length} snippet previews</Badge>
+              <Badge variant="secondary">
+                {snippets.length} snippet previews
+              </Badge>
               <Badge variant="secondary">{categoryCount} core categories</Badge>
               <Badge variant="secondary" className="gap-1">
                 <LockKeyhole aria-hidden className="size-3.5" />
@@ -173,7 +184,9 @@ export default function LearnPlaybooksPage() {
               >
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="space-y-1">
-                    <p className="text-sm font-semibold leading-5">{snippet.title}</p>
+                    <p className="text-sm font-semibold leading-5">
+                      {snippet.title}
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       {snippet.scenario}
                     </p>
@@ -229,7 +242,9 @@ export default function LearnPlaybooksPage() {
 
             <div className="rounded-lg border border-primary/25 bg-primary/5 p-4">
               <div className="space-y-2">
-                <p className="font-semibold">Designed for premium learning paths</p>
+                <p className="font-semibold">
+                  Designed for premium learning paths
+                </p>
                 <p className="text-sm text-muted-foreground">
                   Upcoming releases will connect snippet previews to deeper
                   architecture notes, implementation trade-offs, and full

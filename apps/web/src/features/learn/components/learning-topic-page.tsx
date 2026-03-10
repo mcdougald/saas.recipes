@@ -1,3 +1,6 @@
+import { ArrowRight, LockKeyhole } from "lucide-react";
+import Link from "next/link";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,9 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { LearningFavoriteToggle } from "@/features/learn/components/learning-favorite-toggle";
-import type { LearningTopic } from "@/features/learn/data/learning-topics";
-import { ArrowRight, LockKeyhole } from "lucide-react";
-import Link from "next/link";
+import { type LearningTopic } from "@/features/learn/data/learning-topics";
 
 interface LearningTopicPageProps {
   topic: LearningTopic;
@@ -30,7 +31,9 @@ export function LearningTopicPage({
         <div className="rounded-xl border bg-card p-6 lg:p-7">
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary">{topic.recipes.length} free recipes</Badge>
+              <Badge variant="secondary">
+                {topic.recipes.length} free recipes
+              </Badge>
               <Badge variant="outline" className="gap-1">
                 <LockKeyhole aria-hidden className="size-3.5" />
                 {topic.premiumContent.length} premium modules
@@ -38,7 +41,9 @@ export function LearningTopicPage({
             </div>
 
             <div className="space-y-2">
-              <h1 className="text-2xl font-bold tracking-tight">{topic.title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight">
+                {topic.title}
+              </h1>
               <p className="text-muted-foreground">{topic.description}</p>
             </div>
 

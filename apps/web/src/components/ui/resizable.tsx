@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { GripVerticalIcon } from "lucide-react";
+import type * as React from "react";
 import * as ResizablePrimitive from "react-resizable-panels";
 
 import { cn } from "@/lib/utils";
@@ -10,7 +10,9 @@ type ResizablePanelGroupProps = Omit<
   React.ComponentProps<typeof ResizablePrimitive.Group>,
   "orientation" | "onLayoutChange"
 > & {
-  direction?: React.ComponentProps<typeof ResizablePrimitive.Group>["orientation"];
+  direction?: React.ComponentProps<
+    typeof ResizablePrimitive.Group
+  >["orientation"];
   onLayout?: (sizes: number[]) => void;
 };
 

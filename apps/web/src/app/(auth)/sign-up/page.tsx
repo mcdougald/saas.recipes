@@ -1,12 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Clock3,
+  Github,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
-import { CheckCircle2, Clock3, Github, ShieldCheck, Sparkles } from "lucide-react";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -14,9 +21,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signIn, signUp } from "@/lib/auth-client";
+import { Input } from "@/components/ui/input";
 import { useI18n } from "@/hooks/use-i18n";
+import { signIn, signUp } from "@/lib/auth-client";
 
+/** Render the sign-up card and registration actions. */
 export default function SignUpPage() {
   const { t } = useI18n();
   const [name, setName] = useState("");
@@ -85,30 +94,51 @@ export default function SignUpPage() {
   };
 
   return (
-    <Card className="w-full max-w-md border-border/60 bg-background/95 shadow-xl shadow-black/5 backdrop-blur-xs">
+    <Card className="w-full max-w-md overflow-hidden border-border/60 bg-background/95 shadow-xl shadow-black/10 backdrop-blur-sm">
       <CardHeader className="space-y-3 pb-2 text-center">
         <p className="mx-auto inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/3 px-3 py-1 text-xs font-medium text-primary">
           <Sparkles className="h-3.5 w-3.5" aria-hidden />
           {t("auth.signUp.badge")}
         </p>
-        <CardTitle className="text-4xl font-semibold tracking-tight">
+        <CardTitle className="text-3xl font-semibold tracking-tight">
           {t("auth.signUp.title")}
         </CardTitle>
         <CardDescription className="mx-auto max-w-sm text-muted-foreground">
           {t("auth.signUp.description")}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full h-10 font-medium"
-          onClick={handleGithubSignIn}
-          disabled={isBusy}
-        >
-          <Github className="mr-2 h-4 w-4" aria-hidden />
-          {isSocialLoading ? t("auth.signUp.github.connecting") : t("auth.signUp.github.cta")}
-        </Button>
+      <CardContent className="space-y-5">
+        <div className="group relative mx-auto w-full max-w-88 overflow-hidden rounded-xl p-px transition-all duration-300 hover:-translate-y-0.5">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -inset-[120%] animate-[spin_3.2s_linear_infinite] bg-[conic-gradient(from_90deg,#ffffff00_0%,#ffffff_20%,#ffffff00_34%,#ffffff00_100%)] opacity-80"
+          />
+          <Button
+            type="button"
+            className="relative z-10 h-12 w-full cursor-pointer overflow-hidden rounded-[11px] border border-white/20 bg-linear-to-r from-zinc-950 via-black to-zinc-900 px-4 text-white shadow-sm transition-all hover:shadow-lg hover:shadow-white/10"
+            onClick={handleGithubSignIn}
+            disabled={isBusy}
+          >
+            <span className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <span className="relative mr-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10">
+              <Github className="h-4 w-4" aria-hidden />
+            </span>
+            <span className="text-sm font-semibold">
+              {isSocialLoading
+                ? t("auth.signUp.github.connecting")
+                : t("auth.signUp.github.cta")}
+            </span>
+            {!isSocialLoading ? (
+              <ArrowRight
+                className="ml-auto h-4 w-4 opacity-80 transition-transform duration-300 group-hover:translate-x-0.5"
+                aria-hidden
+              />
+            ) : null}
+          </Button>
+        </div>
+        <p className="text-center text-xs text-muted-foreground">
+          {t("auth.signUp.github.helper")}
+        </p>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
@@ -133,7 +163,7 @@ export default function SignUpPage() {
               autoComplete="name"
               required
               disabled={isBusy}
-              className="h-10"
+              className="h-10 border-border/70 bg-white text-foreground placeholder:text-muted-foreground dark:border-white/20 dark:bg-black"
             />
           </div>
           <div className="space-y-2">
@@ -149,7 +179,7 @@ export default function SignUpPage() {
               autoComplete="email"
               required
               disabled={isBusy}
-              className="h-10"
+              className="h-10 border-border/70 bg-white text-foreground placeholder:text-muted-foreground dark:border-white/20 dark:bg-black"
             />
           </div>
           <div className="space-y-2">
@@ -166,7 +196,7 @@ export default function SignUpPage() {
               minLength={8}
               autoComplete="new-password"
               disabled={isBusy}
-              className="h-10"
+              className="h-10 border-border/70 bg-white text-foreground placeholder:text-muted-foreground dark:border-white/20 dark:bg-black"
             />
             <p className="text-xs text-muted-foreground">
               {t("auth.signUp.passwordHint")}
@@ -186,24 +216,35 @@ export default function SignUpPage() {
             className="w-full h-10 font-medium"
             disabled={isBusy}
           >
-            {isLoading ? t("auth.signUp.submit.loading") : t("auth.signUp.submit.default")}
+            {isLoading
+              ? t("auth.signUp.submit.loading")
+              : t("auth.signUp.submit.default")}
           </Button>
         </form>
         <ul className="space-y-2 mt-3 rounded-lg border border-border/60 bg-muted/20 p-3 text-xs text-muted-foreground">
           <li className="flex items-start gap-2">
-            <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+            <CheckCircle2
+              className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary"
+              aria-hidden
+            />
             {t("auth.signUp.benefits.recipes")}
           </li>
           <li className="flex items-start gap-2">
-            <Clock3 className="mb-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+            <Clock3
+              className="mb-0.5 h-3.5 w-3.5 shrink-0 text-primary"
+              aria-hidden
+            />
             {t("auth.signUp.benefits.setup")}
           </li>
           <li className="flex items-start gap-2">
-            <ShieldCheck className="mb-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+            <ShieldCheck
+              className="mb-0.5 h-3.5 w-3.5 shrink-0 text-primary"
+              aria-hidden
+            />
             {t("auth.signUp.benefits.free")}
           </li>
         </ul>
-  
+
         <p className="text-center text-sm text-muted-foreground">
           {t("auth.signUp.alreadyHaveAccount")}{" "}
           <Link

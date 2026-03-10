@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { ArrowRight, Github, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Github, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -14,8 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signIn } from "@/lib/auth-client";
+import { Input } from "@/components/ui/input";
 import { useI18n } from "@/hooks/use-i18n";
+import { signIn } from "@/lib/auth-client";
 
 /** Render the sign-in card and authentication actions. */
 export default function SignInPage() {
@@ -40,7 +41,9 @@ export default function SignInPage() {
       });
 
       if (result.error) {
-        setError(result.error.message || t("auth.signIn.errors.invalidCredentials"));
+        setError(
+          result.error.message || t("auth.signIn.errors.invalidCredentials"),
+        );
       } else {
         router.push("/dashboard");
       }
@@ -57,12 +60,14 @@ export default function SignInPage() {
     setIsSocialLoading(true);
 
     try {
-      const callbackURL = `${window.location.origin}/dashboard?auth=success`;
-      console.info("[auth] Starting GitHub sign-in", { callbackURL });
+      const callbackUrl = `${window.location.origin}/dashboard?auth=success`;
+      console.info("[auth] Starting GitHub sign-in", {
+        callbackURL: callbackUrl,
+      });
 
       const result = await signIn.social({
         provider: "github",
-        callbackURL,
+        callbackURL: callbackUrl,
       });
 
       if (
@@ -72,7 +77,7 @@ export default function SignInPage() {
         result.error
       ) {
         console.error("[auth] GitHub sign-in returned an API error", {
-          callbackURL,
+          callbackURL: callbackUrl,
           error: result.error,
         });
         setError(t("auth.signIn.errors.github"));
@@ -126,7 +131,10 @@ export default function SignInPage() {
                 : t("auth.signIn.github.cta")}
             </span>
             {!isSocialLoading ? (
-              <ArrowRight className="ml-auto h-4 w-4 opacity-80 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden />
+              <ArrowRight
+                className="ml-auto h-4 w-4 opacity-80 transition-transform duration-300 group-hover:translate-x-0.5"
+                aria-hidden
+              />
             ) : null}
           </Button>
         </div>

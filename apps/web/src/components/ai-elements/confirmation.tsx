@@ -1,17 +1,18 @@
 "use client";
 
+import { type ToolUIPart } from "ai";
+import {
+  type ComponentProps,
+  createContext,
+  type ReactNode,
+  useContext,
+} from "react";
+
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { ToolUIPart } from "ai";
-import {
-  createContext,
-  useContext,
-  type ComponentProps,
-  type ReactNode,
-} from "react";
 
-type ToolUIPartApproval =
+type ToolUiPartApproval =
   | {
       id: string;
       approved?: never;
@@ -47,7 +48,7 @@ type ConfirmationState =
   | "output-denied";
 
 type ConfirmationContextValue = {
-  approval: ToolUIPartApproval;
+  approval: ToolUiPartApproval;
   state: ConfirmationState;
 };
 
@@ -66,7 +67,7 @@ const useConfirmation = () => {
 };
 
 export type ConfirmationProps = ComponentProps<typeof Alert> & {
-  approval?: ToolUIPartApproval;
+  approval?: ToolUiPartApproval;
   state: ConfirmationState;
 };
 

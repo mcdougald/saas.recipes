@@ -346,7 +346,12 @@ export type RepositoryDashboardItem = {
     Partial<
       Pick<
         RepositoryRepo,
-        "deployments" | "packageManager" | "packageJson" | "dependencies" | "workspacePackageJsons" | "commits"
+        | "deployments"
+        | "packageManager"
+        | "packageJson"
+        | "dependencies"
+        | "workspacePackageJsons"
+        | "commits"
       >
     > & {
       dependencyCount: number;

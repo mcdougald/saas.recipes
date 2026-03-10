@@ -1,5 +1,5 @@
-import { PaymentAnalytics } from "@/features/payment-dashboard/components/payment-analytics";
 import { DashboardPageHeader } from "@/components/dashboard/page-header";
+import { PaymentAnalytics } from "@/features/payment-dashboard/components/payment-analytics";
 import { PaymentGatewayStatus } from "@/features/payment-dashboard/components/payment-gateway-status";
 import { PaymentMethodsBreakdown } from "@/features/payment-dashboard/components/payment-methods-breakdown";
 import { PaymentMetrics } from "@/features/payment-dashboard/components/payment-metrics";

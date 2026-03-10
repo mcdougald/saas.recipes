@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
-import { db } from "@/lib/db";
-import { user, subscription } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import Stripe from "stripe";
+import { type NextRequest, NextResponse } from "next/server";
+import type Stripe from "stripe";
+
+import { db } from "@/lib/db";
+import { subscription, user } from "@/lib/db/schema";
 import { getPostHogClient, shutdownPostHog } from "@/lib/posthog-server";
+import { stripe } from "@/lib/stripe";
 
 /**
  * Process incoming Stripe webhook events and sync subscription state.
@@ -23,14 +24,17 @@ export async function POST(req: NextRequest) {
   if (!stripe) {
     return NextResponse.json(
       { error: "Stripe is not configured" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) {
     console.error("STRIPE_WEBHOOK_SECRET is not set");
-    return NextResponse.json({ error: "Webhook secret not configured" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Webhook secret not configured" },
+      { status: 500 },
+    );
   }
 
   let event: Stripe.Event;
@@ -99,7 +103,7 @@ export async function POST(req: NextRequest) {
 
         const userId = users[0].id;
         const priceId = sub.items.data[0]?.price.id;
-        
+
         // Determine subscription tier
         let tier = "free";
         if (
@@ -122,13 +126,17 @@ export async function POST(req: NextRequest) {
         // Get period end timestamp
         // Note: Stripe SDK types for this API version don't expose these properties in a type-safe way
         // Using unknown then Record<string, unknown> to safely access subscription properties
-        const periodEndTimestamp = 'current_period_end' in sub 
-          ? ((sub as unknown) as Record<string, unknown>).current_period_end as number 
-          : Date.now() / 1000;
+        const periodEndTimestamp =
+          "current_period_end" in sub
+            ? ((sub as unknown as Record<string, unknown>)
+                .current_period_end as number)
+            : Date.now() / 1000;
         const periodEnd = new Date(periodEndTimestamp * 1000);
-        const cancelAtEnd = 'cancel_at_period_end' in sub 
-          ? ((sub as unknown) as Record<string, unknown>).cancel_at_period_end as boolean 
-          : false;
+        const cancelAtEnd =
+          "cancel_at_period_end" in sub
+            ? ((sub as unknown as Record<string, unknown>)
+                .cancel_at_period_end as boolean)
+            : false;
 
         // Update or create subscription
         await db
@@ -201,9 +209,11 @@ export async function POST(req: NextRequest) {
         // Get period end timestamp
         // Note: Stripe SDK types for this API version don't expose these properties in a type-safe way
         // Using unknown then Record<string, unknown> to safely access subscription properties
-        const periodEndTimestamp = 'current_period_end' in sub 
-          ? ((sub as unknown) as Record<string, unknown>).current_period_end as number 
-          : Date.now() / 1000;
+        const periodEndTimestamp =
+          "current_period_end" in sub
+            ? ((sub as unknown as Record<string, unknown>)
+                .current_period_end as number)
+            : Date.now() / 1000;
         const periodEnd = new Date(periodEndTimestamp * 1000);
 
         // Update subscription status
@@ -246,6 +256,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   } catch (error) {
     console.error("Error processing webhook:", error);
-    return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Webhook handler failed" },
+      { status: 500 },
+    );
   }
 }

@@ -1,3 +1,4 @@
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import {
   Card,
   CardContent,
@@ -5,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
 
 export default function IssuesPage() {
   return (
@@ -25,7 +25,8 @@ export default function IssuesPage() {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground text-sm">
-              Add filters by status, assignee, label, and a data table or list view.
+              Add filters by status, assignee, label, and a data table or list
+              view.
             </p>
           </CardContent>
         </Card>

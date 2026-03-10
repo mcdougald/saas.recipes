@@ -1,22 +1,23 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 
-function isLocalhostURL(url: string) {
+function isLocalhostUrl(url: string) {
   return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(url);
 }
 
-function resolveBetterAuthBaseURL() {
-  const explicitBaseURLCandidates = [
+function resolveBetterAuthBaseUrl() {
+  const explicitBaseUrlCandidates = [
     process.env.BETTER_AUTH_URL,
     process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
     process.env.NEXT_PUBLIC_APP_URL,
   ].filter((value): value is string => Boolean(value));
 
-  for (const url of explicitBaseURLCandidates) {
+  for (const url of explicitBaseUrlCandidates) {
     // Prevent accidental production misconfiguration to localhost.
-    if (process.env.NODE_ENV === "production" && isLocalhostURL(url)) {
+    if (process.env.NODE_ENV === "production" && isLocalhostUrl(url)) {
       continue;
     }
     return url;
@@ -30,7 +31,7 @@ function resolveBetterAuthBaseURL() {
   return `http://localhost:${process.env.PORT || "4000"}`;
 }
 
-const betterAuthBaseURL = resolveBetterAuthBaseURL();
+const betterAuthBaseUrl = resolveBetterAuthBaseUrl();
 
 const githubClientId = process.env.GITHUB_CLIENT_ID;
 const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
@@ -47,7 +48,7 @@ const socialProviders = isGitHubAuthConfigured
 
 if (process.env.NODE_ENV !== "production") {
   console.info("[auth] Better Auth config", {
-    baseURL: betterAuthBaseURL,
+    baseURL: betterAuthBaseUrl,
     githubConfigured: isGitHubAuthConfigured,
     hasGithubClientId: Boolean(githubClientId),
     hasGithubClientSecret: Boolean(githubClientSecret),
@@ -77,7 +78,7 @@ export const auth = betterAuth({
   socialProviders,
   secret:
     process.env.BETTER_AUTH_SECRET || "your-secret-key-change-in-production",
-  baseURL: betterAuthBaseURL,
+  baseURL: betterAuthBaseUrl,
 });
 
 export type Session = typeof auth.$Infer.Session;

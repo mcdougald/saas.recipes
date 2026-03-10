@@ -1,14 +1,15 @@
-import { SnowEffect } from "@/components/snow-effect";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { I18nProvider } from "@/components/i18n-provider";
-import { AuthProvider } from "@/contexts/auth-context";
-import { FontProvider } from "@/contexts/font-context";
-import { SnowProvider } from "@/contexts/snow-context";
-import type { Metadata } from "next";
+import { type Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Manrope } from "next/font/google";
 import { getLocale, getMessages } from "next-intl/server";
 import NextToploader from "nextjs-toploader";
+
+import { I18nProvider } from "@/components/i18n-provider";
+import { SnowEffect } from "@/components/snow-effect";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/contexts/auth-context";
+import { FontProvider } from "@/contexts/font-context";
+import { SnowProvider } from "@/contexts/snow-context";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,7 +34,8 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: "SaaS Recipes - Dashboard",
-  description: "A modern SaaS dashboard built with Next.js, TailwindCSS, and shadcn/ui",
+  description:
+    "A modern SaaS dashboard built with Next.js, TailwindCSS, and shadcn/ui",
   icons: {
     icon: "/favicon.ico",
   },

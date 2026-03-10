@@ -1,5 +1,8 @@
 "use client";
 
+import { Layout, Palette, RotateCcw, Settings, X } from "lucide-react";
+import React from "react";
+
 import { ImportModal } from "@/components/theme-customizer/import-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,10 +17,8 @@ import { tweakcnThemes } from "@/config/theme-data";
 import { useSidebarConfig } from "@/contexts/sidebar-context";
 import { useI18n } from "@/hooks/use-i18n";
 import { useThemeManager } from "@/hooks/use-theme-manager";
-import type { ImportedTheme } from "@/lib/types";
+import { type ImportedTheme } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Layout, Palette, RotateCcw, Settings, X } from "lucide-react";
-import React from "react";
 import { LayoutTab } from "./layout-tab";
 import { ThemeTab } from "./theme-tab";
 
@@ -37,8 +38,7 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
     applyTheme,
     applyTweakcnTheme,
   } = useThemeManager();
-  const { config: sidebarConfig, resetSidebarData } =
-    useSidebarConfig();
+  const { config: sidebarConfig, resetSidebarData } = useSidebarConfig();
 
   const [activeTab, setActiveTab] = React.useState("theme");
   const [selectedTheme, setSelectedTheme] = React.useState("default");
@@ -165,13 +165,15 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
                     value="theme"
                     className="cursor-pointer data-[state=active]:bg-background"
                   >
-                    <Palette className="size-4" /> {t("themeCustomizer.tabs.theme")}
+                    <Palette className="size-4" />{" "}
+                    {t("themeCustomizer.tabs.theme")}
                   </TabsTrigger>
                   <TabsTrigger
                     value="layout"
                     className="cursor-pointer data-[state=active]:bg-background"
                   >
-                    <Layout className="size-4" /> {t("themeCustomizer.tabs.layout")}
+                    <Layout className="size-4" />{" "}
+                    {t("themeCustomizer.tabs.layout")}
                   </TabsTrigger>
                 </TabsList>
                 {/* <TabsList className="grid w-full grid-cols-2 rounded-none h-12 p-1.5">

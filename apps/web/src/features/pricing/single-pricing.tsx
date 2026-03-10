@@ -1,5 +1,8 @@
 "use client";
 
+import { Check } from "lucide-react";
+import { useState } from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,10 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { pricingPageCopy, pricingPlans } from "@/features/pricing/pricing-data";
 import { Switch } from "@/components/ui/switch";
-import { Check } from "lucide-react";
-import { useState } from "react";
+import { pricingPageCopy, pricingPlans } from "@/features/pricing/pricing-data";
 
 export function SinglePricing() {
   const [isAnnual, setIsAnnual] = useState(false);

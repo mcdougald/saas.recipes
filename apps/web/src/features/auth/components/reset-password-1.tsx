@@ -1,5 +1,12 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CheckCircle2, KeyRound, Mail, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,19 +25,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, KeyRound, Mail, ShieldCheck } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import {
+  type EmailSchema,
   emailSchema,
-  EmailSchema,
+  type OtpSchema,
   otpSchema,
-  OtpSchema,
+  type PasswordSchema,
   passwordSchema,
-  PasswordSchema,
 } from "../utils/reset-password-schema";
 
 const steps = [

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import posthog from "posthog-js";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useI18n } from "@/hooks/use-i18n";
 
 export default function ForgotPasswordPage() {
@@ -112,7 +113,10 @@ export default function ForgotPasswordPage() {
           </Button>
         </form>
         <p className="text-center text-sm text-muted-foreground">
-          <Link href="/sign-in" className="font-medium text-primary hover:underline">
+          <Link
+            href="/sign-in"
+            className="font-medium text-primary hover:underline"
+          >
             {t("auth.forgotPassword.backToSignIn")}
           </Link>
         </p>

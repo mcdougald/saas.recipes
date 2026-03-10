@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  Bell,
+  CreditCard,
+  Monitor,
+  Palette,
+  UserCog,
+  Wrench,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+
 import { buttonVariants } from "@/components/ui/button";
 import {
   Select,
@@ -11,9 +22,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { Bell, CreditCard, Monitor, Palette, UserCog, Wrench } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 
 const sidebarNavItems = [
   {

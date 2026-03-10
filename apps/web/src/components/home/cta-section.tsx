@@ -1,7 +1,8 @@
-"use client";  
+"use client";
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/hooks/use-i18n";
-import Link from "next/link";
 
 export function CtaSection() {
   const { t } = useI18n();
@@ -23,10 +24,7 @@ export function CtaSection() {
             className="pointer-events-none absolute inset-x-6 top-0 z-0 flex -translate-y-1/4 items-start justify-between opacity-85 dark:opacity-100 sm:inset-x-12"
           >
             {smokePlumes.map((plume) => (
-              <div
-                key={plume}
-                className={`smoke-scene smoke-scene-${plume}`}
-              >
+              <div key={plume} className={`smoke-scene smoke-scene-${plume}`}>
                 {smokeLayers.map((layer) => (
                   <span key={layer} className={`smoke smoke-${layer}`} />
                 ))}
@@ -35,17 +33,17 @@ export function CtaSection() {
           </div>
 
           <div className="relative z-10">
-          <h2
-            id="cta-heading"
-            className="mb-6 mt-6 text-4xl font-bold tracking-tight dark:text-white sm:text-4xl md:text-6xl"
-          >
-            {t("cta.heading")}
-          </h2>
-          <p className="mx-auto mb-8 mt-4 max-w-2xl text-lg text-muted-foreground dark:text-muted-foreground/95">
-            {t("cta.description")}
-          </p>
+            <h2
+              id="cta-heading"
+              className="mb-6 mt-6 text-4xl font-bold tracking-tight dark:text-white sm:text-4xl md:text-6xl"
+            >
+              {t("cta.heading")}
+            </h2>
+            <p className="mx-auto mb-8 mt-4 max-w-2xl text-lg text-muted-foreground dark:text-muted-foreground/95">
+              {t("cta.description")}
+            </p>
 
-          {/* <div className="mb-8 flex flex-wrap items-center justify-center gap-2">
+            {/* <div className="mb-8 flex flex-wrap items-center justify-center gap-2">
             {trustSignals.map((signal) => (
               <span
                 key={signal}
@@ -56,36 +54,34 @@ export function CtaSection() {
             ))}
           </div> */}
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Button
-              asChild
-              size="lg"
-              className="group w-full px-8 text-base shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:shadow-primary/20 dark:hover:shadow-primary/35 active:translate-y-0 sm:w-auto"
-            >
-              <Link href="/dashboard">
-                {t("cta.primaryAction")}
-                <span
-                  className="ml-2 transition-transform duration-200 group-hover:translate-x-0.5"
-                  aria-hidden
-                >
-                  →
-                </span>
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="w-full border-border/70 bg-background/70 text-base backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 dark:border-white/20 dark:bg-white/3 dark:hover:border-primary/50 dark:hover:bg-primary/12 active:translate-y-0 sm:w-auto"
-            >
-              <Link href="/pricing">
-                {t("cta.secondaryAction")}
-              </Link>
-            </Button>
-          </div>
-          <p className="mt-4 text-sm text-muted-foreground dark:text-muted-foreground/90">
-            {t("cta.footnote")}
-          </p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <Button
+                asChild
+                size="lg"
+                className="group w-full px-8 text-base shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:shadow-primary/20 dark:hover:shadow-primary/35 active:translate-y-0 sm:w-auto"
+              >
+                <Link href="/dashboard">
+                  {t("cta.primaryAction")}
+                  <span
+                    className="ml-2 transition-transform duration-200 group-hover:translate-x-0.5"
+                    aria-hidden
+                  >
+                    →
+                  </span>
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="w-full border-border/70 bg-background/70 text-base backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 dark:border-white/20 dark:bg-white/3 dark:hover:border-primary/50 dark:hover:bg-primary/12 active:translate-y-0 sm:w-auto"
+              >
+                <Link href="/pricing">{t("cta.secondaryAction")}</Link>
+              </Button>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground dark:text-muted-foreground/90">
+              {t("cta.footnote")}
+            </p>
           </div>
         </div>
       </div>

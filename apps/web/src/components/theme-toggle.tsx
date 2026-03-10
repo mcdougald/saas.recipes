@@ -4,7 +4,6 @@ import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useI18n } from "@/hooks/use-i18n";
+import { cn } from "@/lib/utils";
 
 type ToggleThemeVariant = "icon" | "labeled" | "footer";
 type ThemeMode = "light" | "dark" | "system";
@@ -101,7 +101,8 @@ export function ToggleTheme({
   }, [handleThemeChange, isDark]);
 
   if (variant === "icon") {
-    const TriggerIcon = !mounted || selectedTheme === "system" ? Monitor : isDark ? Moon : Sun;
+    const TriggerIcon =
+      !mounted || selectedTheme === "system" ? Monitor : isDark ? Moon : Sun;
 
     return (
       <DropdownMenu>
@@ -110,7 +111,10 @@ export function ToggleTheme({
             type="button"
             variant="ghost"
             size="icon"
-            className={cn("rounded-full text-muted-foreground hover:text-foreground", className)}
+            className={cn(
+              "rounded-full text-muted-foreground hover:text-foreground",
+              className,
+            )}
             aria-label={t("theme.label")}
           >
             <TriggerIcon className="h-[1.1rem] w-[1.1rem]" />
@@ -157,7 +161,9 @@ export function ToggleTheme({
         <span
           className={cn(
             "font-semibold uppercase text-black/45 dark:text-white/45",
-            isFooter ? "pr-2.5 text-[10px] tracking-[0.16em]" : "pr-2 text-[11px] tracking-wide",
+            isFooter
+              ? "pr-2.5 text-[10px] tracking-[0.16em]"
+              : "pr-2 text-[11px] tracking-wide",
           )}
         >
           {t("theme.label")}
@@ -174,14 +180,18 @@ export function ToggleTheme({
           className={cn(
             "absolute transition-all duration-400",
             isFooter ? "left-2 h-4 w-4" : "left-1.5 h-3.5 w-3.5",
-            !mounted || !isDark ? "scale-100 text-amber-500 opacity-100" : "scale-75 text-zinc-500 opacity-45",
+            !mounted || !isDark
+              ? "scale-100 text-amber-500 opacity-100"
+              : "scale-75 text-zinc-500 opacity-45",
           )}
         />
         <Moon
           className={cn(
             "absolute transition-all duration-400",
             isFooter ? "right-2 h-4 w-4" : "right-1.5 h-3.5 w-3.5",
-            mounted && isDark ? "scale-100 text-indigo-200 opacity-100" : "scale-75 text-zinc-400 opacity-45",
+            mounted && isDark
+              ? "scale-100 text-indigo-200 opacity-100"
+              : "scale-75 text-zinc-400 opacity-45",
           )}
         />
 
@@ -189,21 +199,29 @@ export function ToggleTheme({
           className={cn(
             "absolute left-0.5 rounded-full bg-white shadow-[0_1px_6px_rgba(0,0,0,0.2)] transition-transform duration-400 ease-out group-hover:scale-[1.02] dark:bg-black",
             isFooter ? "h-7 w-7" : "h-6 w-6",
-            mounted && isDark ? (isFooter ? "translate-x-8" : "translate-x-7") : "translate-x-0",
+            mounted && isDark
+              ? isFooter
+                ? "translate-x-8"
+                : "translate-x-7"
+              : "translate-x-0",
           )}
         >
           <Sun
             className={cn(
               "absolute inset-0 m-auto transition-all duration-400",
               isFooter ? "h-4 w-4" : "h-3.5 w-3.5",
-              !mounted || !isDark ? "rotate-0 scale-100 text-amber-500 opacity-100" : "-rotate-45 scale-0 text-zinc-400 opacity-0",
+              !mounted || !isDark
+                ? "rotate-0 scale-100 text-amber-500 opacity-100"
+                : "-rotate-45 scale-0 text-zinc-400 opacity-0",
             )}
           />
           <Moon
             className={cn(
               "absolute inset-0 m-auto transition-all duration-400",
               isFooter ? "h-4 w-4" : "h-3.5 w-3.5",
-              mounted && isDark ? "rotate-0 scale-100 text-indigo-200 opacity-100" : "rotate-45 scale-0 text-zinc-400 opacity-0",
+              mounted && isDark
+                ? "rotate-0 scale-100 text-indigo-200 opacity-100"
+                : "rotate-45 scale-0 text-zinc-400 opacity-0",
             )}
           />
         </span>

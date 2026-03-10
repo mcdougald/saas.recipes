@@ -1,8 +1,9 @@
 "use client";
 
-import { useSnow } from "@/contexts/snow-context";
-import { Button } from "@/components/ui/button";
 import { Snowflake } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { useSnow } from "@/contexts/snow-context";
 import { cn } from "@/lib/utils";
 
 export function SnowToggle() {

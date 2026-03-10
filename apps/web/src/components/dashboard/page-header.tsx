@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -88,15 +88,24 @@ export function DashboardPageHeader({
       >
         <div className={cn("space-y-2", contentClassName)}>
           {eyebrow}
-          <h1 className={cn("text-3xl font-bold tracking-tight md:text-4xl", titleClassName)}>
+          <h1
+            className={cn(
+              "text-3xl font-bold tracking-tight md:text-4xl",
+              titleClassName,
+            )}
+          >
             {title}
           </h1>
           {description ? (
-            <p className={cn("text-muted-foreground", descriptionClassName)}>{description}</p>
+            <p className={cn("text-muted-foreground", descriptionClassName)}>
+              {description}
+            </p>
           ) : null}
           {children}
         </div>
-        {actions ? <div className={cn("shrink-0", actionsClassName)}>{actions}</div> : null}
+        {actions ? (
+          <div className={cn("shrink-0", actionsClassName)}>{actions}</div>
+        ) : null}
       </div>
     </div>
   );

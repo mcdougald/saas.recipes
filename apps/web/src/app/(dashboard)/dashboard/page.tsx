@@ -1,6 +1,6 @@
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { RepoOverviewStats } from "@/features/repos/components/repo-overview-stats";
 import { RepositoryList } from "@/features/repos/components/repository-list";
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import {
   getRepositoryDashboardSummary,
   repositoryDashboardData,

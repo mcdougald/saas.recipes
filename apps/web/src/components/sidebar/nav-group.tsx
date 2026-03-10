@@ -1,5 +1,16 @@
 "use client";
 
+import { ChevronRight, Lock } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { type ReactNode } from "react";
+
+import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,23 +19,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type {
-  NavCollapsible,
-  NavGroup as NavGroupData,
-  NavItem,
-  NavLink,
-} from "@/lib/types";
-import { cn } from "@/lib/utils";
-import { ChevronRight, Lock } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
-import { Badge } from "@/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -36,6 +30,13 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  type NavCollapsible,
+  type NavGroup as NavGroupData,
+  type NavItem,
+  type NavLink,
+} from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 const MENU_ITEM_BASE_CLASS =
   "group/link relative overflow-hidden rounded-md border border-transparent transition-colors duration-150 hover:border-foreground/15 hover:bg-foreground/5 hover:text-foreground";
@@ -53,6 +54,7 @@ const MENU_ICON_LOCKED_CLASS = "text-muted-foreground/75";
 
 interface NavGroupProps extends NavGroupData {
   isAuthenticated: boolean;
+  groupIndex: number;
 }
 
 /**
@@ -60,42 +62,90 @@ interface NavGroupProps extends NavGroupData {
  *
  * @param props - Group metadata and navigation items to render.
  * @param props.isAuthenticated - Indicates whether the current user is signed in.
+ * @param props.groupIndex - Zero-based position of this group in the sidebar list.
  * @returns A sidebar group with direct links and collapsible navigation items.
  */
-export function NavGroup({ title, items, isAuthenticated }: NavGroupProps) {
+export function NavGroup({
+  title,
+  items,
+  isAuthenticated,
+  groupIndex,
+}: NavGroupProps) {
   const pathName = usePathname();
   const { state } = useSidebar();
+  const isGroupActive = checkIsGroupActive(pathName, items);
+  const [isOpen, setIsOpen] = React.useState(
+    state === "collapsed" ? true : isGroupActive,
+  );
+
+  React.useEffect(() => {
+    if (state === "collapsed" || isGroupActive) {
+      setIsOpen(true);
+    }
+  }, [state, isGroupActive]);
 
   return (
-    <SidebarGroup className="px-2 py-1">
-      <SidebarGroupLabel className="px-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/75">
-        {title}
-      </SidebarGroupLabel>
-      <SidebarMenu className="gap-1.5">
-        {items.map((item) => {
-          const key = `${item.title}-${item.url}`;
-          const isLocked = checkIsLocked(item, isAuthenticated);
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="group/nav-group"
+      disabled={state === "collapsed"}
+    >
+      <SidebarGroup
+        className={cn(
+          "mb-2 rounded-md border border-sidebar-border/50 bg-sidebar-accent/15 px-2 py-1.5 last:mb-0 group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:bg-transparent",
+          groupIndex === 0 && "mt-2",
+        )}
+      >
+        <CollapsibleTrigger asChild>
+          <SidebarGroupLabel
+            asChild
+            className="group-data-[collapsible=icon]:hidden h-7 px-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/80 transition-colors hover:text-foreground"
+          >
+            <button
+              type="button"
+              aria-label={`Toggle ${title} section`}
+              className="flex w-full items-center gap-2"
+            >
+              <span>{title}</span>
+              <span className="ml-auto text-[9px] font-medium tracking-widest text-muted-foreground/65">
+                {items.length}
+              </span>
+              <ChevronRight className="size-3.5 text-muted-foreground transition-transform duration-150 group-data-[state=open]/nav-group:rotate-90" />
+            </button>
+          </SidebarGroupLabel>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="pt-1">
+          <SidebarMenu className="gap-1.5">
+            {items.map((item) => {
+              const key = `${item.title}-${item.url}`;
+              const isLocked = checkIsLocked(item, isAuthenticated);
 
-          if (isLocked) return <SidebarMenuLockedItem key={key} item={item} />;
+              if (isLocked)
+                return <SidebarMenuLockedItem key={key} item={item} />;
 
-          if (!item.items)
-            return <SidebarMenuLink key={key} item={item} href={pathName} />;
+              if (!item.items)
+                return (
+                  <SidebarMenuLink key={key} item={item} href={pathName} />
+                );
 
-          if (state === "collapsed")
-            return (
-              <SidebarMenuCollapsedDropdown
-                key={key}
-                item={item}
-                href={pathName}
-              />
-            );
+              if (state === "collapsed")
+                return (
+                  <SidebarMenuCollapsedDropdown
+                    key={key}
+                    item={item}
+                    href={pathName}
+                  />
+                );
 
-          return (
-            <SidebarMenuCollapsible key={key} item={item} href={pathName} />
-          );
-        })}
-      </SidebarMenu>
-    </SidebarGroup>
+              return (
+                <SidebarMenuCollapsible key={key} item={item} href={pathName} />
+              );
+            })}
+          </SidebarMenu>
+        </CollapsibleContent>
+      </SidebarGroup>
+    </Collapsible>
   );
 }
 
@@ -106,9 +156,7 @@ const NavBadge = ({
   color?: "violet" | "green";
 }) => {
   return (
-    <Badge
-      className="ml-auto rounded-full border border-foreground/15 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/85"
-    >
+    <Badge className="ml-auto rounded-full border border-foreground/15 bg-foreground/5 px-2 py-0.5 text-[10px] font-medium text-foreground/85">
       {children}
     </Badge>
   );
@@ -124,7 +172,9 @@ const SidebarMenuLockedItem = ({ item }: { item: NavItem }) => {
         className={cn(MENU_ITEM_BASE_CLASS, MENU_ITEM_LOCKED_CLASS)}
       >
         {item.icon && (
-          <item.icon className={cn(MENU_ICON_BASE_CLASS, MENU_ICON_LOCKED_CLASS)} />
+          <item.icon
+            className={cn(MENU_ICON_BASE_CLASS, MENU_ICON_LOCKED_CLASS)}
+          />
         )}
         <span className="font-medium tracking-tight">{item.title}</span>
         <Lock className="ml-auto size-3.5 text-muted-foreground/75" />
@@ -143,10 +193,7 @@ const SidebarMenuLink = ({ item, href }: { item: NavLink; href: string }) => {
         asChild
         isActive={isActive}
         tooltip={item.title}
-        className={cn(
-          MENU_ITEM_BASE_CLASS,
-          isActive && MENU_ITEM_ACTIVE_CLASS,
-        )}
+        className={cn(MENU_ITEM_BASE_CLASS, isActive && MENU_ITEM_ACTIVE_CLASS)}
       >
         <Link
           href={item.url}
@@ -357,4 +404,8 @@ function checkIsActive(href: string, item: NavItem, mainNav = false) {
 
 function checkIsLocked(item: NavItem, isAuthenticated: boolean) {
   return Boolean(item.requiresAuth && !isAuthenticated);
+}
+
+function checkIsGroupActive(href: string, items: NavItem[]) {
+  return items.some((item) => checkIsActive(href, item, true));
 }

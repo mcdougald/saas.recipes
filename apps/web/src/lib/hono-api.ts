@@ -144,7 +144,9 @@ function resolveProbeRequest(target: HonoProbeTarget): {
   if (target.path) {
     const method = target.method ?? "GET";
     return {
-      requestPath: target.path.startsWith("/") ? target.path : `/${target.path}`,
+      requestPath: target.path.startsWith("/")
+        ? target.path
+        : `/${target.path}`,
       method,
       body:
         method === "POST" && target.body !== undefined
@@ -155,7 +157,8 @@ function resolveProbeRequest(target: HonoProbeTarget): {
 
   if (target.procedure) {
     const rpcBasePath =
-      process.env.HONO_RPC_BASE_PATH?.trim().replace(/\/+$/, "") || DEFAULT_ORPC_BASE_PATH;
+      process.env.HONO_RPC_BASE_PATH?.trim().replace(/\/+$/, "") ||
+      DEFAULT_ORPC_BASE_PATH;
     const method = target.method ?? "POST";
     return {
       requestPath: `${rpcBasePath}/${target.procedure}`,
@@ -182,7 +185,8 @@ function resolveProbeRequest(target: HonoProbeTarget): {
  */
 function buildOrpcCandidatePaths(procedure: string): string[] {
   const rpcBasePath =
-    process.env.HONO_RPC_BASE_PATH?.trim().replace(/\/+$/, "") || DEFAULT_ORPC_BASE_PATH;
+    process.env.HONO_RPC_BASE_PATH?.trim().replace(/\/+$/, "") ||
+    DEFAULT_ORPC_BASE_PATH;
   const normalizedProcedure = procedure.replace(/^\/+/, "");
 
   const dotPath = `${rpcBasePath}/${normalizedProcedure}`;
@@ -203,7 +207,10 @@ export async function probeHonoEndpoint(
 ): Promise<HonoProbeResult> {
   const startedAt = Date.now();
   const abortController = new AbortController();
-  const timeout = setTimeout(() => abortController.abort(), HONO_API_TIMEOUT_MS);
+  const timeout = setTimeout(
+    () => abortController.abort(),
+    HONO_API_TIMEOUT_MS,
+  );
   const resolvedRequest = resolveProbeRequest(target);
 
   try {
@@ -216,7 +223,10 @@ export async function probeHonoEndpoint(
             return methods.map((method) => ({
               requestPath,
               method,
-              body: method === "POST" ? JSON.stringify(target.body ?? {}) : undefined,
+              body:
+                method === "POST"
+                  ? JSON.stringify(target.body ?? {})
+                  : undefined,
             }));
           })
         : [resolvedRequest];
@@ -226,16 +236,21 @@ export async function probeHonoEndpoint(
     let requestMethod = resolvedRequest.method;
 
     for (const candidateRequest of candidateRequests) {
-      response = await fetch(`${getHonoApiBaseUrl()}${candidateRequest.requestPath}`, {
-        method: candidateRequest.method,
-        cache: "no-store",
-        signal: abortController.signal,
-        headers: {
-          Accept: "application/json, text/plain;q=0.9, */*;q=0.8",
-          ...(candidateRequest.method === "POST" ? { "Content-Type": "application/json" } : {}),
+      response = await fetch(
+        `${getHonoApiBaseUrl()}${candidateRequest.requestPath}`,
+        {
+          method: candidateRequest.method,
+          cache: "no-store",
+          signal: abortController.signal,
+          headers: {
+            Accept: "application/json, text/plain;q=0.9, */*;q=0.8",
+            ...(candidateRequest.method === "POST"
+              ? { "Content-Type": "application/json" }
+              : {}),
+          },
+          body: candidateRequest.body,
         },
-        body: candidateRequest.body,
-      });
+      );
 
       requestPath = candidateRequest.requestPath;
       requestMethod = candidateRequest.method;
@@ -251,7 +266,9 @@ export async function probeHonoEndpoint(
 
     const bodyText = await response.text();
     const preview =
-      bodyText.length > 220 ? `${bodyText.slice(0, 220).trimEnd()}...` : bodyText;
+      bodyText.length > 220
+        ? `${bodyText.slice(0, 220).trimEnd()}...`
+        : bodyText;
 
     return {
       target,

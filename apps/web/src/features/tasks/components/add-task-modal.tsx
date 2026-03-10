@@ -3,8 +3,8 @@
 import { Plus } from "lucide-react";
 import posthog from "posthog-js";
 import { useState, useTransition } from "react";
-import { z } from "zod";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,8 +27,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { generateRandomUUID } from "@/helpers/generate-random-uuid";
-
-import { taskFormSchema, type Task, type TaskFormSchema } from "../utils/schema";
+import {
+  type Task,
+  type TaskFormSchema,
+  taskFormSchema,
+} from "../utils/schema";
 import { labels, priorities, statuses } from "../utils/task-data";
 
 interface AddTaskModalProps {
@@ -279,7 +282,11 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
             >
               Cancel
             </Button>
-            <Button type="submit" className="cursor-pointer" disabled={isPending}>
+            <Button
+              type="submit"
+              className="cursor-pointer"
+              disabled={isPending}
+            >
               <Plus className="size-4" />
               {isPending ? "Creating..." : "Create Task"}
             </Button>

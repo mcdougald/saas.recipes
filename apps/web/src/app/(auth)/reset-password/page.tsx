@@ -1,10 +1,10 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useI18n } from "@/hooks/use-i18n";
 
 function ResetPasswordForm() {
@@ -61,7 +62,9 @@ function ResetPasswordForm() {
         </CardHeader>
         <CardContent>
           <Link href="/sign-in" className="block">
-            <Button className="w-full h-10">{t("auth.resetPassword.done.cta")}</Button>
+            <Button className="w-full h-10">
+              {t("auth.resetPassword.done.cta")}
+            </Button>
           </Link>
         </CardContent>
       </Card>
@@ -90,7 +93,9 @@ function ResetPasswordForm() {
               <Input
                 id="password"
                 type="password"
-                placeholder={t("auth.resetPassword.fields.newPassword.placeholder")}
+                placeholder={t(
+                  "auth.resetPassword.fields.newPassword.placeholder",
+                )}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -106,7 +111,9 @@ function ResetPasswordForm() {
               <Input
                 id="confirm"
                 type="password"
-                placeholder={t("auth.resetPassword.fields.confirmPassword.placeholder")}
+                placeholder={t(
+                  "auth.resetPassword.fields.confirmPassword.placeholder",
+                )}
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
                 required
@@ -135,11 +142,17 @@ function ResetPasswordForm() {
           </form>
         ) : null}
         <p className="text-center text-sm text-muted-foreground">
-          <Link href="/forgot-password" className="font-medium text-primary hover:underline">
+          <Link
+            href="/forgot-password"
+            className="font-medium text-primary hover:underline"
+          >
             {t("auth.resetPassword.links.requestNewLink")}
           </Link>
           {" · "}
-          <Link href="/sign-in" className="font-medium text-primary hover:underline">
+          <Link
+            href="/sign-in"
+            className="font-medium text-primary hover:underline"
+          >
             {t("common.signIn")}
           </Link>
         </p>

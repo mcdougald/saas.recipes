@@ -1,7 +1,17 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import {
+  ArrowUpRight,
+  CalendarDays,
+  Calendar as CalendarIcon,
+  Clock,
+  TrendingDown,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+
 import { DashboardPageHeader } from "@/components/dashboard/page-header";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -16,15 +26,6 @@ import {
   events,
 } from "@/features/calendar/utils/calendar-data";
 import { cn } from "@/lib/utils";
-import {
-  ArrowUpRight,
-  CalendarDays,
-  Calendar as CalendarIcon,
-  Clock,
-  TrendingDown,
-  TrendingUp,
-  Users,
-} from "lucide-react";
 
 export default function CalendarPage() {
   const stats = {

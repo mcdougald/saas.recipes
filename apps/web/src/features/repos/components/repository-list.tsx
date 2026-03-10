@@ -1,7 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { RepositoryDashboardListItem } from "@/features/repos/types";
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { type RepositoryDashboardListItem } from "@/features/repos/types";
 import { RepositoryListItem } from "./repository-list-item";
 
 type RepositoryListProps = {
@@ -9,9 +14,15 @@ type RepositoryListProps = {
 };
 
 export function RepositoryList({ projects }: RepositoryListProps) {
-  const activeCount = projects.filter((project) => project.status === "active").length;
-  const pausedCount = projects.filter((project) => project.status === "paused").length;
-  const archivedCount = projects.filter((project) => project.status === "archived").length;
+  const activeCount = projects.filter(
+    (project) => project.status === "active",
+  ).length;
+  const pausedCount = projects.filter(
+    (project) => project.status === "paused",
+  ).length;
+  const archivedCount = projects.filter(
+    (project) => project.status === "archived",
+  ).length;
   const orderedProjects = projects.toSorted((a, b) => {
     if (b.inspirationScore === a.inspirationScore) {
       return b.metadata.stars - a.metadata.stars;

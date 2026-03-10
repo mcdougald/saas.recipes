@@ -1,9 +1,10 @@
 "use client";
 
-import { useI18n } from "@/hooks/use-i18n";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+
+import { useI18n } from "@/hooks/use-i18n";
 
 export function AuthLayoutHeader() {
   const { t } = useI18n();
@@ -34,7 +35,9 @@ export function AuthLayoutHeader() {
                 className="hidden h-6 w-auto dark:block"
                 priority
               />
-              <span className="relative top-[1px] text-black dark:text-white">{t("brand.shortName")}</span>
+              <span className="relative top-[1px] text-black dark:text-white">
+                {t("brand.shortName")}
+              </span>
             </Link>
           </div>
         </section>

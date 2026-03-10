@@ -1,8 +1,9 @@
 "use client";
 
-import { useSnow } from "@/contexts/snow-context";
 import { Snowflake } from "lucide-react";
 import * as React from "react";
+
+import { useSnow } from "@/contexts/snow-context";
 import { cn } from "@/lib/utils";
 
 const SNOWFLAKES = Array.from({ length: 50 }, (_, i) => {

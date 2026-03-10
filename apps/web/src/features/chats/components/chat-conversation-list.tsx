@@ -26,7 +26,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatMessageTime } from "@/helpers/format-message-time";
 import { cn } from "@/lib/utils";
-import type { ChatConversation, ChatUser } from "../utils/types";
+import { type ChatConversation, type ChatUser } from "../utils/types";
 import { useChat } from "../utils/use-chat";
 
 interface ConversationListProps {

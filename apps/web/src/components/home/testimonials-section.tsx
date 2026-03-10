@@ -1,8 +1,9 @@
 "use client";
 
+import { Quote } from "lucide-react";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { useI18n } from "@/hooks/use-i18n";
-import { Quote } from "lucide-react";
 
 const testimonials = [
   {
@@ -40,15 +41,9 @@ export function TestimonialsSection() {
         </div>
         <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
           {testimonials.map(({ quoteKey, authorKey, roleKey }) => (
-            <Card
-              key={authorKey}
-              className="border-2 bg-card/80 shadow-sm"
-            >
+            <Card key={authorKey} className="border-2 bg-card/80 shadow-sm">
               <CardContent className="pt-2">
-                <Quote
-                  className="mb-3 h-8 w-8 text-primary/40"
-                  aria-hidden
-                />
+                <Quote className="mb-3 h-8 w-8 text-primary/40" aria-hidden />
                 <p className="text-foreground leading-relaxed">
                   &ldquo;{t(quoteKey)}&rdquo;
                 </p>

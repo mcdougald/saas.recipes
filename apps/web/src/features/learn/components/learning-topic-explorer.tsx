@@ -1,5 +1,9 @@
 "use client";
 
+import { ArrowUpRight, LockKeyhole, Search } from "lucide-react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,16 +13,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { LearningFavoriteToggle } from "@/features/learn/components/learning-favorite-toggle";
 import { Input } from "@/components/ui/input";
-import type {
-  LearningTopic,
-  PremiumContentKind,
+import { LearningFavoriteToggle } from "@/features/learn/components/learning-favorite-toggle";
+import {
+  type LearningTopic,
+  type PremiumContentKind,
+  premiumContentKinds,
 } from "@/features/learn/data/learning-topics";
-import { premiumContentKinds } from "@/features/learn/data/learning-topics";
-import { ArrowUpRight, LockKeyhole, Search } from "lucide-react";
-import Link from "next/link";
-import { useMemo, useState } from "react";
 
 type SortMode = "featured" | "alphabetical";
 
@@ -182,7 +183,9 @@ export function LearningTopicExplorer({
                         slug={topic.slug}
                         title={topic.title}
                         description={topic.description}
-                        initialFavorited={favoriteTopicSlugs.includes(topic.slug)}
+                        initialFavorited={favoriteTopicSlugs.includes(
+                          topic.slug,
+                        )}
                       />
                       <ArrowUpRight
                         aria-hidden

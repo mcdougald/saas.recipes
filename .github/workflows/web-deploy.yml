@@ -1,0 +1,94 @@
+name: Web CI and Deploy
+
+on:
+  pull_request:
+    paths:
+      - "apps/web/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "turbo.json"
+      - "biome.json"
+      - ".github/workflows/web-deploy.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "turbo.json"
+      - "biome.json"
+      - ".github/workflows/web-deploy.yml"
+
+jobs:
+  quality:
+    name: Lint and Playwright
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Biome checks
+        run: pnpm check
+
+      - name: Workspace lint checks
+        run: pnpm lint
+
+      - name: Install Playwright browser
+        run: pnpm --filter web playwright:install
+
+      - name: Run Playwright smoke test
+        run: pnpm --filter web test:e2e:smoke
+
+  deploy:
+    name: Deploy to Vercel
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pull Vercel environment information
+        run: pnpm dlx vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+        working-directory: apps/web
+
+      - name: Build Vercel artifacts
+        run: pnpm dlx vercel build --prod --token="$VERCEL_TOKEN"
+        working-directory: apps/web
+
+      - name: Deploy Vercel build artifacts
+        run: pnpm dlx vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+        working-directory: apps/web

@@ -3,7 +3,7 @@ import Stripe from "stripe";
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || "";
 
 // Only throw error in runtime if stripe is actually used
-export const stripe = stripeSecretKey 
+export const stripe = stripeSecretKey
   ? new Stripe(stripeSecretKey, {
       apiVersion: "2026-02-25.clover",
       typescript: true,
@@ -42,9 +42,7 @@ export const STRIPE_PLANS = {
     interval: "month" as const,
     stripePriceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID,
     stripeYearlyPriceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID,
-    features: [
-      "Same as Basic plan",
-    ],
+    features: ["Same as Basic plan"],
   },
   PRO_PLUS: {
     name: "Pro+",

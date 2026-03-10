@@ -1,16 +1,17 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
-import { hasAdminAccess } from "@/lib/auth-access";
-import { User } from "@/lib/types";
 import posthog from "posthog-js";
 import {
-  ReactNode,
   createContext,
+  type ReactNode,
   useContext,
   useEffect,
   useState,
 } from "react";
+
+import { hasAdminAccess } from "@/lib/auth-access";
+import { authClient } from "@/lib/auth-client";
+import { type User } from "@/lib/types";
 
 interface AuthContextType {
   user: User | null;

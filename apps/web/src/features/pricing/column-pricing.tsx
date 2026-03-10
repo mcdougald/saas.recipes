@@ -1,5 +1,5 @@
-import { pricingPlans } from "@/features/pricing/pricing-data";
 import { PriceColumns } from "@/features/pricing/price-columns";
+import { pricingPlans } from "@/features/pricing/pricing-data";
 
 /**
  * Describe account-aware rendering props for the pricing hero and cards.

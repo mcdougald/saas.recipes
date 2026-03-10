@@ -1,5 +1,12 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { ContentSection } from "@/components/content-section";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,14 +18,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { FontOption, useFont } from "@/contexts/font-context";
+import { type FontOption, useFont } from "@/contexts/font-context";
 import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTheme } from "next-themes";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark"], {
@@ -55,8 +56,7 @@ export default function AppearancePage() {
     if (font && font !== form.getValues("font")) {
       form.setValue("font", font);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theme, font]);
+  }, [theme, font, form]);
 
   function onSubmit(data: AppearanceFormValues) {
     setTheme(data.theme);

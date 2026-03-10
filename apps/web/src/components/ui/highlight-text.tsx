@@ -3,7 +3,7 @@
 import { useInView } from "motion/react";
 import * as React from "react";
 import { annotate } from "rough-notation";
-import type { RoughAnnotation } from "rough-notation/lib/model";
+import { type RoughAnnotation } from "rough-notation/lib/model";
 
 import { cn } from "@/lib/utils";
 

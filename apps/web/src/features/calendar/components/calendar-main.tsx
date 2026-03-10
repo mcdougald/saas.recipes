@@ -45,11 +45,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { type CalendarEvent } from "../utils/types";
-
 // Import data
 import eventsData from "@/constants/events.json";
+import { cn } from "@/lib/utils";
+import { type CalendarEvent } from "../utils/types";
 
 interface CalendarMainProps {
   selectedDate?: Date;

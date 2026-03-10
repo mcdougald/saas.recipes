@@ -1,4 +1,4 @@
-import type { ColorTheme } from "@/lib/types";
+import { type ColorTheme } from "@/lib/types";
 import { shadcnThemePresets } from "@/utils/shadcnui-theme-presets";
 import { tweakcnPresets } from "@/utils/tweakcn-theme-presets";
 

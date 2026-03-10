@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,8 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import type { ImportedTheme } from "@/lib/types";
-import React from "react";
+import { type ImportedTheme } from "@/lib/types";
 
 interface ImportModalProps {
   open: boolean;

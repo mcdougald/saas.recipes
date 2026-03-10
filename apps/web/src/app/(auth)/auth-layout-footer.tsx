@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useI18n } from "@/hooks/use-i18n";
+
 import { ToggleTheme } from "@/components/theme-toggle";
+import { useI18n } from "@/hooks/use-i18n";
 
 type FooterLink = {
   href: string;
@@ -54,7 +55,6 @@ export function AuthLayoutFooter() {
                   {t("authLayoutFooter.welcomeDescription")}
                 </p>
               </div>
-             
             </div>
 
             <div className="inline-flex w-fit flex-wrap items-center justify-center gap-2 rounded-md border border-black/10 bg-black/3 p-1 text-xs dark:border-white/15 dark:bg-white/6 sm:justify-start">
@@ -69,7 +69,10 @@ export function AuthLayoutFooter() {
                       aria-disabled="true"
                       className="inline-flex cursor-default items-center gap-1.5 rounded-md border border-primary/70 bg-primary px-3 py-1.5 font-semibold text-primary-foreground shadow-sm ring-1 ring-primary/30"
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground/90" aria-hidden />
+                      <span
+                        className="h-1.5 w-1.5 rounded-full bg-primary-foreground/90"
+                        aria-hidden
+                      />
                       {t(link.labelKey)}
                     </span>
                   );
@@ -100,14 +103,21 @@ export function AuthLayoutFooter() {
                   <Link
                     href={CREATOR_LINK.href}
                     target={CREATOR_LINK.isExternal ? "_blank" : undefined}
-                    rel={CREATOR_LINK.isExternal ? "noopener noreferrer" : undefined}
+                    rel={
+                      CREATOR_LINK.isExternal
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
                     className="font-medium text-white underline decoration-white/30 underline-offset-2 transition-colors hover:text-white hover:decoration-white dark:text-black dark:decoration-black/30 dark:hover:text-black dark:hover:decoration-black"
                   >
                     {t(CREATOR_LINK.labelKey)}
                   </Link>
                 </span>
 
-                <span className="hidden h-3 w-px bg-white/25 dark:bg-black/25 sm:inline-block" aria-hidden />
+                <span
+                  className="hidden h-3 w-px bg-white/25 dark:bg-black/25 sm:inline-block"
+                  aria-hidden
+                />
 
                 <Link
                   href={SUPPORT_LINK.href}

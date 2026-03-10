@@ -1,5 +1,9 @@
 "use client";
 
+import { CheckCircle, Circle, Clock, ListTodo } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+
 import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -9,18 +13,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { createUserTaskAction } from "@/features/tasks/actions";
 import { columns } from "@/features/tasks/components/columns";
 import { DataTable } from "@/features/tasks/components/data-table";
-import { createUserTaskAction } from "@/features/tasks/actions";
-import type { Task, TaskFormSchema } from "@/features/tasks/utils/schema";
-import {
-  CheckCircle,
-  Circle,
-  Clock,
-  ListTodo,
-} from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import { type Task, type TaskFormSchema } from "@/features/tasks/utils/schema";
 
 interface TasksPageClientProps {
   initialTasks: Task[];
@@ -132,7 +128,11 @@ export function TasksPageClient({ initialTasks }: TasksPageClientProps) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <DataTable columns={columns} data={tasks} onAddTask={handleAddTask} />
+            <DataTable
+              columns={columns}
+              data={tasks}
+              onAddTask={handleAddTask}
+            />
           </CardContent>
         </Card>
       </div>

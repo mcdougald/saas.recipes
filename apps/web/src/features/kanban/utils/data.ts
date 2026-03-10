@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
-import type { KanbanTask } from "./schema";
+
+import { type KanbanTask } from "./schema";
 
 export const initialTasks: KanbanTask[] = [
   {

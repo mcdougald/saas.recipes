@@ -1,9 +1,13 @@
 "use client";
 
-import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { localeCookieName, normalizeToSupportedLanguage } from "@/i18n/settings";
+import { useCallback } from "react";
+
+import {
+  localeCookieName,
+  normalizeToSupportedLanguage,
+} from "@/i18n/settings";
 
 type TranslationValues = Record<string, string | number | boolean | Date>;
 
@@ -14,7 +18,9 @@ export function useI18n(namespace?: string, options?: { keyPrefix?: string }) {
 
   const t = useCallback(
     (key: string, values?: TranslationValues) => {
-      const scopedKey = options?.keyPrefix ? `${options.keyPrefix}.${key}` : key;
+      const scopedKey = options?.keyPrefix
+        ? `${options.keyPrefix}.${key}`
+        : key;
       return translate(scopedKey as never, values as never);
     },
     [options?.keyPrefix, translate],

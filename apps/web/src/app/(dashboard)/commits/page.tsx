@@ -1,3 +1,4 @@
+import { DashboardPageHeader } from "@/components/dashboard/page-header";
 import {
   Card,
   CardContent,
@@ -5,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DashboardPageHeader } from "@/components/dashboard/page-header";
 
 export default function CommitsPage() {
   return (
@@ -25,7 +25,8 @@ export default function CommitsPage() {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground text-sm">
-              Add a commit log table or list with message, author, date, and branch.
+              Add a commit log table or list with message, author, date, and
+              branch.
             </p>
           </CardContent>
         </Card>

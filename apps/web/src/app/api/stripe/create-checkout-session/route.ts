@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { stripe, STRIPE_PLANS } from "@/lib/stripe";
-import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { type NextRequest, NextResponse } from "next/server";
+
+import { auth } from "@/lib/auth";
 import { getPostHogClient, shutdownPostHog } from "@/lib/posthog-server";
+import { STRIPE_PLANS, stripe } from "@/lib/stripe";
 
 /**
  * Create a Stripe checkout session for the selected plan and billing interval.

@@ -1,9 +1,6 @@
+import { Check, X } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import {
-  pricingComparisonRows,
-  pricingPageCopy,
-  pricingPlans,
-} from "@/features/pricing/pricing-data";
 import {
   Table,
   TableBody,
@@ -12,7 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Check, X } from "lucide-react";
+import {
+  pricingComparisonRows,
+  pricingPageCopy,
+  pricingPlans,
+} from "@/features/pricing/pricing-data";
 
 function FeatureValue({ value }: { value: string | boolean | undefined }) {
   if (typeof value === "undefined") {

@@ -1,6 +1,5 @@
-import * as React from "react";
-import { NextIntlClientProvider } from "next-intl";
-import type { AbstractIntlMessages } from "next-intl";
+import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
+import type * as React from "react";
 
 export function I18nProvider({
   children,

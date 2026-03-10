@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import { type Metadata } from "next";
+
 import { AuthCtaBackground } from "./auth-cta-background";
 import { AuthCtaContent } from "./auth-cta-content";
 import { AuthLayoutFooter } from "./auth-layout-footer";

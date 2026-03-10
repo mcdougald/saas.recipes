@@ -1,5 +1,12 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -12,15 +19,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { signUp } from "@/lib/auth-client";
-import { SignUp2Schema, signUp2Schema } from "../utils/sign-up-2-schema";
+import { cn } from "@/lib/utils";
+import { type SignUp2Schema, signUp2Schema } from "../utils/sign-up-2-schema";
 
 export function SignUp2({ className, ...props }: React.ComponentProps<"div">) {
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +64,9 @@ export function SignUp2({ className, ...props }: React.ComponentProps<"div">) {
       });
 
       if (result.error) {
-        toast.error(result.error.message || "Failed to create account. Please try again.");
+        toast.error(
+          result.error.message || "Failed to create account. Please try again.",
+        );
         return;
       }
 

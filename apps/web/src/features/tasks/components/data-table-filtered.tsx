@@ -1,8 +1,8 @@
 "use client";
 
-import type { Column } from "@tanstack/react-table";
+import { type Column } from "@tanstack/react-table";
 import { PlusCircle } from "lucide-react";
-import * as React from "react";
+import type * as React from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

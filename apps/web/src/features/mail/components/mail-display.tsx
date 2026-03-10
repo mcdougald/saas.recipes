@@ -11,6 +11,7 @@ import {
   ReplyAll,
   Trash2,
 } from "lucide-react";
+import { useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,6 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { type Mail } from "@/constants/mail-data";
-import { useState } from "react";
 
 interface MailDisplayProps {
   mail: Mail | null;

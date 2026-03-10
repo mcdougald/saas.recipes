@@ -1,8 +1,9 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { type CSSProperties, memo, useMemo } from "react";
+
+import { cn } from "@/lib/utils";
 
 // Pre-create motion components outside of render
 const MotionP = motion.p;

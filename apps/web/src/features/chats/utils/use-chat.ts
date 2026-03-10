@@ -1,7 +1,12 @@
 "use client";
 
 import { create } from "zustand";
-import type { ChatConversation, ChatMessage, ChatUser } from "./types";
+
+import {
+  type ChatConversation,
+  type ChatMessage,
+  type ChatUser,
+} from "./types";
 
 export type {
   ChatConversation,

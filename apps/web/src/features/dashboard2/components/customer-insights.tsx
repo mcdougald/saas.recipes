@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  ArrowUpIcon,
+  MapPin,
+  Target,
+  TrendingUp,
+  UserIcon,
+  Users,
+} from "lucide-react";
+import { useState } from "react";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,16 +33,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  ArrowUpIcon,
-  MapPin,
-  Target,
-  TrendingUp,
-  UserIcon,
-  Users,
-} from "lucide-react";
-import { useState } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 const customerGrowthData = [
   { month: "Jan", new: 245, returning: 890, churn: 45 },

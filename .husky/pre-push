@@ -1,0 +1,2 @@
+pnpm check
+pnpm --filter web test:e2e:smoke

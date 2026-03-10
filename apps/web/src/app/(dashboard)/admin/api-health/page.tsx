@@ -30,15 +30,19 @@ export const dynamic = "force-dynamic";
  */
 export default async function ApiHealthPage() {
   const targets = getHonoProbeTargets();
-  const results = await Promise.all(targets.map((target) => probeHonoEndpoint(target)));
+  const results = await Promise.all(
+    targets.map((target) => probeHonoEndpoint(target)),
+  );
   const successfulCount = results.filter((result) => result.ok).length;
   const failedCount = results.length - successfulCount;
   const averageLatencyMs =
     results.length === 0
       ? 0
       : Math.round(
-          results.reduce((accumulator, result) => accumulator + result.latencyMs, 0) /
-            results.length,
+          results.reduce(
+            (accumulator, result) => accumulator + result.latencyMs,
+            0,
+          ) / results.length,
         );
 
   return (
@@ -56,7 +60,9 @@ export default async function ApiHealthPage() {
               <CardDescription>Configured Hono server origin</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="font-mono text-xs break-all">{getHonoApiBaseUrl()}</p>
+              <p className="font-mono text-xs break-all">
+                {getHonoApiBaseUrl()}
+              </p>
             </CardContent>
           </Card>
 
@@ -109,7 +115,9 @@ export default async function ApiHealthPage() {
               </TableHeader>
               <TableBody>
                 {results.map((result) => (
-                  <TableRow key={`${result.target.label}:${result.requestPath}`}>
+                  <TableRow
+                    key={`${result.target.label}:${result.requestPath}`}
+                  >
                     <TableCell className="font-medium">
                       {result.target.label}
                       <p className="text-muted-foreground mt-1 font-mono text-xs">
@@ -123,13 +131,17 @@ export default async function ApiHealthPage() {
                         </Badge>
                       ) : (
                         <Badge variant="destructive">
-                          {result.status ? `${result.status} ${result.statusText}` : "Unavailable"}
+                          {result.status
+                            ? `${result.status} ${result.statusText}`
+                            : "Unavailable"}
                         </Badge>
                       )}
                     </TableCell>
                     <TableCell>{result.latencyMs} ms</TableCell>
                     <TableCell className="text-muted-foreground max-w-[560px] truncate">
-                      {result.errorMessage ? `Error: ${result.errorMessage}` : result.bodyPreview}
+                      {result.errorMessage
+                        ? `Error: ${result.errorMessage}`
+                        : result.bodyPreview}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -1,5 +1,6 @@
+import { type Metadata } from "next";
+
 import { LearningOverviewPage } from "@/features/learn/components/learning-overview-page";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Learn | SaaS Academy",

@@ -1,5 +1,19 @@
 "use client";
 
+import { Check } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import posthog from "posthog-js";
+import {
+  type MouseEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { toast } from "sonner";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,14 +24,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { PricingPlan } from "@/features/pricing/pricing-data";
+import { type PricingPlan } from "@/features/pricing/pricing-data";
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import posthog from "posthog-js";
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
-import { toast } from "sonner";
 
 type ActiveBadge = {
   label: string;
@@ -104,7 +112,8 @@ export function PriceColumns({
   isSignedIn,
 }: PriceColumnsProps) {
   const searchParams = useSearchParams();
-  const [billingInterval, setBillingInterval] = useState<BillingInterval>("monthly");
+  const [billingInterval, setBillingInterval] =
+    useState<BillingInterval>("monthly");
   const normalizedActivePlan = useMemo(
     () => tierToPlanId[activeTier] ?? "free",
     [activeTier],
@@ -112,12 +121,15 @@ export function PriceColumns({
   const [busyPlanId, setBusyPlanId] = useState<string | null>(null);
   const hasAutoStartedCheckout = useRef(false);
 
-  const openPortal = async () => {
+  const openPortal = useCallback(async () => {
     try {
       const response = await fetch("/api/stripe/create-portal-session", {
         method: "POST",
       });
-      const payload = (await response.json()) as { url?: string; error?: string };
+      const payload = (await response.json()) as {
+        url?: string;
+        error?: string;
+      };
 
       if (!response.ok || !payload.url) {
         throw new Error(payload.error ?? "Could not open billing portal.");
@@ -126,72 +138,93 @@ export function PriceColumns({
       window.location.assign(payload.url);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Could not open billing portal.";
+        error instanceof Error
+          ? error.message
+          : "Could not open billing portal.";
       toast.error(message);
     }
-  };
+  }, []);
 
-  const startCheckout = async (plan: PricingPlan) => {
-    const checkoutPlanId = planToCheckoutId[plan.id];
+  const startCheckout = useCallback(
+    async (plan: PricingPlan) => {
+      const checkoutPlanId = planToCheckoutId[plan.id];
 
-    if (!checkoutPlanId) {
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/stripe/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ priceId: checkoutPlanId, billingInterval }),
-      });
-      const payload = (await response.json()) as { url?: string; error?: string };
-
-      if (!response.ok || !payload.url) {
-        throw new Error(payload.error ?? "Could not start checkout.");
-      }
-
-      posthog.capture("pricing_checkout_started", {
-        plan_id: plan.id,
-        checkout_plan_id: checkoutPlanId,
-        billing_interval: billingInterval,
-      });
-      window.location.assign(payload.url);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Could not start checkout.";
-      toast.error(message);
-    }
-  };
-
-  const onPlanAction = async (plan: PricingPlan, isCurrent: boolean) => {
-    if (busyPlanId) {
-      return;
-    }
-
-    if (!isSignedIn) {
-      const destination = new URL("/pricing", window.location.origin);
-      destination.searchParams.set("subscribePlan", plan.id);
-      destination.searchParams.set("billingInterval", billingInterval);
-      const redirect = `${destination.pathname}${destination.search}`;
-      window.location.assign(`/sign-up?redirect=${encodeURIComponent(redirect)}`);
-      return;
-    }
-
-    setBusyPlanId(plan.id);
-    try {
-      if (isCurrent && plan.id !== "free" && hasStripeCustomer) {
-        await openPortal();
+      if (!checkoutPlanId) {
         return;
       }
 
-      if (!isCurrent) {
-        await startCheckout(plan);
+      try {
+        const response = await fetch("/api/stripe/create-checkout-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ priceId: checkoutPlanId, billingInterval }),
+        });
+        const payload = (await response.json()) as {
+          url?: string;
+          error?: string;
+        };
+
+        if (!response.ok || !payload.url) {
+          throw new Error(payload.error ?? "Could not start checkout.");
+        }
+
+        posthog.capture("pricing_checkout_started", {
+          plan_id: plan.id,
+          checkout_plan_id: checkoutPlanId,
+          billing_interval: billingInterval,
+        });
+        window.location.assign(payload.url);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Could not start checkout.";
+        toast.error(message);
       }
-    } finally {
-      setBusyPlanId(null);
-    }
-  };
+    },
+    [billingInterval],
+  );
+
+  const onPlanAction = useCallback(
+    async (plan: PricingPlan, isCurrent: boolean) => {
+      if (busyPlanId) {
+        return;
+      }
+
+      if (!isSignedIn) {
+        const destination = new URL("/pricing", window.location.origin);
+        destination.searchParams.set("subscribePlan", plan.id);
+        destination.searchParams.set("billingInterval", billingInterval);
+        const redirect = `${destination.pathname}${destination.search}`;
+        window.location.assign(
+          `/sign-up?redirect=${encodeURIComponent(redirect)}`,
+        );
+        return;
+      }
+
+      setBusyPlanId(plan.id);
+      try {
+        if (isCurrent && plan.id !== "free" && hasStripeCustomer) {
+          await openPortal();
+          return;
+        }
+
+        if (!isCurrent) {
+          await startCheckout(plan);
+        }
+      } finally {
+        setBusyPlanId(null);
+      }
+    },
+    [
+      billingInterval,
+      busyPlanId,
+      hasStripeCustomer,
+      isSignedIn,
+      openPortal,
+      startCheckout,
+    ],
+  );
 
   const isPlainLeftClick = (event: MouseEvent<HTMLAnchorElement>) =>
     event.button === 0 &&
@@ -216,14 +249,23 @@ export function PriceColumns({
       return;
     }
 
-    const nextInterval: BillingInterval = subscribeInterval === "yearly" ? "yearly" : "monthly";
+    const nextInterval: BillingInterval =
+      subscribeInterval === "yearly" ? "yearly" : "monthly";
     if (billingInterval !== nextInterval) {
       setBillingInterval(nextInterval);
     }
 
     hasAutoStartedCheckout.current = true;
     void onPlanAction(plan, normalizedActivePlan === plan.id);
-  }, [billingInterval, busyPlanId, isSignedIn, normalizedActivePlan, plans, searchParams]);
+  }, [
+    billingInterval,
+    busyPlanId,
+    isSignedIn,
+    normalizedActivePlan,
+    onPlanAction,
+    plans,
+    searchParams,
+  ]);
 
   return (
     <div className="space-y-6">
@@ -248,15 +290,25 @@ export function PriceColumns({
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-stretch gap-8 md:grid-cols-2 xl:grid-cols-4">
         {plans.map((plan) => {
           const displayPrice =
-            billingInterval === "yearly" && plan.yearlyPrice ? plan.yearlyPrice : plan.price;
+            billingInterval === "yearly" && plan.yearlyPrice
+              ? plan.yearlyPrice
+              : plan.price;
           const displayPeriod =
-            billingInterval === "yearly" && plan.yearlyPeriod ? plan.yearlyPeriod : plan.period;
+            billingInterval === "yearly" && plan.yearlyPeriod
+              ? plan.yearlyPeriod
+              : plan.period;
           const isPopular = Boolean(plan.popular);
           const isCurrent = normalizedActivePlan === plan.id;
           const isBusy = busyPlanId === plan.id;
-          const badge = getActiveBadge(isCurrent, subscriptionStatus, isPopular);
-          const canManageCurrentPlan = isCurrent && plan.id !== "free" && hasStripeCustomer;
-          const isActionDisabled = isBusy || (isCurrent && !canManageCurrentPlan);
+          const badge = getActiveBadge(
+            isCurrent,
+            subscriptionStatus,
+            isPopular,
+          );
+          const canManageCurrentPlan =
+            isCurrent && plan.id !== "free" && hasStripeCustomer;
+          const isActionDisabled =
+            isBusy || (isCurrent && !canManageCurrentPlan);
           const isCardLinkDisabled = isBusy || isCurrent;
           const planHref = `/pricing?subscribePlan=${encodeURIComponent(plan.id)}&billingInterval=${billingInterval}`;
 
@@ -319,9 +371,13 @@ export function PriceColumns({
               <CardContent className="flex flex-1 flex-col px-4 pt-0">
                 <div className="mb-3 min-h-16 border-y py-3 text-center">
                   <span className="text-3xl font-bold">{displayPrice}</span>
-                  <span className="text-muted-foreground ml-1">{displayPeriod}</span>
+                  <span className="text-muted-foreground ml-1">
+                    {displayPeriod}
+                  </span>
                   {billingInterval === "yearly" && plan.yearlyCallout ? (
-                    <p className="text-muted-foreground mt-2 text-xs">{plan.yearlyCallout}</p>
+                    <p className="text-muted-foreground mt-2 text-xs">
+                      {plan.yearlyCallout}
+                    </p>
                   ) : null}
                 </div>
                 <ul className="flex-1 space-y-1.5">

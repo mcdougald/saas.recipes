@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
-export type ResizeDirection = 'left' | 'right';
+export type ResizeDirection = "left" | "right";
 
 interface UseResizableOptions {
   initialWidth: number;
@@ -52,15 +52,17 @@ export function useResizable({
       localStorage.setItem(storageKey, String(width));
     }
     onWidthChange?.(width);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width, isResizing, storageKey]);
+  }, [width, isResizing, storageKey, onWidthChange]);
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    startXRef.current = e.clientX;
-    startWidthRef.current = width;
-    setIsResizing(true);
-  }, [width]);
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      startXRef.current = e.clientX;
+      startWidthRef.current = width;
+      setIsResizing(true);
+    },
+    [width],
+  );
 
   useEffect(() => {
     if (!isResizing) return;
@@ -69,7 +71,7 @@ export function useResizable({
       const deltaX = e.clientX - startXRef.current;
       let newWidth: number;
 
-      if (direction === 'right') {
+      if (direction === "right") {
         // For left sidebar - dragging right increases width
         newWidth = startWidthRef.current + deltaX;
       } else {
@@ -86,24 +88,27 @@ export function useResizable({
     };
 
     // Prevent text selection while resizing
-    document.body.style.userSelect = 'none';
-    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "col-resize";
 
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
 
     return () => {
-      document.body.style.userSelect = '';
-      document.body.style.cursor = '';
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isResizing, direction, minWidth, maxWidth]);
 
-  const setWidth = useCallback((newWidth: number) => {
-    const clampedWidth = Math.min(maxWidth, Math.max(minWidth, newWidth));
-    setWidthState(clampedWidth);
-  }, [minWidth, maxWidth]);
+  const setWidth = useCallback(
+    (newWidth: number) => {
+      const clampedWidth = Math.min(maxWidth, Math.max(minWidth, newWidth));
+      setWidthState(clampedWidth);
+    },
+    [minWidth, maxWidth],
+  );
 
   return {
     width,
