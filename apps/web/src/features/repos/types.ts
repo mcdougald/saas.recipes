@@ -164,44 +164,199 @@ export type RepositoryPullRequest = {
 };
 
 export type RepositoryPullRequestAnalytics = {
-  maxAge: number;
-  lastPrAt: ISODateString | null;
-  openCount: number;
-  averageAge: number;
-  draftCount: number;
-  maxCommits: number;
-  totalCount: number;
-  authorCount: number;
-  closedCount: number;
-  maxComments: number;
-  mergedCount: number;
-  maxAdditions: number;
-  averageCommits: number;
-  averageComments: number;
-  maxChangedFiles: number;
-  averageAdditions: number;
-  recentPullRequests: RepositoryPullRequest[];
+  maxAge?: number;
+  lastPrAt?: ISODateString | null;
+  openCount?: number;
+  averageAge?: number;
+  draftCount?: number;
+  maxCommits?: number;
+  totalCount?: number;
+  authorCount?: number;
+  closedCount?: number;
+  maxComments?: number;
+  mergedCount?: number;
+  maxAdditions?: number;
+  averageCommits?: number;
+  averageComments?: number;
+  maxChangedFiles?: number;
+  averageAdditions?: number;
+  recentPullRequests?: RepositoryPullRequest[];
   [key: string]: unknown;
 };
 
 export type RepositoryIssueAnalytics = {
+  openCount?: number;
+  closedCount?: number;
+  totalCount?: number;
+  staleOpenIssues?: number;
+  lastIssueAt?: ISODateString | null;
+  oldestOpenIssues?: Array<Record<string, unknown>>;
+  topCommentedOpenIssues?: Array<Record<string, unknown>>;
+  recentIssues?: Array<Record<string, unknown>>;
+  byLabel?: Array<Record<string, unknown>>;
+  byAssignee?: Array<Record<string, unknown>>;
+  byAuthor?: Array<Record<string, unknown>>;
+  activity?: Array<Record<string, unknown>>;
   [key: string]: unknown;
 };
 
+/**
+ * Represent one contributor row extracted from repository analytics.
+ */
 export type RepositoryContributor = {
+  id?: string;
+  name?: string | null;
+  email?: string | null;
+  avatarUrl?: string | null;
+  githubUsername?: string | null;
+  commitCount?: number;
+  additions?: number;
+  deletions?: number;
+  filesChanged?: number;
+  activeMonths?: number;
+  firstCommitAt?: ISODateString | null;
+  lastCommitAt?: ISODateString | null;
+  isBot?: boolean;
+  isPrimaryContributor?: boolean;
+  fileTypesChanged?: Array<Record<string, unknown>>;
+  changedFileCounts?: Array<Record<string, unknown>>;
+  commitTypes?: Array<Record<string, unknown>>;
+  metadata?: Record<string, unknown> | null;
   [key: string]: unknown;
 };
 
+/**
+ * Represent one package dependency discovered in repository manifests.
+ */
 export type RepositoryDependency = {
+  id?: string;
+  packageName?: string;
+  category?: string | null;
+  version?: string | null;
+  latestVersion?: string | null;
+  license?: string | null;
+  usageCount?: number;
+  dependencyDepth?: number;
+  fileCount?: number;
+  usedInPackages?: string[] | null;
+  isDirect?: boolean;
+  isDevDependency?: boolean;
+  isPeerDependency?: boolean;
+  isCritical?: boolean;
+  bundleSize?: number | null;
+  addedAt?: ISODateString | null;
+  lastUpdatedAt?: ISODateString | null;
   [key: string]: unknown;
 };
 
+/**
+ * Group dependencies into platform- or category-level buckets.
+ */
 export type RepositoryDependencyGroup = {
+  id?: string;
+  groupName?: string;
+  category?: string | null;
+  dependencyCount?: number;
+  dependencies?: RepositoryDependency[];
+  config?: Record<string, unknown> | null;
   [key: string]: unknown;
 };
 
+/**
+ * Capture dependency version changes over time.
+ */
 export type RepositoryDependencyChange = {
+  id?: string;
+  packageName?: string;
+  fromVersion?: string | null;
+  toVersion?: string | null;
+  changedAt?: ISODateString | null;
+  severity?: string | null;
   [key: string]: unknown;
+};
+
+/**
+ * Represent one file-level churn hotspot in AI setup analytics.
+ */
+export type RepositoryAiSetupChurnFile = {
+  path: string;
+  changeCount: number;
+  lastChangedAt: ISODateString | null;
+  additionsTotal: number;
+  deletionsTotal: number;
+};
+
+/**
+ * Aggregate AI setup file churn metrics extracted from git history.
+ */
+export type RepositoryAiSetupChurnMetrics = {
+  totalAdditions: number;
+  totalDeletions: number;
+  totalChangeCount: number;
+  touchedFileCount: number;
+  touchedCommitCount: number;
+  analyzedCommitCount: number;
+  topChangedFiles: RepositoryAiSetupChurnFile[];
+};
+
+/**
+ * Represent one instruction or configuration file related to AI setup.
+ */
+export type RepositoryAiInstructionFile = {
+  path: string;
+  type: string;
+};
+
+/**
+ * Represent one file-extension frequency bucket.
+ */
+export type RepositoryFileExtensionCount = {
+  extension: string;
+  count: number;
+};
+
+/**
+ * Represent one AI instruction-type frequency bucket.
+ */
+export type RepositoryInstructionFileTypeCount = {
+  type: string;
+  count: number;
+};
+
+/**
+ * Aggregate AI assistant setup metrics discovered in repository files.
+ */
+export type RepositoryAiSetupMetrics = {
+  churn: RepositoryAiSetupChurnMetrics | null;
+  detectedTools: string[];
+  totalFileCount: number;
+  instructionFiles: RepositoryAiInstructionFile[];
+  toolingDirectories: string[];
+  fileExtensionCounts: RepositoryFileExtensionCount[];
+  instructionFileCount: number;
+  totalConfigFileCount: number;
+  toolingDirectoryCount: number;
+  instructionFileTypeCounts: RepositoryInstructionFileTypeCount[];
+};
+
+/**
+ * Represent one hotspot file ranked by change frequency.
+ */
+export type RepositoryHotspotFile = {
+  path: string;
+  changeCount: number;
+  lastChangedAt: ISODateString | null;
+  additionsTotal: number;
+  deletionsTotal: number;
+};
+
+/**
+ * Represent one large file discovered in repository snapshots.
+ */
+export type RepositoryLargestFile = {
+  path: string;
+  size: number;
+  extension: string | null;
 };
 
 export type RepositoryCommit = {
@@ -281,6 +436,7 @@ export type RepositoryRepo = {
   readme: string | null;
   packageJson: RepositoryPackageJson | null;
   markdownFiles: RepositoryMarkdownFile[];
+  aiSetupMetrics: RepositoryAiSetupMetrics | null;
   deployments: RepositoryDeployments | null;
   releases: RepositoryReleases | null;
   pullRequests: RepositoryPullRequestAnalytics | null;
@@ -297,6 +453,8 @@ export type RepositoryRepo = {
   dependencies: RepositoryDependency[];
   dependencyGroups: RepositoryDependencyGroup[];
   dependencyChanges: RepositoryDependencyChange[];
+  hotspotFiles: RepositoryHotspotFile[];
+  largestFiles: RepositoryLargestFile[];
   commits: RepositoryCommit[];
   [key: string]: unknown;
 };
@@ -323,6 +481,7 @@ export type RepositoryDashboardItem = {
   license: string | null;
   sourceType: RepositorySourceType;
   inspirationScore: number;
+  trends: RepositoryTrendSignals;
   metadata: RepositoryMetadata;
   repo: Pick<
     RepositoryRepo,
@@ -339,25 +498,60 @@ export type RepositoryDashboardItem = {
     | "closedIssues"
     | "totalIssues"
     | "openPullRequests"
+    | "closedPullRequests"
     | "mergedPullRequests"
     | "totalPullRequests"
+    | "latestVersion"
     | "topics"
   > &
     Partial<
       Pick<
         RepositoryRepo,
         | "deployments"
+        | "releases"
+        | "pullRequests"
+        | "issues"
+        | "contributors"
         | "packageManager"
         | "packageJson"
+        | "markdownFiles"
+        | "aiSetupMetrics"
         | "dependencies"
+        | "dependencyGroups"
+        | "dependencyChanges"
+        | "hotspotFiles"
+        | "largestFiles"
         | "workspacePackageJsons"
         | "commits"
+        | "gitAnalysis"
       >
     > & {
       dependencyCount: number;
       workspacePackageCount: number;
       totalFilesTouched: number;
     };
+};
+
+/**
+ * Captures recent repository momentum and codebase change direction.
+ */
+export type RepositoryTrendSignals = {
+  commitsLast7Days: number;
+  commitsLast30Days: number;
+  additionsLast30Days: number;
+  deletionsLast30Days: number;
+  codeChurnLast30Days: number;
+  deploymentsLast30Days: number | null;
+  releasesLast90Days: number | null;
+  topCategories: string[];
+  topFileTypes: string[];
+  commitMomentumRatio: number;
+  mergeEfficiency30Days: number;
+  deploymentFrequencyPerWeek: number | null;
+  releaseFrequencyPerMonth: number | null;
+  avgCommitSize30Days: number;
+  stabilityScore: number;
+  activityScore: number;
 };
 
 export type RepositoryDashboardListItem = Pick<
@@ -371,6 +565,7 @@ export type RepositoryDashboardListItem = Pick<
   | "license"
   | "sourceType"
   | "inspirationScore"
+  | "trends"
   | "metadata"
   | "repo"
 >;
