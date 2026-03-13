@@ -1,3 +1,4 @@
 pnpm check:fix
 pnpm check
+pnpm --filter web playwright:install
 pnpm --filter web test:e2e:smoke
