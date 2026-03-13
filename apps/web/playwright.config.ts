@@ -33,7 +33,7 @@ export default defineConfig({
   webServer: shouldStartLocalWebServer
     ? {
         command:
-          "pnpm --filter web build && pnpm --filter web start -- -p 4000 -H 127.0.0.1",
+          "pnpm --filter web build && PORT=4000 HOSTNAME=127.0.0.1 pnpm --filter web start",
         url: baseURL,
         reuseExistingServer: !isPlaywrightCi,
         timeout: 300 * 1000,
