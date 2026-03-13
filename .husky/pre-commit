@@ -1,2 +1,5 @@
-pnpm check:fix
+#!/usr/bin/env sh
+set -e
+
+echo "Running staged file checks..."
 pnpm lint-staged

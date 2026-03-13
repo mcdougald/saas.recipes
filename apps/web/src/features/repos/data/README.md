@@ -21,20 +21,26 @@ apps/web/src/app/(dashboard)/dashboard/[slug]/page.tsx
 ## Data flow
 
 ```text
-.mocks/project-mock-03-11-2026.json
-  -> repository-dashboard-data.ts
-     - normalize/sanitize fields
-     - compute trends:
-       - commitsLast7Days / commitsLast30Days
-       - additions/deletions/churn (30d)
-       - deploymentsLast30Days
-       - releasesLast90Days
-       - topCategories / topFileTypes
-  -> exported selectors:
-     - repositoryDashboardData
-     - getRepositoryBySlug()
-     - getRepositorySlugs()
-     - getRepositoryDashboardSummary()
+Optional local source:
+  .mocks/project-mock-03-11-2026.json
+    -> repository-dashboard-data.ts (loaded at runtime when present)
+
+Fallback source:
+  empty payload (`{ data: [] }`) when local mock file is absent
+
+In both cases, repository-dashboard-data.ts:
+  - normalize/sanitize fields
+  - compute trends:
+    - commitsLast7Days / commitsLast30Days
+    - additions/deletions/churn (30d)
+    - deploymentsLast30Days
+    - releasesLast90Days
+    - topCategories / topFileTypes
+  - exported selectors:
+    - repositoryDashboardData
+    - getRepositoryBySlug()
+    - getRepositorySlugs()
+    - getRepositoryDashboardSummary()
 ```
 
 ## Why this exists

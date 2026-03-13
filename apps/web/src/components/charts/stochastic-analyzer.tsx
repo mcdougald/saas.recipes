@@ -1024,9 +1024,12 @@ const AdvancedMultidimensionalStochasticAnalyzer = () => {
                 }}
               />
               <Tooltip
-                formatter={(value: number | string, name: string) => [
-                  typeof value === "number" ? value.toFixed(2) : value,
-                  name,
+                formatter={(
+                  value: number | string | undefined,
+                  name: string | undefined,
+                ) => [
+                  typeof value === "number" ? value.toFixed(2) : (value ?? "-"),
+                  String(name ?? ""),
                 ]}
                 labelFormatter={(_label, payload) =>
                   payload?.[0]
@@ -1074,9 +1077,12 @@ const AdvancedMultidimensionalStochasticAnalyzer = () => {
               <XAxis dataKey="pair" />
               <YAxis domain={[-1, 1]} />
               <Tooltip
-                formatter={(value: number | string, name: string) => [
-                  typeof value === "number" ? value.toFixed(3) : value,
-                  name,
+                formatter={(
+                  value: number | string | undefined,
+                  name: string | undefined,
+                ) => [
+                  typeof value === "number" ? value.toFixed(3) : (value ?? "-"),
+                  String(name ?? ""),
                 ]}
               />
               <Legend />

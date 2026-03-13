@@ -1,4 +1,12 @@
-pnpm check:fix
+#!/usr/bin/env sh
+set -e
+
+echo "Running repository checks..."
 pnpm check
+
+echo "Validating web production build..."
+pnpm --filter web build
+
+echo "Running web smoke tests..."
 pnpm --filter web playwright:install
 pnpm --filter web test:e2e:smoke

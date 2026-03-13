@@ -15,7 +15,12 @@ import {
   SidebarMenu,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { type NavGroup as NavGroupData } from "@/lib/types";
+import {
+  type NavCollapsible,
+  type NavGroup as NavGroupData,
+  type NavItem,
+  type NavLink,
+} from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { getGroupToneClass } from "./nav-group.styles";
 import { checkIsGroupActive, checkIsLocked } from "./nav-group.utils";
@@ -38,6 +43,14 @@ export interface NavGroupProps extends NavGroupData {
    * Position index used for subtle visual section variation.
    */
   groupIndex: number;
+}
+
+function isNavLink(item: NavItem): item is NavLink {
+  return "url" in item && item.url !== undefined;
+}
+
+function isNavCollapsible(item: NavItem): item is NavCollapsible {
+  return "items" in item && Array.isArray(item.items);
 }
 
 /**
@@ -115,10 +128,14 @@ export function NavGroup({
                 return <SidebarMenuLockedItem key={key} item={item} />;
               }
 
-              if (!("items" in item)) {
+              if (isNavLink(item)) {
                 return (
                   <SidebarMenuLink key={key} item={item} href={pathname} />
                 );
+              }
+
+              if (!isNavCollapsible(item)) {
+                return null;
               }
 
               if (state === "collapsed") {

@@ -43,6 +43,10 @@ export function DataChartTooltipContent({
           return value;
         }
 
+        if (value === undefined) {
+          return value;
+        }
+
         return valueFormatter(value, String(name));
       }}
       {...props}

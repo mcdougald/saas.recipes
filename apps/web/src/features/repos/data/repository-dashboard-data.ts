@@ -1,3 +1,6 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import {
   type RepositoryDashboardListItem,
   type RepositoryDashboardSummary,
@@ -5,13 +8,13 @@ import {
   type RepositoryStatus,
   type RepositoryVisibility,
 } from "@/features/repos/types";
-import projectMockData from "../../../../../../.mocks/project-mock-03-11-2026.json";
 import {
   type ProjectMockItem,
   type ProjectMockPayload,
 } from "./project-mock-types";
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
+const PROJECT_MOCK_FILE_PATH = ".mocks/project-mock-03-11-2026.json";
 const SUPPORTED_STATUSES = new Set<RepositoryStatus>([
   "active",
   "paused",
@@ -301,7 +304,33 @@ function getActivityScore(params: {
   );
 }
 
-const mockPayload = projectMockData as unknown as ProjectMockPayload;
+function loadProjectMockPayload(): ProjectMockPayload {
+  const fallbackPayload: ProjectMockPayload = { data: [] };
+  const filePath = join(process.cwd(), PROJECT_MOCK_FILE_PATH);
+
+  if (!existsSync(filePath)) {
+    return fallbackPayload;
+  }
+
+  try {
+    const fileContents = readFileSync(filePath, "utf8");
+    const parsed = JSON.parse(fileContents) as unknown;
+
+    if (
+      typeof parsed === "object" &&
+      parsed !== null &&
+      Array.isArray((parsed as { data?: unknown }).data)
+    ) {
+      return parsed as ProjectMockPayload;
+    }
+  } catch {
+    return fallbackPayload;
+  }
+
+  return fallbackPayload;
+}
+
+const mockPayload = loadProjectMockPayload();
 const rawProjects = Array.isArray(mockPayload.data) ? mockPayload.data : [];
 
 /**
