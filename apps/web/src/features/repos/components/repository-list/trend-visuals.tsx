@@ -1,3 +1,5 @@
+import { formatCompactNumber, SparkChart } from "@/components/charts";
+
 type TrendSparklineProps = {
   values: number[];
   className?: string;
@@ -12,34 +14,13 @@ type TrendSparklineProps = {
  */
 export function TrendSparkline({ values, className }: TrendSparklineProps) {
   const safeValues = values.length > 0 ? values : [0];
-  const max = Math.max(...safeValues, 1);
-  const min = Math.min(...safeValues, 0);
-  const span = Math.max(max - min, 1);
-  const width = 160;
-  const height = 42;
-  const points = safeValues.map((value, index) => {
-    const x = (index / Math.max(safeValues.length - 1, 1)) * width;
-    const y = height - ((value - min) / span) * (height - 6) - 3;
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  });
+  const sparkData = safeValues.map((value, index) => ({
+    label: `point-${index + 1}`,
+    value,
+  }));
 
   return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      className={className}
-      role="img"
-      aria-label="Trend sparkline"
-      preserveAspectRatio="none"
-    >
-      <polyline
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        points={points.join(" ")}
-      />
-    </svg>
+    <SparkChart data={sparkData} className={className} showTooltip={false} />
   );
 }
 
@@ -68,7 +49,9 @@ export function ComparativeBars({ bars }: ComparativeBarsProps) {
         <div key={bar.key} className="space-y-1">
           <div className="text-muted-foreground flex items-center justify-between gap-2 text-[10px]">
             <span>{bar.label}</span>
-            <span className="text-foreground font-medium">{bar.value}</span>
+            <span className="text-foreground font-medium">
+              {formatCompactNumber(bar.value)}
+            </span>
           </div>
           <div className="h-1.5 rounded-full bg-muted/60">
             <div
@@ -118,8 +101,8 @@ export function DeltaSplit({ additions, deletions }: DeltaSplitProps) {
         />
       </div>
       <div className="text-muted-foreground flex items-center justify-between text-[10px]">
-        <span>+{additions}</span>
-        <span>-{deletions}</span>
+        <span>+{formatCompactNumber(additions)}</span>
+        <span>-{formatCompactNumber(deletions)}</span>
       </div>
     </div>
   );

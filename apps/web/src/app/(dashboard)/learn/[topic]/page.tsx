@@ -1,6 +1,7 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { LearnPageAnalytics } from "@/features/learn/components/learn-page-analytics";
 import { LearningTopicPage } from "@/features/learn/components/learning-topic-page";
 import {
   getLearningTopicBySlug,
@@ -42,6 +43,9 @@ export async function generateMetadata({
   return {
     title: `${learningTopic.title} | SaaS Academy`,
     description: `${learningTopic.description} Unlock premium academy, notes, guides, and case studies for deeper implementation support.`,
+    alternates: {
+      canonical: `/learn/${learningTopic.slug}`,
+    },
   };
 }
 
@@ -60,9 +64,12 @@ export default async function LearnTopicPage({ params }: LearnTopicPageProps) {
   }
 
   return (
-    <LearningTopicPage
-      topic={learningTopic}
-      isFavorited={favoriteTopicSlugs.includes(learningTopic.slug)}
-    />
+    <>
+      <LearnPageAnalytics pageType="topic" slug={learningTopic.slug} />
+      <LearningTopicPage
+        topic={learningTopic}
+        isFavorited={favoriteTopicSlugs.includes(learningTopic.slug)}
+      />
+    </>
   );
 }

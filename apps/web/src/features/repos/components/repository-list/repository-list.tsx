@@ -212,7 +212,10 @@ export function RepositoryList({ projects }: RepositoryListProps) {
 
   const updateUrlState = useCallback(
     (updates: Record<string, string | null>) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const currentSearch = window.location.search.startsWith("?")
+        ? window.location.search.slice(1)
+        : window.location.search;
+      const params = new URLSearchParams(currentSearch);
 
       for (const [key, value] of Object.entries(updates)) {
         if (value && value.length > 0 && value !== "all") {
@@ -222,10 +225,15 @@ export function RepositoryList({ projects }: RepositoryListProps) {
         }
       }
 
-      const nextUrl = params.toString() ? `${pathname}?${params}` : pathname;
+      const nextSearch = params.toString();
+      if (nextSearch === currentSearch) {
+        return;
+      }
+
+      const nextUrl = nextSearch ? `${pathname}?${nextSearch}` : pathname;
       router.replace(nextUrl, { scroll: false });
     },
-    [pathname, router, searchParams],
+    [pathname, router],
   );
 
   useEffect(() => {
@@ -412,6 +420,42 @@ export function RepositoryList({ projects }: RepositoryListProps) {
           Curated repositories optimized for high-volume browsing with
           URL-synced filters, sorting, and infinite scrolling.
         </CardDescription>
+        <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-md border bg-card/60 p-3">
+            <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
+              <Activity className="size-3.5" />
+              Commits (30d)
+            </p>
+            <p className="mt-1 text-xl font-semibold">
+              {formatCompactNumber(totalCommits30Days)}
+            </p>
+          </div>
+          <div className="rounded-md border bg-card/60 p-3">
+            <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
+              <Rocket className="size-3.5" />
+              Deployments (30d)
+            </p>
+            <p className="mt-1 text-xl font-semibold">
+              {formatCompactNumber(totalDeployments30Days)}
+            </p>
+          </div>
+          <div className="rounded-md border bg-card/60 p-3">
+            <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
+              <Users className="size-3.5" />
+              Contributors
+            </p>
+            <p className="mt-1 text-xl font-semibold">
+              {formatCompactNumber(totalContributors)}
+            </p>
+          </div>
+          <div className="rounded-md border bg-card/60 p-3">
+            <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
+              <GitMerge className="size-3.5" />
+              Avg. merge rate
+            </p>
+            <p className="mt-1 text-xl font-semibold">{averageMergeRate}%</p>
+          </div>
+        </div>
         <div className="rounded-md border bg-card/40 p-2.5">
           <div className="grid gap-2 lg:grid-cols-[minmax(0,1.4fr)_repeat(5,minmax(0,1fr))]">
             <div className="relative">
@@ -570,76 +614,6 @@ export function RepositoryList({ projects }: RepositoryListProps) {
             <SlidersHorizontal className="mr-1 size-3.5" />
             {sortKey} ({sortDirection})
           </Badge>
-        </div>
-
-        <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-md border bg-card/60 p-3">
-            <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
-              <Activity className="size-3.5" />
-              Commits (30d)
-            </p>
-            <p className="mt-1 text-xl font-semibold">
-              {formatCompactNumber(totalCommits30Days)}
-            </p>
-          </div>
-          <div className="rounded-md border bg-card/60 p-3">
-            <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
-              <Rocket className="size-3.5" />
-              Deployments (30d)
-            </p>
-            <p className="mt-1 text-xl font-semibold">
-              {formatCompactNumber(totalDeployments30Days)}
-            </p>
-          </div>
-          <div className="rounded-md border bg-card/60 p-3">
-            <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
-              <Users className="size-3.5" />
-              Contributors
-            </p>
-            <p className="mt-1 text-xl font-semibold">
-              {formatCompactNumber(totalContributors)}
-            </p>
-          </div>
-          <div className="rounded-md border bg-card/60 p-3">
-            <p className="text-muted-foreground inline-flex items-center gap-1 text-xs">
-              <GitMerge className="size-3.5" />
-              Avg. merge rate
-            </p>
-            <p className="mt-1 text-xl font-semibold">{averageMergeRate}%</p>
-          </div>
-        </div>
-
-        <div className="rounded-md border bg-muted/30 p-3">
-          <p className="text-muted-foreground inline-flex items-center gap-1 text-xs font-medium">
-            <FolderGit2 className="size-3.5" />
-            Portfolio trend comparison
-          </p>
-          <div className="mt-2">
-            <ComparativeBars
-              bars={[
-                {
-                  key: "portfolio-commits",
-                  label: "Total commits (30d)",
-                  value: totalCommits30Days,
-                },
-                {
-                  key: "portfolio-deploys",
-                  label: "Total deployments (30d)",
-                  value: totalDeployments30Days,
-                },
-                {
-                  key: "portfolio-churn",
-                  label: "Code churn (30d)",
-                  value: totalCodeChurn30Days,
-                },
-                {
-                  key: "portfolio-prs",
-                  label: "Merged PRs",
-                  value: totalMergedPullRequests,
-                },
-              ]}
-            />
-          </div>
         </div>
       </CardHeader>
 

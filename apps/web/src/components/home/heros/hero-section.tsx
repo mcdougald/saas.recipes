@@ -19,7 +19,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative flex flex-col items-center justify-center overflow-hidden px-4 py-20 md:py-32"
+      className="relative flex flex-col items-center justify-center overflow-hidden px-4 py-20 py-0 md:py-32 md:pb-0"
       aria-labelledby="hero-heading"
     >
       <div className="absolute inset-0 -z-20 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,var(--primary)/18%,transparent)]" />
@@ -43,7 +43,7 @@ export function HeroSection() {
                     aria-hidden
                     className="pointer-events-none absolute inset-x-0 -bottom-0.5 h-[3px] rounded-full bg-primary/90"
                   />
-                  <HandDrawnArrowNote />
+                  {/* <HandDrawnArrowNote /> */}
                 </span>
               </span>
               <span className="mt-1 block whitespace-nowrap text-gradient-primary">

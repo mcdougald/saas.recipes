@@ -53,6 +53,7 @@ export const sidebarData: SidebarData = {
           url: "/dashboard",
           icon: IconLayoutDashboard,
           badge: "Beta",
+          activeUrls: ["/dashboard/[slug]"],
         },
         {
           title: "Analytics",
@@ -129,6 +130,18 @@ export const sidebarData: SidebarData = {
           badge: "Beta",
         },
         {
+          title: "Courses",
+          url: "/learn/courses",
+          icon: IconChecklist,
+          badge: "New",
+        },
+        {
+          title: "Guides",
+          url: "/learn/guides",
+          icon: BookOpen,
+          badge: "New",
+        },
+        {
           title: "Snippets",
           url: "/learn/playbooks",
           icon: IconChecklist,
@@ -137,7 +150,7 @@ export const sidebarData: SidebarData = {
       ],
     },
     {
-      title: "USER",
+      title: "Workspace",
       items: [
         {
           title: "Your Recipes",
@@ -145,6 +158,7 @@ export const sidebarData: SidebarData = {
           icon: BookOpen,
           badge: "Beta",
           requiresAuth: true,
+          lockedBadge: "Sign in",
         },
         {
           title: "Tasks",
@@ -163,6 +177,7 @@ export const sidebarData: SidebarData = {
           title: "Settings",
           icon: IconSettings,
           requiresAuth: true,
+          lockedBadge: "Sign in",
           items: [
             {
               title: "Profile",
@@ -271,6 +286,7 @@ export const sidebarData: SidebarData = {
           url: "/admin/api-health",
           icon: Activity,
           requiresAuth: true,
+          lockedBadge: "Admin",
         },
       ],
     },

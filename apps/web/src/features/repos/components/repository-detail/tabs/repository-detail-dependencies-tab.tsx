@@ -21,7 +21,7 @@ import {
   formatCompactNumber,
   formatNumber,
   type RepositoryDetailModel,
-} from "./repository-detail-utils";
+} from "../repository-detail-utils";
 
 type RepositoryDetailDependenciesTabProps = {
   model: RepositoryDetailModel;

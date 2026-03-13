@@ -5,7 +5,10 @@ import { LearningOverviewPage } from "@/features/learn/components/learning-overv
 export const metadata: Metadata = {
   title: "Learn | SaaS Academy",
   description:
-    "Study real SaaS codebase recipes and unlock premium academy, notes, guides, and case studies.",
+    "Study SaaS course lessons, implementation guides, and production snippets in one learning flow.",
+  alternates: {
+    canonical: "/learn",
+  },
 };
 
 /**

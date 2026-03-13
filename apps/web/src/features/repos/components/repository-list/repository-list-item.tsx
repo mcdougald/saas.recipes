@@ -1,15 +1,17 @@
 import {
   ArrowUpRight,
-  Flame,
+  Eye,
   GitBranch,
   GitCommitHorizontal,
+  GitFork,
   GitMerge,
   Globe,
   HardDrive,
+  Heart,
   Package,
   Rocket,
   Scale,
-  ShieldCheck,
+  Star,
   Target,
   Users,
 } from "lucide-react";
@@ -28,7 +30,7 @@ import {
   RepositoryHistoryChart,
   type RepositoryHistoryPoint,
 } from "./repository-history-chart";
-import { DeltaSplit, TrendDeltaBadge } from "./trend-visuals";
+import { DeltaSplit } from "./trend-visuals";
 
 const numberFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
@@ -186,6 +188,11 @@ function formatMonthLabel(value: string): string {
 /** Build the canonical GitHub URL for a repository. */
 function getRepoUrl(project: RepositoryDashboardListItem): string {
   return `https://github.com/${project.repo.owner}/${project.repo.name}`;
+}
+
+/** Build the canonical GitHub URL for a repository owner. */
+function getOwnerUrl(project: RepositoryDashboardListItem): string {
+  return `https://github.com/${project.repo.owner}`;
 }
 
 /** Resolve a public GitHub avatar URL from owner login. */
@@ -548,7 +555,7 @@ function buildHistory(
       );
     });
 
-  return prHistory.slice(-6).map((row) => ({
+  return prHistory.map((row) => ({
     label: formatMonthLabel(row.month),
     openedPrs: row.openedPrs,
     mergedPrs: row.mergedPrs,
@@ -583,6 +590,8 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
   const deploymentsLast30Days = project.trends.deploymentsLast30Days ?? 0;
   const releasesLast90Days = project.trends.releasesLast90Days ?? 0;
   const visibility = project.metadata.visibility ?? "public";
+  const repoUrl = getRepoUrl(project);
+  const ownerUrl = getOwnerUrl(project);
   const packageManager =
     project.repo.packageManager ?? project.repo.packageJson?.packageManager;
   const normalizedPackageManager =
@@ -609,7 +618,6 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
   const mergeEfficiency30Days = project.trends.mergeEfficiency30Days;
   const deploymentFrequencyPerWeek = project.trends.deploymentFrequencyPerWeek;
   const releaseFrequencyPerMonth = project.trends.releaseFrequencyPerMonth;
-  const momentumDeltaPercent = Math.round((commitMomentumRatio - 1) * 100);
   const churnPerCommit =
     commitsLast30Days > 0
       ? Math.round(project.trends.codeChurnLast30Days / commitsLast30Days)
@@ -620,10 +628,6 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
   const history = buildHistory(project);
   const historyOpenedPrs = historySum(history, "openedPrs");
   const historyMergedPrs = historySum(history, "mergedPrs");
-  const historyMergeEfficiency =
-    historyOpenedPrs > 0
-      ? Math.round((historyMergedPrs / historyOpenedPrs) * 100)
-      : 0;
   const primaryLanguage = project.metadata.language || "Unknown";
   const languageSignals = [primaryLanguage, ...topFileTypes.map(toTitleCase)]
     .filter(
@@ -631,6 +635,8 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
     )
     .slice(0, 4);
   const recentPushAt = project.repo.pushed_at;
+  const repoCreatedAgo = formatTimeSince(project.repo.created_at);
+  const repoUpdatedAgo = formatTimeSince(project.repo.pushed_at);
   const aiSetupMetrics = project.repo.aiSetupMetrics;
   const detectedToolsCount = aiSetupMetrics?.detectedTools.length ?? 0;
   const instructionFileCount = aiSetupMetrics?.instructionFileCount ?? 0;
@@ -654,8 +660,8 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
 
       <div className="relative flex flex-col gap-2.5">
         <div className="grid min-w-0 gap-2 lg:grid-cols-[minmax(0,1fr)_auto]">
-          <div className="flex min-w-0 items-start gap-2">
-            <Avatar className="mt-0.5 size-8 border">
+          <div className="flex min-w-0 items-start gap-2.5">
+            <Avatar className="mt-0.5 size-9 border">
               <AvatarImage
                 src={getOwnerAvatarUrl(project)}
                 alt={project.name}
@@ -664,16 +670,60 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
             </Avatar>
 
             <div className="min-w-0 space-y-1.5">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <h3 className="min-w-0 text-sm font-semibold tracking-tight">
-                  {project.repo.owner}/{project.repo.name}
-                </h3>
-                <Badge
-                  variant="outline"
-                  className="h-5 px-1.5 text-[10px] capitalize"
+              <div className="flex flex-wrap items-center gap-1">
+                <a
+                  href={ownerUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-muted-foreground text-sm font-medium underline-offset-4 hover:text-foreground hover:underline"
                 >
-                  {project.sourceType}
-                </Badge>
+                  {project.repo.owner}
+                </a>
+                <span className="text-muted-foreground text-sm">/</span>
+                <a
+                  href={repoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="min-w-0 truncate text-lg font-semibold tracking-tight underline-offset-4 hover:text-primary hover:underline sm:text-xl"
+                >
+                  {project.repo.name}
+                </a>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 w-7 px-0"
+                  asChild
+                >
+                  <a
+                    href={`${repoUrl}/stargazers`}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Favorite ${project.repo.owner}/${project.repo.name} on GitHub`}
+                  >
+                    <Heart className="size-3.5" />
+                  </a>
+                </Button>
+                <span className="text-muted-foreground inline-flex items-center gap-1 px-1.5 py-1 text-[11px]">
+                  <Star className="size-3.5 fill-amber-400 text-amber-500" />
+                  {formatCompactNumber(project.metadata.stars)}
+                </span>
+                <span className="text-muted-foreground inline-flex items-center gap-1 px-1.5 py-1 text-[11px]">
+                  <GitFork className="size-3.5" />
+                  {formatCompactNumber(project.metadata.forks)}
+                </span>
+                <span className="text-muted-foreground inline-flex items-center gap-1 px-1.5 py-1 text-[11px]">
+                  <Eye className="size-3.5" />
+                  {formatCompactNumber(watchersCount)}
+                </span>
+                <span className="text-muted-foreground inline-flex items-center gap-1 rounded-md border bg-muted/20 px-1.5 py-1 text-[11px]">
+                  Created {repoCreatedAgo}
+                </span>
+                <span className="text-muted-foreground inline-flex items-center gap-1 rounded-md border bg-muted/20 px-1.5 py-1 text-[11px]">
+                  Updated {repoUpdatedAgo}
+                </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-1.5">
                 {isArchived ? (
                   <Badge
                     variant="outline"
@@ -687,13 +737,6 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
                 ) : null}
                 <Badge
                   variant="secondary"
-                  className="h-5 px-1.5 text-[10px] capitalize"
-                >
-                  <ShieldCheck className="mr-1 size-3" />
-                  {visibility}
-                </Badge>
-                <Badge
-                  variant="secondary"
                   className={cn(
                     "h-5 px-1.5 text-[10px]",
                     activityToneClassName,
@@ -704,14 +747,6 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
                     ? "commit today"
                     : `commit ${lastCommitDaysAgo}d ago`}
                 </Badge>
-                <TrendDeltaBadge
-                  label="Momentum"
-                  value={momentumDeltaPercent}
-                />
-                <TrendDeltaBadge
-                  label="Merge"
-                  value={mergeEfficiency30Days - historyMergeEfficiency}
-                />
               </div>
               <p className="text-muted-foreground line-clamp-2 text-xs leading-5">
                 {description}
@@ -723,25 +758,40 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-1.5 lg:w-[210px]">
-            <div className="rounded-sm border bg-background/80 px-2 py-1.5">
-              <p className="text-muted-foreground text-[10px]">Stars</p>
-              <p className="text-sm font-semibold">
-                {formatCompactNumber(project.metadata.stars)}
-              </p>
-            </div>
-            <div className="rounded-sm border bg-background/80 px-2 py-1.5">
-              <p className="text-muted-foreground text-[10px]">Forks</p>
-              <p className="text-sm font-semibold">
-                {formatCompactNumber(project.metadata.forks)}
-              </p>
-            </div>
-            <div className="col-span-2 rounded-sm border bg-background/80 px-2 py-1.5">
-              <p className="text-muted-foreground text-[10px]">Watchers</p>
-              <p className="text-sm font-semibold">
-                {formatCompactNumber(watchersCount)}
-              </p>
-            </div>
+          <div className="flex flex-wrap items-start justify-end gap-1.5 lg:w-[260px]">
+            <Button
+              variant="default"
+              size="sm"
+              className="h-7 px-2 text-[11px]"
+              asChild
+            >
+              <Link href={`/dashboard/${project.slug}`}>
+                Recipe
+                <ArrowUpRight className="size-3" />
+              </Link>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-7 px-2 text-[11px]"
+              asChild
+            >
+              <a href={project.url} target="_blank" rel="noreferrer">
+                App
+                <ArrowUpRight className="size-3" />
+              </a>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-7 px-2 text-[11px]"
+              asChild
+            >
+              <a href={repoUrl} target="_blank" rel="noreferrer">
+                Repository
+                <ArrowUpRight className="size-3" />
+              </a>
+            </Button>
           </div>
         </div>
 
@@ -750,17 +800,6 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
             <Package className="mr-1 size-3" />
             {normalizedPackageManager}
           </Badge>
-          <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-            <Flame className="mr-1 size-3" />
-            {momentumLabel} ({formatMultiplier(commitMomentumRatio)})
-          </Badge>
-          <span className="inline-flex items-center gap-1 rounded-md border bg-muted/20 px-1.5 py-1">
-            Created {formatTimeSince(project.repo.created_at)}
-          </span>
-          <span className="inline-flex items-center gap-1 rounded-md border bg-muted/20 px-1.5 py-1">
-            <GitCommitHorizontal className="size-3.5" />
-            Last commit {formatTimeSince(lastCommitAt)}
-          </span>
           <span className="inline-flex items-center gap-1 rounded-md border bg-muted/20 px-1.5 py-1">
             <Rocket className="size-3.5" />
             Last deploy {formatTimeSince(lastDeploymentAt)}
@@ -1015,44 +1054,9 @@ export function RepositoryListItem({ project }: RepositoryListItemProps) {
           </section>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5">
-          <Button
-            variant="default"
-            size="sm"
-            className="h-7 px-2 text-[11px]"
-            asChild
-          >
-            <Link href={`/dashboard/${project.slug}`}>
-              Open recipe
-              <ArrowUpRight className="size-3" />
-            </Link>
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-7 px-2 text-[11px]"
-            asChild
-          >
-            <a href={project.url} target="_blank" rel="noreferrer">
-              Visit app
-              <ArrowUpRight className="size-3" />
-            </a>
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-7 px-2 text-[11px]"
-            asChild
-          >
-            <a href={getRepoUrl(project)} target="_blank" rel="noreferrer">
-              Open repo
-              <ArrowUpRight className="size-3" />
-            </a>
-          </Button>
-          <div className="text-muted-foreground ml-auto flex items-center gap-2 text-[11px]">
-            <span>{formatNumber(commitsLast7Days)} commits (7d)</span>
-            <span>{formatNumber(commitsLast30Days)} commits (30d)</span>
-          </div>
+        <div className="text-muted-foreground ml-auto flex items-center gap-2 text-[11px]">
+          <span>{formatNumber(commitsLast7Days)} commits (7d)</span>
+          <span>{formatNumber(commitsLast30Days)} commits (30d)</span>
         </div>
       </div>
     </article>

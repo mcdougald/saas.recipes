@@ -16,14 +16,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { type RepositoryDashboardListItem } from "@/features/repos/types";
-import { ComparativeBars } from "../repository-list/trend-visuals";
-import { RepositoryDetailTabErrorBoundary } from "./repository-detail-error-boundary";
+import { ComparativeBars } from "../../repository-list/trend-visuals";
 import {
   formatCompactNumber,
   formatNumber,
   getRepositoryFileUrl,
   type RepositoryDetailModel,
-} from "./repository-detail-utils";
+} from "../repository-detail-utils";
+import { RepositoryDetailTabErrorBoundary } from "./repository-detail-error-boundary";
 
 type RepositoryDetailFilesTabProps = {
   project: RepositoryDashboardListItem;

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { type RepositoryDashboardListItem } from "@/features/repos/types";
-import { type RepositoryDetailModel } from "./repository-detail-utils";
+import { type RepositoryDetailModel } from "../repository-detail-utils";
 
 type RepositoryDetailAdminTabProps = {
   project: RepositoryDashboardListItem;

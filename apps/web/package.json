@@ -16,6 +16,7 @@
     "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
     "test:e2e:smoke": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test tests/e2e/smoke.spec.ts --project=chromium",
     "test:e2e:ci": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --reporter=line",
+    "test:unit": "node --import tsx --test \"src/**/*.test.ts\"",
     "i18n:scan": "i18next-scanner --config i18next-scanner.config.js",
     "i18n:scan:check": "node -e \"require('./i18next-scanner.config.js'); console.log('i18n scanner config loaded')\"",
     "i18n:sync": "tsx scripts/sync-locales.ts",
@@ -27,7 +28,9 @@
     "db:migrate": "node ./scripts/with-env.mjs drizzle-kit migrate",
     "db:push": "node ./scripts/with-env.mjs drizzle-kit push",
     "db:studio": "node ./scripts/with-env.mjs drizzle-kit studio",
-    "db:seed": "node ./scripts/with-env.mjs tsx scripts/seed-test-user.ts"
+    "db:seed": "node ./scripts/with-env.mjs tsx scripts/seed-test-user.ts",
+    "learn:lint-content": "tsx scripts/lint-learn-content.ts",
+    "learn:refresh-report": "tsx scripts/learn-monthly-refresh-report.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.29",

@@ -16,7 +16,7 @@ import {
   formatNumber,
   getRepositoryUrl,
   type RepositoryDetailModel,
-} from "./repository-detail-utils";
+} from "../repository-detail-utils";
 
 type RepositoryDetailPrsTabProps = {
   project: RepositoryDashboardListItem;

@@ -1,6 +1,7 @@
 "use client";
 
 import { Heart } from "lucide-react";
+import posthog from "posthog-js";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
@@ -50,6 +51,10 @@ export function LearningFavoriteToggle({
           });
 
           setIsFavorited(result.favorited);
+          posthog.capture("learn_topic_saved", {
+            topic_slug: slug,
+            favorited: result.favorited,
+          });
           toast.success(
             result.favorited
               ? "Saved to your favorites workspace."

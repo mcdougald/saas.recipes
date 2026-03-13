@@ -11,6 +11,13 @@ import {
 
 type TranslationValues = Record<string, string | number | boolean | Date>;
 
+/**
+ * Access localized translations and language switching helpers.
+ *
+ * @param namespace - Optional translation namespace to scope lookups.
+ * @param options - Optional key prefix for nested translation keys.
+ * @returns Translation helpers including `t`, current `language`, and `changeLanguage`.
+ */
 export function useI18n(namespace?: string, options?: { keyPrefix?: string }) {
   const router = useRouter();
   const language = useLocale();
@@ -29,10 +36,16 @@ export function useI18n(namespace?: string, options?: { keyPrefix?: string }) {
   const changeLanguage = useCallback(
     (nextLanguage: string) => {
       const normalizedLanguage = normalizeToSupportedLanguage(nextLanguage);
+      const currentLanguage = normalizeToSupportedLanguage(language);
+
+      if (normalizedLanguage === currentLanguage) {
+        return;
+      }
+
       document.cookie = `${localeCookieName}=${encodeURIComponent(normalizedLanguage)}; path=/; max-age=31536000; samesite=lax`;
       router.refresh();
     },
-    [router],
+    [language, router],
   );
 
   return {

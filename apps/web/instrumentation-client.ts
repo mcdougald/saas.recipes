@@ -1,20 +1,29 @@
 import posthog from "posthog-js";
 
-posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-  api_host: "/_ph",
-  ui_host: "https://us.posthog.com",
-  // Include the defaults option as required by PostHog
-  defaults: "2025-11-30",
-  // Enables capturing unhandled exceptions via Error Tracking
-  capture_exceptions: true,
-  capture_heatmaps: true,
-  capture_pageview: true,
-  capture_pageleave: true,
-  capture_dead_clicks: true,
-  capture_performance: true,
-  // Turn on debug in development mode
-  debug: process.env.NODE_ENV === "development",
-});
+import { isPostHogClientEnabled } from "./src/lib/posthog-environment";
+
+if (
+  isPostHogClientEnabled({
+    nodeEnv: process.env.NODE_ENV,
+    hostname: window.location.hostname,
+    apiKey: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+  })
+) {
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+    api_host: "/_ph",
+    ui_host: "https://us.posthog.com",
+    // Include the defaults option as required by PostHog
+    defaults: "2025-11-30",
+    // Enables capturing unhandled exceptions via Error Tracking
+    capture_exceptions: true,
+    capture_heatmaps: true,
+    capture_pageview: true,
+    capture_pageleave: true,
+    capture_dead_clicks: true,
+    capture_performance: true,
+    debug: false,
+  });
+}
 
 // IMPORTANT: Never combine this approach with other client-side PostHog initialization approaches,
 // especially components like a PostHogProvider. instrumentation-client.ts is the correct solution

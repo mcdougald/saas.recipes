@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LearnPageAnalytics } from "@/features/learn/components/learn-page-analytics";
 import { LearningTopicExplorer } from "@/features/learn/components/learning-topic-explorer";
 import { learningTopics } from "@/features/learn/data/learning-topics";
 import { listCurrentUserFavoriteTopicSlugs } from "@/features/learn/server/learn-favorites";
@@ -30,6 +31,7 @@ export async function LearningOverviewPage() {
 
   return (
     <>
+      <LearnPageAnalytics pageType="overview" />
       <div className="px-4 py-4 lg:px-6">
         <div className="relative overflow-hidden rounded-xl border bg-card p-6 lg:p-8">
           <div
@@ -70,15 +72,19 @@ export async function LearningOverviewPage() {
 
             <div className="flex flex-wrap gap-2">
               <Button asChild>
-                <Link href="/pricing">
-                  Unlock AI notes
+                <Link href="/learn/courses">
+                  Start courses
                   <ArrowRight aria-hidden className="size-4" />
                 </Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/learn/system-design">
-                  Start with system design
-                </Link>
+                <Link href="/learn/guides">Browse guides</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/learn/playbooks">Open snippets</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/pricing">Unlock AI notes</Link>
               </Button>
             </div>
           </div>
@@ -90,6 +96,28 @@ export async function LearningOverviewPage() {
           topics={learningTopics}
           favoriteTopicSlugs={favoriteTopicSlugs}
         />
+
+        <Card className="border">
+          <CardHeader>
+            <CardTitle>Learning paths</CardTitle>
+            <CardDescription>
+              Move from theory to shipping with a practical education flow:
+              course lessons, implementation guides, then snippets you can apply
+              immediately.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2">
+            <Button asChild variant="outline">
+              <Link href="/learn/courses">Courses</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/learn/guides">Guides</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/learn/playbooks">Snippets</Link>
+            </Button>
+          </CardContent>
+        </Card>
 
         <div>
           <Card className="border w-fit">

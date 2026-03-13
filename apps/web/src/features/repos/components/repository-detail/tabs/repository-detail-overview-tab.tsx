@@ -15,6 +15,7 @@ import {
   Timer,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,18 +25,20 @@ import {
   ComparativeBars,
   DeltaSplit,
   TrendSparkline,
-} from "../repository-list/trend-visuals";
+} from "../../repository-list/trend-visuals";
 import {
   formatCompactNumber,
+  formatDate,
   formatNumber,
   type RepositoryDetailModel,
-} from "./repository-detail-utils";
+} from "../repository-detail-utils";
 
 type RepositoryDetailOverviewTabProps = {
   project: RepositoryDashboardListItem;
   model: RepositoryDetailModel;
   mergeRate: number;
   issueClosureRate: number;
+  relatedProjects: RepositoryDashboardListItem[];
 };
 
 /**
@@ -45,6 +48,7 @@ type RepositoryDetailOverviewTabProps = {
  * @param model - Normalized repository detail datasets.
  * @param mergeRate - Merge-rate percentage for pull requests.
  * @param issueClosureRate - Issue closure percentage.
+ * @param relatedProjects - Similar repository recipes for continued exploration.
  * @returns Overview cards and trend visuals.
  */
 export function RepositoryDetailOverviewTab({
@@ -52,6 +56,7 @@ export function RepositoryDetailOverviewTab({
   model,
   mergeRate,
   issueClosureRate,
+  relatedProjects,
 }: RepositoryDetailOverviewTabProps) {
   const deploymentSuccessRate = project.repo.deployments?.successRate ?? 0;
   const deploymentCount = project.repo.deployments?.totalCount ?? 0;
@@ -525,6 +530,35 @@ export function RepositoryDetailOverviewTab({
           </CardContent>
         </Card>
       </div>
+
+      {relatedProjects.length > 0 ? (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Related repositories</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">
+            {relatedProjects.map((related) => (
+              <Link
+                key={related.id}
+                href={`/dashboard/${related.slug}`}
+                className="rounded-md border bg-muted/20 p-3 transition-colors hover:bg-muted/40"
+              >
+                <p className="text-sm font-medium">
+                  {related.repo.owner}/{related.repo.name}
+                </p>
+                <p className="text-muted-foreground mt-1 text-xs">
+                  {related.metadata.language} • {related.sourceType} •{" "}
+                  {formatCompactNumber(related.metadata.stars)} stars
+                </p>
+                <p className="text-muted-foreground mt-1 inline-flex items-center gap-1 text-[11px]">
+                  <GitBranch className="size-3.5" />
+                  {formatDate(related.repo.pushed_at)}
+                </p>
+              </Link>
+            ))}
+          </CardContent>
+        </Card>
+      ) : null}
     </div>
   );
 }

@@ -25,9 +25,20 @@ interface BaseNavItem {
   badgeColor?: "violet" | "green";
   icon?: React.ElementType;
   /**
+   * Define extra route patterns that should mark this item as active.
+   *
+   * Supports static paths (for example `/dashboard`) and Next.js-style
+   * dynamic segments (for example `/dashboard/[slug]`).
+   */
+  activeUrls?: string[];
+  /**
    * Limit access to authenticated users.
    */
   requiresAuth?: boolean;
+  /**
+   * Override the badge copy shown while an item is locked.
+   */
+  lockedBadge?: string;
 }
 
 type NavSubItem = BaseNavItem & {

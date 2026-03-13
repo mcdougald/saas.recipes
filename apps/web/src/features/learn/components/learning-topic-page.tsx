@@ -88,6 +88,27 @@ export function LearningTopicPage({
 
         <Card className="border">
           <CardHeader>
+            <CardTitle>Next best steps</CardTitle>
+            <CardDescription>
+              Move from this topic into structured lessons, focused guides, and
+              practical snippets.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2">
+            <Button asChild size="sm" variant="outline">
+              <Link href="/learn/courses">Go to courses</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link href="/learn/guides">Go to guides</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link href="/learn/playbooks">Go to snippets</Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="border">
+          <CardHeader>
             <CardTitle>Free recipe walkthroughs</CardTitle>
             <CardDescription>
               Curated codebase patterns you can start reviewing immediately.

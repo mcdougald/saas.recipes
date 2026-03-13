@@ -1,0 +1,265 @@
+import {
+  type HelpArticleDefinition,
+  type HelpCategoryDefinition,
+  type HelpCenterSuggestedTopicDefinition,
+  type HelpFAQSectionDefinition,
+} from "@/features/help-center/data/help-center-schema";
+
+/**
+ * Define suggested topics using translation keys for i18n-safe hero chips.
+ */
+export const HELP_CENTER_SUGGESTED_TOPIC_DEFINITIONS = [
+  {
+    id: "getting-started",
+    labelKey: "helpCenter.suggestedTopics.gettingStarted",
+  },
+  {
+    id: "recipes-and-repos",
+    labelKey: "helpCenter.suggestedTopics.recipesAndRepos",
+  },
+  {
+    id: "plans-and-pricing",
+    labelKey: "helpCenter.suggestedTopics.plansAndPricing",
+  },
+  { id: "billing", labelKey: "helpCenter.suggestedTopics.billing" },
+  {
+    id: "similar-projects",
+    labelKey: "helpCenter.suggestedTopics.similarProjects",
+  },
+  { id: "ai-chef", labelKey: "helpCenter.suggestedTopics.aiChef" },
+] as const satisfies readonly HelpCenterSuggestedTopicDefinition[];
+
+/**
+ * Define category entities and localized key references.
+ */
+export const HELP_CENTER_CATEGORY_DEFINITIONS = [
+  {
+    id: "getting-started",
+    slug: "getting-started",
+    titleKey: "helpCenter.categories.gettingStarted.title",
+    descriptionKey: "helpCenter.categories.gettingStarted.description",
+    icon: "sparkles",
+    articleCount: 8,
+    intent: "discover",
+    audience: "new-user",
+    funnelStage: "activation",
+    relatedIds: ["understanding-plans"],
+    owner: "growth-content",
+    qualityScore: 80,
+    lastReviewedAt: "2026-03-12",
+  },
+  {
+    id: "recipes-repositories",
+    slug: "recipes-repositories",
+    titleKey: "helpCenter.categories.recipesRepositories.title",
+    descriptionKey: "helpCenter.categories.recipesRepositories.description",
+    icon: "bookOpen",
+    articleCount: 14,
+    intent: "evaluate",
+    audience: "indie-builder",
+    funnelStage: "activation",
+    relatedIds: ["using-dashboard-live-projects"],
+    owner: "product-education",
+    qualityScore: 82,
+    lastReviewedAt: "2026-03-12",
+  },
+  {
+    id: "account-settings",
+    slug: "account-settings",
+    titleKey: "helpCenter.categories.accountSettings.title",
+    descriptionKey: "helpCenter.categories.accountSettings.description",
+    icon: "settings",
+    articleCount: 6,
+    intent: "troubleshoot",
+    audience: "new-user",
+    funnelStage: "retention",
+    relatedIds: ["account-settings-preferences"],
+    owner: "support-ops",
+    qualityScore: 76,
+    lastReviewedAt: "2026-03-12",
+  },
+  {
+    id: "billing-subscriptions",
+    slug: "billing-subscriptions",
+    titleKey: "helpCenter.categories.billingSubscriptions.title",
+    descriptionKey: "helpCenter.categories.billingSubscriptions.description",
+    icon: "creditCard",
+    articleCount: 10,
+    intent: "purchase",
+    audience: "decision-maker",
+    funnelStage: "conversion",
+    relatedIds: ["manage-billing-payment-methods"],
+    owner: "revenue-ops",
+    qualityScore: 84,
+    lastReviewedAt: "2026-03-12",
+  },
+  {
+    id: "security-privacy",
+    slug: "security-privacy",
+    titleKey: "helpCenter.categories.securityPrivacy.title",
+    descriptionKey: "helpCenter.categories.securityPrivacy.description",
+    icon: "shield",
+    articleCount: 7,
+    intent: "troubleshoot",
+    audience: "team-admin",
+    funnelStage: "retention",
+    relatedIds: ["setup-two-factor-authentication"],
+    owner: "security",
+    qualityScore: 86,
+    lastReviewedAt: "2026-03-12",
+  },
+  {
+    id: "support-contact",
+    slug: "support-contact",
+    titleKey: "helpCenter.categories.supportContact.title",
+    descriptionKey: "helpCenter.categories.supportContact.description",
+    icon: "messageSquare",
+    articleCount: 4,
+    intent: "retain",
+    audience: "new-user",
+    funnelStage: "retention",
+    relatedIds: ["help-center-contact-support"],
+    owner: "support-ops",
+    qualityScore: 74,
+    lastReviewedAt: "2026-03-12",
+  },
+  {
+    id: "api-docs",
+    slug: "api-docs",
+    titleKey: "helpCenter.categories.apiDocs.title",
+    descriptionKey: "helpCenter.categories.apiDocs.description",
+    icon: "keyRound",
+    articleCount: 12,
+    intent: "evaluate",
+    audience: "developer",
+    funnelStage: "activation",
+    relatedIds: ["api-docs-authentication"],
+    owner: "developer-relations",
+    qualityScore: 83,
+    lastReviewedAt: "2026-03-12",
+  },
+] as const satisfies readonly HelpCategoryDefinition[];
+
+/**
+ * Define top-article entities and localized key references.
+ */
+export const HELP_CENTER_ARTICLE_DEFINITIONS = [
+  {
+    id: "getting-started-with-saas-recipes",
+    slug: "getting-started-with-saas-recipes",
+    titleKey: "helpCenter.articles.gettingStartedWithSaasRecipes.title",
+    descriptionKey:
+      "helpCenter.articles.gettingStartedWithSaasRecipes.description",
+    categoryId: "getting-started",
+    categoryLabelKey: "helpCenter.categories.gettingStarted.title",
+    readTimeKey: "helpCenter.articles.gettingStartedWithSaasRecipes.readTime",
+    viewsKey: "helpCenter.articles.gettingStartedWithSaasRecipes.views",
+    href: "/dashboard",
+    intent: "discover",
+    audience: "new-user",
+    funnelStage: "activation",
+    relatedIds: ["create-account"],
+    owner: "growth-content",
+    qualityScore: 80,
+    lastReviewedAt: "2026-03-12",
+  },
+  {
+    id: "understanding-plans",
+    slug: "understanding-plans",
+    titleKey: "helpCenter.articles.understandingPlans.title",
+    descriptionKey: "helpCenter.articles.understandingPlans.description",
+    categoryId: "billing-subscriptions",
+    categoryLabelKey: "helpCenter.categories.billingSubscriptions.title",
+    readTimeKey: "helpCenter.articles.understandingPlans.readTime",
+    viewsKey: "helpCenter.articles.understandingPlans.views",
+    href: "/pricing",
+    intent: "purchase",
+    audience: "decision-maker",
+    funnelStage: "conversion",
+    relatedIds: ["included-in-each-plan"],
+    owner: "revenue-ops",
+    qualityScore: 84,
+    lastReviewedAt: "2026-03-12",
+  },
+  {
+    id: "using-dashboard-live-projects",
+    slug: "using-dashboard-live-projects",
+    titleKey: "helpCenter.articles.usingDashboardLiveProjects.title",
+    descriptionKey:
+      "helpCenter.articles.usingDashboardLiveProjects.description",
+    categoryId: "recipes-repositories",
+    categoryLabelKey: "helpCenter.categories.recipesRepositories.title",
+    readTimeKey: "helpCenter.articles.usingDashboardLiveProjects.readTime",
+    viewsKey: "helpCenter.articles.usingDashboardLiveProjects.views",
+    href: "/dashboard",
+    intent: "evaluate",
+    audience: "indie-builder",
+    funnelStage: "activation",
+    relatedIds: ["what-are-recipes"],
+    owner: "product-education",
+    qualityScore: 82,
+    lastReviewedAt: "2026-03-12",
+  },
+] as const satisfies readonly HelpArticleDefinition[];
+
+/**
+ * Define FAQ sections and FAQ items with translation-key based text.
+ */
+export const HELP_CENTER_FAQ_SECTION_DEFINITIONS = [
+  {
+    id: "getting-started",
+    categoryId: "getting-started",
+    categoryLabelKey: "helpCenter.categories.gettingStarted.title",
+    questions: [
+      {
+        id: "create-account",
+        questionKey: "helpCenter.faqs.gettingStarted.createAccount.question",
+        answerKey: "helpCenter.faqs.gettingStarted.createAccount.answer",
+        answerRenderer: "plain",
+        intent: "discover",
+        audience: "new-user",
+        funnelStage: "activation",
+        relatedIds: ["getting-started-with-saas-recipes"],
+        owner: "growth-content",
+        qualityScore: 80,
+        lastReviewedAt: "2026-03-12",
+      },
+      {
+        id: "included-in-each-plan",
+        questionKey:
+          "helpCenter.faqs.gettingStarted.includedInEachPlan.question",
+        answerKey: "helpCenter.faqs.gettingStarted.includedInEachPlan.answer",
+        answerRenderer: "plain",
+        intent: "purchase",
+        audience: "decision-maker",
+        funnelStage: "conversion",
+        relatedIds: ["understanding-plans"],
+        owner: "revenue-ops",
+        qualityScore: 84,
+        lastReviewedAt: "2026-03-12",
+      },
+    ],
+  },
+  {
+    id: "billing-payments",
+    categoryId: "billing-subscriptions",
+    categoryLabelKey: "helpCenter.categories.billingSubscriptions.title",
+    questions: [
+      {
+        id: "upgrade-downgrade-workflow",
+        questionKey:
+          "helpCenter.faqs.billingPayments.upgradeDowngradeWorkflow.question",
+        answerKey:
+          "helpCenter.faqs.billingPayments.upgradeDowngradeWorkflow.answer",
+        answerRenderer: "plain",
+        intent: "purchase",
+        audience: "decision-maker",
+        funnelStage: "conversion",
+        relatedIds: ["understanding-plans"],
+        owner: "revenue-ops",
+        qualityScore: 84,
+        lastReviewedAt: "2026-03-12",
+      },
+    ],
+  },
+] as const satisfies readonly HelpFAQSectionDefinition[];

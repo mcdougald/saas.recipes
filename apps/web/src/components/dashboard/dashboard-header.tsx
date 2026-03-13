@@ -2,7 +2,7 @@
 
 import { Home, Settings } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
 
@@ -26,8 +26,8 @@ export function DashboardHeader() {
   const { isAuthenticated, isLoading } = useAuth();
   const [themeCustomizerOpen, setThemeCustomizerOpen] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
+  const authSuccessHandledRef = React.useRef(false);
   const searchParams = useSearchParams();
-  const router = useRouter();
   const quickActionClassName =
     "size-9 rounded-full text-muted-foreground transition-colors hover:text-foreground";
 
@@ -36,18 +36,26 @@ export function DashboardHeader() {
   }, []);
 
   React.useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || authSuccessHandledRef.current) return;
 
     const authParam = searchParams.get("auth");
-    if (authParam === "success") {
-      toast.success(t("auth.signInSuccess"), {
-        description: t("auth.welcomeBack"),
-      });
-      const url = new URL(window.location.href);
-      url.searchParams.delete("auth");
-      router.replace(url.pathname + url.search, { scroll: false });
+    if (authParam !== "success") return;
+
+    authSuccessHandledRef.current = true;
+    toast.success(t("auth.signInSuccess"), {
+      description: t("auth.welcomeBack"),
+    });
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete("auth");
+    const nextPath = `${url.pathname}${url.search}${url.hash}`;
+    if (
+      nextPath !==
+      `${window.location.pathname}${window.location.search}${window.location.hash}`
+    ) {
+      window.history.replaceState(window.history.state, "", nextPath);
     }
-  }, [mounted, searchParams, router, t]);
+  }, [mounted, searchParams, t]);
 
   return (
     <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b border-border/50 bg-background/80 px-4 backdrop-blur-xl lg:px-6">
